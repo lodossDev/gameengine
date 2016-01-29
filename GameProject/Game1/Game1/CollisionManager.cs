@@ -24,7 +24,7 @@ namespace Game1
 
             foreach (Entity target in entities)
             {
-                if (entity != target && target.IsEntityType(Entity.EntityType.OBSTACLE))
+                if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
 
@@ -48,7 +48,7 @@ namespace Game1
 
             foreach (Entity target in entities)
             {
-                if (entity != target && target.IsEntityType(Entity.EntityType.OBSTACLE))
+                if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
 
@@ -124,7 +124,7 @@ namespace Game1
             
             foreach (Entity target in entities)
             {
-                if (entity != target && target.IsEntityType(Entity.EntityType.OBSTACLE))
+                if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
 
@@ -144,7 +144,7 @@ namespace Game1
 
             foreach (Entity target in entities)
             {
-                if (entity != target && target.IsEntityType(Entity.EntityType.OBSTACLE))
+                if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
 
@@ -188,7 +188,7 @@ namespace Game1
 
             foreach (Entity target in entities)
             {
-                if (entity != target && target.IsEntityType(Entity.EntityType.OBSTACLE))
+                if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     BoundingBox bb2 = target.GetBoxes(BoundingBox.BoxType.BODY)[0];
                     Rectangle targetBox = bb2.GetBox();
@@ -265,7 +265,7 @@ namespace Game1
             {
                 foreach (Entity target in entities)
                 {
-                    if (entity != target && target.IsEntityType(Entity.EntityType.OBSTACLE))
+                    if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                     {
                         Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();

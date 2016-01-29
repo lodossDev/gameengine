@@ -452,7 +452,7 @@ namespace Game1
             return type;
         }
 
-        public bool IsEntityType(EntityType type)
+        public bool IsEntity(EntityType type)
         {
             return (this.type == type);
         }
@@ -504,6 +504,16 @@ namespace Game1
         public Sprite GetCurrentSprite()
         {
             return currentSprite;
+        }
+
+        public float GetCurrentSpriteWidth()
+        {
+            return GetCurrentSprite().GetCurrentTexture().Width * GetScale().X;
+        }
+
+        public float GetCurrentSpriteHeight()
+        {
+            return GetCurrentSprite().GetCurrentTexture().Height * GetScale().Y;
         }
 
         public Sprite GetBaseSprite()
@@ -665,7 +675,7 @@ namespace Game1
 
         public bool IsOnGround()
         {
-            return GetPosY() == 0.0;
+            return GetPosY() == GetGroundBase();
         }
 
         public bool InAir()
@@ -921,13 +931,16 @@ namespace Game1
                 return 0;
             }
 
-            if ((GetPosZ() + GetDepthOffset()).Equals(other.GetPosZ() + other.GetDepthOffset()))
+            float z1 = GetPosZ() + GetCurrentSprite().GetCurrentTexture().Height - GetDepth();
+            float z2 = other.GetPosZ() + other.GetCurrentSprite().GetCurrentTexture().Height - other.GetDepth();
+
+            if (z1.Equals(z2))
             {
                 return GetEntityId().CompareTo(other.GetEntityId());
             }
             else
             {
-                return (GetPosZ() + GetDepthOffset()).CompareTo(other.GetPosZ() + other.GetDepthOffset());
+                return z1.CompareTo(z2);
             }
         }
     }
