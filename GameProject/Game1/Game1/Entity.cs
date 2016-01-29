@@ -33,11 +33,14 @@ namespace Game1
         private Vector2 scale;
 
         private float tossHeight;
+        //Move to vector
         private float tossVelY;
         private float tossVelX;
         private float maxTossVelY;
         private float gravity;
         private bool tryToss;
+        //Move to vector3 colDir
+        public bool colX = false;
 
         private int entityId;
         private int width;
@@ -506,6 +509,16 @@ namespace Game1
             return currentSprite;
         }
 
+        public float GetSpriteWidth(Animation.State state)
+        {
+            return GetSprite(state).GetCurrentTexture().Width * GetScale().X;
+        }
+
+        public float GetSpriteHeight(Animation.State state)
+        {
+            return GetSprite(state).GetCurrentTexture().Height * GetScale().Y;
+        }
+
         public float GetCurrentSpriteWidth()
         {
             return GetCurrentSprite().GetCurrentTexture().Width * GetScale().X;
@@ -712,7 +725,7 @@ namespace Game1
         {
             return IsInAnimationState(GetCurrentAttackChainState())
                         && IsInAnimationAction(Animation.Action.ATTACKING)
-                        //&& IsFrameComplete(GetCurrentAttackState(), GetDefaultAttackChain().GetCurrentMove().GetCancelFrame())
+                        && IsFrameComplete(GetCurrentAttackChainState(), GetDefaultAttackChain().GetCurrentMove().GetCancelFrame())
                         && GetCurrentSprite().GetCurrentFrame() >= GetDefaultAttackChain().GetCurrentMove().GetCancelFrame()
                         && !GetDefaultAttackChain().InLastAttackState();
         }
@@ -849,7 +862,10 @@ namespace Game1
         {
             if (InResetState())
             {
-                if (IsFrameComplete(GetAnimationState(), GetCurrentSprite().GetCurrentFrame() + 1))SetAnimationState(Animation.State.STANCE);
+                if (IsFrameComplete(GetAnimationState(), GetCurrentSprite().GetCurrentFrame() + 1))
+                {
+                    SetAnimationState(Animation.State.STANCE);
+                }
             }
         }
 
@@ -893,7 +909,7 @@ namespace Game1
             }
 
             //Update movement.
-            MoveX(velocity.X);
+            if(!colX)MoveX(velocity.X);
             MoveY(velocity.Y);
             MoveZ(velocity.Z);
         }
@@ -931,8 +947,8 @@ namespace Game1
                 return 0;
             }
 
-            float z1 = GetPosZ() + GetCurrentSprite().GetCurrentTexture().Height - GetDepth();
-            float z2 = other.GetPosZ() + other.GetCurrentSprite().GetCurrentTexture().Height - other.GetDepth();
+            float z1 = GetPosZ() + GetDepth();
+            float z2 = other.GetPosZ() + other.GetDepth();
 
             if (z1.Equals(z2))
             {

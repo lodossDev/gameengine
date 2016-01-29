@@ -214,7 +214,7 @@ namespace Game1
             drum2.SetAnimationState(Animation.State.STANCE);
             drum2.AddBox(new BoundingBox(BoundingBox.BoxType.BODY, 125, 210, -30, 80));
             drum2.SetScale(2.2f, 2.6f);
-            drum2.SetPostion(100, 0, 400);
+            drum2.SetPostion(500, 0, 400);
             drum2.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum2.SetDepthOffset(-5);
             drum2.SetDepth(20);
@@ -318,12 +318,12 @@ namespace Game1
             if (Keyboard.GetState().IsKeyDown(Keys.K))
             {
                 drum3.VelX(-5);
-                drum3.SetIsLeft(true);
+                //drum3.SetIsLeft(true);
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.L))
             {
                 drum3.VelX(5);
-                drum3.SetIsLeft(false);
+                //drum3.SetIsLeft(false);
             }
             else
             {

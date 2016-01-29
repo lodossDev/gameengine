@@ -160,7 +160,7 @@ namespace Game1
                         //Get total height for entity needed to land.
                         int totalHeight = (int)Math.Abs(target.GetPosY()) + target.GetHeight() + above.Sum(e => e.GetHeight());
                         //totalHeight = (above.Count == 0 ? (int)Math.Abs(target.GetPosY()) + totalHeight : totalHeight);
-                        //Debug.WriteLine("TOTAL HEIGHT: " + target.GetName() + " : " + totalHeight);
+                        Debug.WriteLine("TOTAL HEIGHT: " + target.GetName() + " : " + totalHeight);
 
                         if (Math.Abs(entity.GetPosY() + 20) > totalHeight && (entity.GetVelocity().Y > 1 || target.InAir()))
                         {
@@ -185,6 +185,7 @@ namespace Game1
             Rectangle entityBox = bb1.GetBox();
             Sprite pStance = entity.GetSprite(Animation.State.STANCE);
             int pWidth = entityBox.Width;
+            entity.colX = false;
 
             foreach (Entity target in entities)
             {
@@ -199,8 +200,9 @@ namespace Game1
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
                             && entityBox.Intersects(targetBox))
                     {
+                        Vector2 x1 = entityBox.GetIntersectionDepth(targetBox);
                         //if (entity.IsEntityType(Entity.EntityType.PLAYER))
-                          //  Debug.WriteLine("TOCH RIGHT: " + target.GetName() + ": " + (pWidth - tWidth));
+                        //  Debug.WriteLine("TOCH RIGHT: " + target.GetName() + ": " + (pWidth - tWidth));
 
                         Vector2 pLeft = new Vector2(entityBox.Left, 0);
                         Vector2 pRight = new Vector2(entityBox.Right, 0);
@@ -220,32 +222,26 @@ namespace Game1
                                 if ((entity.GetDirX() > 0) && TouchLeft(entityBox, targetBox))//left
                                 {
                                     entity.VelX(0f);
-                                    entity.SetPosX(target.GetPosX() - targetBox.Width - 2);
+                                    entity.colX = true;
+                                    entity.SetPosX(entity.GetPosX() + x1.X + 2);
                                 }
                                 else if ((entity.GetDirX() < 0) && TouchRight(entityBox, targetBox))//right
                                 {
                                     entity.VelX(0f);
-                                    entity.SetPosX(target.GetPosX() + targetBox.Width + 2);
+                                    entity.colX = true;
+                                    entity.SetPosX(entity.GetPosX() + x1.X - 2);
                                 }
                             }
 
                             if (entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ() - target.GetDepth())
                             {
                                 entity.VelZ(0f);
-
-                                if (pWidth != tWidth)
-                                {
-                                    entity.SetPosZ(target.GetPosZ() - target.GetDepth());
-                                }
+                                entity.SetPosZ(target.GetPosZ() - target.GetDepth());
                             }
                             else if (entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ() + target.GetDepth())
                             {
                                 entity.VelZ(0f);
-
-                                if (pWidth != tWidth)
-                                {
-                                    entity.SetPosZ(target.GetPosZ() + target.GetDepth());
-                                }
+                                entity.SetPosZ(target.GetPosZ() + target.GetDepth());
                             }
                         }
                     }
