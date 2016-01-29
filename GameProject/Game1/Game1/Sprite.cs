@@ -12,12 +12,12 @@ namespace Game1
     {
         private int currentFrame;
         private List<Texture2D> sprites;
-        public List<float> frameDelays;
+        private List<float> frameDelays;
         private List<bool> isFrameComplete;
         private List<Vector2> offsets;
         private Vector2 spriteOffset;
         private Vector2 position;
-        public float frameTimeElapsed;
+        private float frameTimeElapsed;
         private int resetFrame;
         private Dictionary<int, List<BoundingBox>> boxes;
         private Animation.Type animationType;
@@ -239,6 +239,21 @@ namespace Game1
         public int GetCurrentFrame()
         {
             return currentFrame;
+        }
+
+        public float GetTotalAnimationTime()
+        {
+            return frameDelays.Sum(item => item);
+        }
+
+        public List<float> GetFrameDelays()
+        {
+            return frameDelays;
+        }
+
+        public float GetCurrentFrameDelay()
+        {
+            return frameDelays[currentFrame];
         }
 
         public void ResetFrames()

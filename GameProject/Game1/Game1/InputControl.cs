@@ -180,7 +180,7 @@ namespace Game1
             {
                 if (!player.IsToss())
                 {
-                    player.SetAnimationState(player.GetCurrentAttackState());
+                    player.SetAnimationState(player.GetCurrentAttackChainState());
 
                     if (player.InCurrentAttackCancelState() && !player.GetDefaultAttackChain().InLastAttackState())
                     {

@@ -257,7 +257,7 @@ namespace Game1
 
         private void CheckAttack(Entity entity)
         {
-            ComboChain attackChain = entity.GetDefaultAttackChain();
+            ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
             Attributes.AttackInfo attackInfo = entity.GetAttackInfo();
             List<BoundingBox> attackBoxes = entity.GetCurrentSprite().GetCurrentBoxes(BoundingBox.BoxType.HIT_BOX);
 

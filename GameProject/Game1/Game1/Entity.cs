@@ -21,7 +21,7 @@ namespace Game1
         private Dictionary<Animation.State, int> tossFrames;
         private List<BoundingBox> boxes;
         private List<AnimationLink> animationLinks;
-        private ComboChain defaultAttackChain;
+        private ComboAttack.Chain defaultAttackChain;
 
         private string name;
         private EntityType type;
@@ -215,7 +215,7 @@ namespace Game1
             tossFrames.Add(state, frame - 1);
         }
 
-        public void SetDefaultAttack(ComboChain attackChain)
+        public void SetDefaultAttackChain(ComboAttack.Chain attackChain)
         {
             defaultAttackChain = attackChain;
         }
@@ -688,19 +688,19 @@ namespace Game1
             return maxTossVelY;
         }
 
-        public ComboChain GetDefaultAttackChain()
+        public ComboAttack.Chain GetDefaultAttackChain()
         {
             return defaultAttackChain;
         }
 
-        public Animation.State GetCurrentAttackState()
+        public Animation.State GetCurrentAttackChainState()
         {
             return defaultAttackChain.GetCurrentMove().GetState();
         }
 
         public bool InCurrentAttackCancelState()
         {
-            return IsInAnimationState(GetCurrentAttackState())
+            return IsInAnimationState(GetCurrentAttackChainState())
                         && IsInAnimationAction(Animation.Action.ATTACKING)
                         //&& IsFrameComplete(GetCurrentAttackState(), GetDefaultAttackChain().GetCurrentMove().GetCancelFrame())
                         && GetCurrentSprite().GetCurrentFrame() >= GetDefaultAttackChain().GetCurrentMove().GetCancelFrame()

@@ -176,17 +176,17 @@ namespace Game1
             leo.AddAnimationLink(new AnimationLink(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, 8));
             leo.AddAnimationLink(new AnimationLink(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
 
-            leo.SetDefaultAttack(new ComboChain(new List<ComboMove>{
-                new ComboMove(Animation.State.ATTACK1, 2000, 10),
-                new ComboMove(Animation.State.ATTACK1, 2000, 10),
-                new ComboMove(Animation.State.ATTACK1, 2000, 10),
-                new ComboMove(Animation.State.ATTACK4, 2000, 6),
-                new ComboMove(Animation.State.ATTACK4, 2000, 6),
-                new ComboMove(Animation.State.ATTACK4, 2000, 6),
-                new ComboMove(Animation.State.ATTACK2, 2000, 10),
-                new ComboMove(Animation.State.ATTACK3, 2000, 9),
-                new ComboMove(Animation.State.ATTACK5, 2000, 8),
-                new ComboMove(Animation.State.ATTACK6, 2000, 12)
+            leo.SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
+                new ComboAttack.Move(Animation.State.ATTACK1, 2000, 10),
+                new ComboAttack.Move(Animation.State.ATTACK1, 2000, 10),
+                new ComboAttack.Move(Animation.State.ATTACK1, 2000, 10),
+                new ComboAttack.Move(Animation.State.ATTACK4, 2000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK4, 2000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK4, 2000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK2, 2000, 10),
+                new ComboAttack.Move(Animation.State.ATTACK3, 2000, 9),
+                new ComboAttack.Move(Animation.State.ATTACK5, 2000, 8),
+                new ComboAttack.Move(Animation.State.ATTACK6, 2000, 12)
             }));
 
 
@@ -375,7 +375,7 @@ namespace Game1
             }   
 
             
-            spriteBatch.DrawString(font1, "drum3 width: " + drum3.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox().Width, new Vector2(20, 40), Color.Black);
+            spriteBatch.DrawString(font1, "drum3 width: " + leo.GetCurrentSprite().GetTotalAnimationTime(), new Vector2(20, 40), Color.Black);
             spriteBatch.DrawString(font1, "drum3 width: " + drum3.GetCurrentSprite().GetCurrentTexture().Width *drum3.GetScale().X, new Vector2(20, 60), Color.Black);
             spriteBatch.DrawString(font1, "drum3 POS Y: " + drum3.GetPosY(), new Vector2(20, 90), Color.Black);
             spriteBatch.DrawString(font1, "drum4 last attackid: " + drum4.GetPosY(), new Vector2(20, 110), Color.Black);
