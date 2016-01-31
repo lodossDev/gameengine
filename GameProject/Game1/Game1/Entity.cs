@@ -13,6 +13,7 @@ namespace Game1
     {
         private static int id = 0;
         public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON}
+
         private Dictionary<Animation.State, Sprite> spriteMap;
         private Animation.Action animationAction;
         private Sprite currentSprite;
@@ -20,7 +21,7 @@ namespace Game1
         private Dictionary<Animation.State, int> moveFrames;
         private Dictionary<Animation.State, int> tossFrames;
         private List<BoundingBox> boxes;
-        private List<AnimationLink> animationLinks;
+        private List<Animation.Link> animationLinks;
         private ComboAttack.Chain defaultAttackChain;
 
         private string name;
@@ -39,8 +40,6 @@ namespace Game1
         private float maxTossVelY;
         private float gravity;
         private bool tryToss;
-        //Move to vector3 colDir
-        public bool colX = false;
 
         private int entityId;
         private int width;
@@ -58,6 +57,7 @@ namespace Game1
         private bool alive;
         private bool isToss;
 
+        private Attributes.CollisionInfo collisionInfo;
         private Attributes.AttackInfo attackInfo;
         
 
@@ -69,7 +69,7 @@ namespace Game1
             spriteMap = new Dictionary<Animation.State, Sprite>();
             moveFrames = new Dictionary<Animation.State, int>();
             tossFrames = new Dictionary<Animation.State, int>();
-            animationLinks = new List<AnimationLink>();
+            animationLinks = new List<Animation.Link>();
 
             boxes = new List<BoundingBox>();
             scale = new Vector2(1f, 1f);
@@ -107,6 +107,7 @@ namespace Game1
             animationState = Animation.State.NONE;
             animationAction = Animation.Action.NONE;
 
+            collisionInfo = new Attributes.CollisionInfo();
             attackInfo = new Attributes.AttackInfo();
         }
 
@@ -130,14 +131,14 @@ namespace Game1
             AddSprite(state, new Sprite(location), setAsDefaultState);
         }
 
-        public void AddAnimationLink(AnimationLink link)
+        public void AddAnimationLink(Animation.Link link)
         {
             animationLinks.Add(link);
         }
 
         public void SetAnimationLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
         {
-            AnimationLink link = animationLinks.Find(item => item.GetOnState() == onState);
+            Animation.Link link = animationLinks.Find(item => item.GetOnState() == onState);
             link.SetLink(onState, toState, frameOnStart, onFrameComplete);
         }
 
@@ -245,14 +246,9 @@ namespace Game1
             position.Z = z;
         }
 
-        public void SetDepthOffset(float z)
-        {
-            depthOffSet = z;
-        }
-
         public void MoveX(float velX)
         {
-            if (IsInMoveFrame())
+            if (IsInMoveFrame() && collisionInfo.collide_x == Attributes.CollisionState.NO_COLLISION)
             {
                 position.X += velX;
             }
@@ -260,12 +256,15 @@ namespace Game1
 
         public void MoveY(float velY)
         {
-            position.Y += velY;
+            if (collisionInfo.collide_y == Attributes.CollisionState.NO_COLLISION)
+            {
+                position.Y += velY;
+            }
         }
 
         public void MoveZ(float velZ)
         {
-            if (IsInMoveFrame())
+            if (IsInMoveFrame() && collisionInfo.collide_z == Attributes.CollisionState.NO_COLLISION)
             {
                 position.Z += velZ;
             }
@@ -348,6 +347,11 @@ namespace Game1
         public void SetDepth(float depth)
         {
             this.depth = depth;
+        }
+
+        public void SetDepthOffset(float z)
+        {
+            depthOffSet = z;
         }
 
         public void SetGround(float ground)
@@ -502,6 +506,11 @@ namespace Game1
             {
                 return null;
             }
+        }
+
+        public int GetSpriteFrames(Animation.State state)
+        {
+            return GetSprite(state).GetFrames();
         }
 
         public Sprite GetCurrentSprite()
@@ -725,7 +734,7 @@ namespace Game1
         {
             return IsInAnimationState(GetCurrentAttackChainState())
                         && IsInAnimationAction(Animation.Action.ATTACKING)
-                        && IsFrameComplete(GetCurrentAttackChainState(), GetDefaultAttackChain().GetCurrentMove().GetCancelFrame())
+                        //&& IsFrameComplete(GetCurrentAttackChainState(), GetDefaultAttackChain().GetCurrentMove().GetCancelFrame())
                         && GetCurrentSprite().GetCurrentFrame() >= GetDefaultAttackChain().GetCurrentMove().GetCancelFrame()
                         && !GetDefaultAttackChain().InLastAttackState();
         }
@@ -734,6 +743,11 @@ namespace Game1
         {
             List<BoundingBox> attackBoxes = GetCurrentSprite().GetCurrentBoxes(BoundingBox.BoxType.HIT_BOX);
             return IsInAnimationAction(Animation.Action.ATTACKING) && attackBoxes != null && attackBoxes.Count > 0;
+        }
+
+        public Attributes.CollisionInfo GetCollisionInfo()
+        {
+            return collisionInfo;
         }
 
         public Attributes.AttackInfo GetAttackInfo()
@@ -824,9 +838,9 @@ namespace Game1
 
         public void UpdateAnimationLinks(GameTime gameTime)
         {
-            List<AnimationLink> links = animationLinks.FindAll(item => item.GetOnState() == GetAnimationState());
+            List<Animation.Link> links = animationLinks.FindAll(item => item.GetOnState() == GetAnimationState());
 
-            foreach (AnimationLink link in links)
+            foreach (Animation.Link link in links)
             {
                 if (link.OnFrameComplete() 
                         && currentSprite.GetCurrentFrame() >= link.GetOnFrameStart())
@@ -875,7 +889,7 @@ namespace Game1
             UpdateAnimationLinks(gameTime);
         }
 
-        public void UpdateDefaultAttack(GameTime gameTime)
+        public void UpdateDefaultAttackChain(GameTime gameTime)
         {
             if (defaultAttackChain != null)
             {
@@ -892,7 +906,7 @@ namespace Game1
 
             //Update animation.
             UpdateAnimation(gameTime);
-            UpdateDefaultAttack(gameTime);
+            UpdateDefaultAttackChain(gameTime);
 
             //Update physics.
             UpdateToss(gameTime);
@@ -909,7 +923,7 @@ namespace Game1
             }
 
             //Update movement.
-            if(!colX)MoveX(velocity.X);
+            MoveX(velocity.X);
             MoveY(velocity.Y);
             MoveZ(velocity.Z);
         }

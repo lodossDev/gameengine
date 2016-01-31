@@ -42,7 +42,7 @@ namespace Game1
         /// </summary>
         /// <returns>
         /// The amount of overlap between two intersecting rectangles. These
-        /// depth values can be negative depending on which wides the rectangles
+        /// depth values can be negative depending on which sides the rectangles
         /// intersect. This allows callers to determine the correct direction
         /// to push objects in order to resolve collisions.
         /// If the rectangles are not intersecting, Vector2.Zero is returned.

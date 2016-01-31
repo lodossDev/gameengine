@@ -87,7 +87,7 @@ namespace Game1
             leo.SetSpriteOffSet(Animation.State.JUMP, 30, -120);
             leo.SetSpriteOffSet(Animation.State.JUMP_TOWARDS, 30, -120);
 
-            leo.AddAnimationLink(new AnimationLink(Animation.State.JUMP_START, Animation.State.JUMP, leo.GetSprite(Animation.State.JUMP_START).GetFrames()));
+            leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_START, Animation.State.JUMP, leo.GetSprite(Animation.State.JUMP_START).GetFrames()));
             leo.SetTossFrame(Animation.State.JUMP, 1);
             leo.SetTossFrame(Animation.State.JUMP_TOWARDS, 1);
 
@@ -173,8 +173,8 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 1, 10);
             leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 2, 10);
 
-            leo.AddAnimationLink(new AnimationLink(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, 8));
-            leo.AddAnimationLink(new AnimationLink(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
+            leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, 8));
+            leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
 
             leo.SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
                 new ComboAttack.Move(Animation.State.ATTACK1, 2000, 10),

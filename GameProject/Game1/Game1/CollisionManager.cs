@@ -67,32 +67,41 @@ namespace Game1
             return found;
         }
 
+        //Move these in static helper class........................................
         public bool InBoundsX(Rectangle r1, Rectangle r2, int offset = 15)
         {
             return (r1.Right >= r2.Left + (r2.Width / offset)
                         && r1.Left <= r2.Right - (r2.Width / offset));
         }
 
-        public bool TouchLeft(Rectangle r1, Rectangle r2)
+        public bool TouchLeft(Rectangle r1, Rectangle r2, int offset = 4)
         {
             return (r1.Right <= r2.Right
                         && r1.Right >= r2.Left - 5
-                        && r1.Top <= r2.Bottom - (r2.Width / 4)
-                        && r1.Bottom >= r2.Top + (r2.Width / 4));
+                        && r1.Top <= r2.Bottom - (r2.Width / offset)
+                        && r1.Bottom >= r2.Top + (r2.Width / offset));
         }
 
-        public bool TouchRight(Rectangle r1, Rectangle r2)
+        public bool TouchRight(Rectangle r1, Rectangle r2, int offset = 4)
         {
             return (r1.Left >= r2.Left
                         && r1.Left <= r2.Right + 5
-                        && r1.Top <= r2.Bottom - (r2.Width / 4)
-                        && r1.Bottom >= r2.Top + (r2.Width / 4));
+                        && r1.Top <= r2.Bottom - (r2.Width / offset)
+                        && r1.Bottom >= r2.Top + (r2.Width / offset));
         }
 
-        public bool TouchBottom(Rectangle r1, Rectangle r2, int offset = 5)
+        public bool TouchTop(Rectangle r1, Rectangle r2, int offset = 5)
         {
-            return r1.Top <= r2.Bottom + (r2.Height / offset)
-                        && r1.Top >= r2.Bottom - (r2.Height / offset)
+            return r1.Bottom >= r2.Top - 1
+                        && r1.Bottom <= r2.Top + (r2.Height / 2)
+                        && r1.Right >= r2.Left + (r2.Width / offset)
+                        && r1.Left <= r2.Right - (r2.Width / offset);
+        }
+
+        public bool TouchBottom(Rectangle r1, Rectangle r2, int offset = 15)
+        {
+            return r1.Top <= r2.Bottom + (r2.Height / 2)
+                        && r1.Top >= r2.Bottom - (r2.Height / 2)
                         && r1.Right >= r2.Left + (r2.Width / offset)
                         && r1.Left <= r2.Right - (r2.Width / offset);
         }
@@ -149,6 +158,14 @@ namespace Game1
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
+                           && TouchTop(entityBox, targetBox)
+                           && entity.GetVelocity().Y > 1)
+                    {
+                        float posy = (Math.Abs(target.GetPosY()) + target.GetHeight()) + 1;
+                        entity.SetGround(-posy);
+                    }
+
+                    /*if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
                         && InBoundsX(entityBox, targetBox)
                         && entityBox.Intersects(targetBox)
                         && target.GetHeight() != 0
@@ -174,7 +191,7 @@ namespace Game1
                             float posy = (Math.Abs(target.GetPosY()) + target.GetHeight()) + 1;
                             entity.SetGround(-posy);
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -185,7 +202,7 @@ namespace Game1
             Rectangle entityBox = bb1.GetBox();
             Sprite pStance = entity.GetSprite(Animation.State.STANCE);
             int pWidth = entityBox.Width;
-            entity.colX = false;
+            entity.GetCollisionInfo().Reset();
 
             foreach (Entity target in entities)
             {
@@ -201,20 +218,9 @@ namespace Game1
                             && entityBox.Intersects(targetBox))
                     {
                         Vector2 x1 = entityBox.GetIntersectionDepth(targetBox);
-                        //if (entity.IsEntityType(Entity.EntityType.PLAYER))
-                        //  Debug.WriteLine("TOCH RIGHT: " + target.GetName() + ": " + (pWidth - tWidth));
-
-                        Vector2 pLeft = new Vector2(entityBox.Left, 0);
-                        Vector2 pRight = new Vector2(entityBox.Right, 0);
-
-                        Vector2 sLeft = new Vector2(targetBox.Left, 0);
-                        Vector2 sRight = new Vector2(targetBox.Right, 0);
-
-                        //posx = Vector2.Distance(pLeft, sRight);
-                        //ppx = pWidth;
-                        //ssx = entityBox.Width - targetBox.Width;
-
-                        if (Math.Abs(entity.GetPosY()) < (Math.Abs(target.GetPosY()) + target.GetHeight()) - 20)
+                        
+                        if (!(Math.Abs(entity.GetPosY()) + 2 >= (Math.Abs(target.GetPosY()) + target.GetHeight()))
+                                && !TouchTop(entityBox, targetBox))
                         {
                             if (!(entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ() - target.GetDepth())
                                     && !(entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ() + target.GetDepth()))
@@ -222,13 +228,13 @@ namespace Game1
                                 if ((entity.GetDirX() > 0) && TouchLeft(entityBox, targetBox))//left
                                 {
                                     entity.VelX(0f);
-                                    entity.colX = true;
+                                    entity.GetCollisionInfo().Left();
                                     entity.SetPosX(entity.GetPosX() + x1.X + 2);
                                 }
                                 else if ((entity.GetDirX() < 0) && TouchRight(entityBox, targetBox))//right
                                 {
                                     entity.VelX(0f);
-                                    entity.colX = true;
+                                    entity.GetCollisionInfo().Right();
                                     entity.SetPosX(entity.GetPosX() + x1.X - 2);
                                 }
                             }
@@ -236,11 +242,13 @@ namespace Game1
                             if (entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ() - target.GetDepth())
                             {
                                 entity.VelZ(0f);
+                                entity.GetCollisionInfo().Top();
                                 entity.SetPosZ(target.GetPosZ() - target.GetDepth());
                             }
                             else if (entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ() + target.GetDepth())
                             {
                                 entity.VelZ(0f);
+                                entity.GetCollisionInfo().Bottom();
                                 entity.SetPosZ(target.GetPosZ() + target.GetDepth());
                             }
                         }

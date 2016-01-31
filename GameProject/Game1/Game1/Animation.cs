@@ -25,80 +25,50 @@ namespace Game1
 
             JUMP_RECOVER1, JUMP_RECOVER2
         }
+
         public enum Action {NONE, ATTACKING, JUMPING, FALLING, IDLE, WALKING, LANDING, RECOVERY}
+
         public enum Type {NONE, ONCE, REPEAT}
-    }
 
-    public class AnimationLink
-    {
-        private Animation.State onState;
-        private Animation.State toState;
-        private int onFrameState;
-        private bool onFrameComplete;
-        
-        public AnimationLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
+        public class Link
         {
-            SetLink(onState, toState, frameOnStart, onFrameComplete);
-        }
+            private Animation.State onState;
+            private Animation.State toState;
+            private int onFrameState;
+            private bool onFrameComplete;
 
-        public void SetLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
-        {
-            this.onState = onState;
-            this.toState = toState;
-            this.onFrameState = (frameOnStart - 1);
-            this.onFrameComplete = onFrameComplete;
-        }
-        
-        public Animation.State GetOnState()
-        {
-            return onState;
-        }
+            public Link(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
+            {
+                SetLink(onState, toState, frameOnStart, onFrameComplete);
+            }
 
-        public Animation.State GetToState()
-        {
-            return toState;
-        }
+            public void SetLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
+            {
+                this.onState = onState;
+                this.toState = toState;
+                this.onFrameState = (frameOnStart - 1);
+                this.onFrameComplete = onFrameComplete;
+            }
 
-        public int GetOnFrameStart()
-        {
-            return onFrameState;
-        }
+            public Animation.State GetOnState()
+            {
+                return onState;
+            }
 
-        public bool OnFrameComplete()
-        {
-            return onFrameComplete;
-        }
-    }
+            public Animation.State GetToState()
+            {
+                return toState;
+            }
 
-    public class FrameInfo
-    {
-        private int startFrame;
-        private int endFrame;
+            public int GetOnFrameStart()
+            {
+                return onFrameState;
+            }
 
-        public FrameInfo(int startFrame, int endFrame)
-        {
-            this.startFrame = startFrame;
-            this.endFrame = endFrame;
-        }
-
-        public int GetStartFrame()
-        {
-            return startFrame;
-        }
-
-        public int GetEndFrame()
-        {
-            return endFrame;
-        }
-
-        public void SetStartFrame(int sx)
-        {
-            startFrame = sx;
-        }
-
-        public void SetEndFrame(int ex)
-        {
-            endFrame = ex;
+            public bool OnFrameComplete()
+            {
+                return onFrameComplete;
+            }
         }
     }
 }

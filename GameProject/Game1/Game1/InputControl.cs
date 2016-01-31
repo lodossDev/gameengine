@@ -26,14 +26,25 @@ namespace Game1
             this.player = player;
             this.playerIndex = index;
             inputDirection = InputDirection.NONE;
-            UP = DOWN = LEFT = RIGHT= JUMP_PRESS = false;
             currentKeyboardState = new KeyboardState();
+            Reset();
+        }
+
+        public void Reset()
+        {
+            UP = false;
+            DOWN = false;
+            LEFT = false;
+            RIGHT = false;
+            JUMP_PRESS = false;
+            ATTACK_PRESS = false;
         }
 
         public void Update(GameTime gameTime)
         {
             currentKeyboardState = Keyboard.GetState(playerIndex);
             inputDirection = InputDirection.NONE;
+            Reset();
 
             JUMP_PRESS = false;
             ATTACK_PRESS = false;
@@ -209,7 +220,8 @@ namespace Game1
                             }
 
                             player.SetAnimationLink(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, player.GetSprite(Animation.State.JUMP_ATTACK1).GetFrames());
-                        } else
+                        }
+                        else
                         {
                             if (!player.InAir())
                             {
