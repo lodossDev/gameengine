@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -122,6 +123,16 @@ namespace Game1
             {
                 endFrame = ex;
             }
+        }
+
+        public class TossInfo
+        {
+            public Vector3 velocity;
+            public Vector3 maxVelocity;
+            public bool isToss;
+            public bool inTossFrame;
+            public float gravity;
+            public float height;
         }
     }
 }

@@ -158,11 +158,18 @@ namespace Game1
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
-                           && TouchTop(entityBox, targetBox)
-                           && entity.GetVelocity().Y > 1)
+                           && TouchTop(entityBox, targetBox))
                     {
-                        float posy = (Math.Abs(target.GetPosY()) + target.GetHeight()) + 1;
-                        entity.SetGround(-posy);
+                        if (entity.GetVelocity().Y > 1)
+                        {
+                            float posy = (Math.Abs(target.GetPosY()) + target.GetHeight()) + 1;
+                            entity.SetGround(-posy);
+                        }
+
+                        if (target.IsToss())
+                        {
+                            //entity.tossVelY = target.tossVelY;
+                        }
                     }
 
                     /*if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
