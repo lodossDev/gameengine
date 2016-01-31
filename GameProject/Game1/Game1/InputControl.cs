@@ -44,7 +44,7 @@ namespace Game1
         {
             currentKeyboardState = Keyboard.GetState(playerIndex);
             inputDirection = InputDirection.NONE;
-            Reset();
+            //Reset();
 
             JUMP_PRESS = false;
             ATTACK_PRESS = false;
