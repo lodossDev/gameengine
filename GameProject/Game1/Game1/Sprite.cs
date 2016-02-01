@@ -68,7 +68,7 @@ namespace Game1
 
         public void AddBox(int frame, BoundingBox box)
         {
-            if (!boxes.ContainsKey(frame))
+            if (!boxes.ContainsKey(frame - 1))
                 boxes.Add(frame - 1, new List<BoundingBox>());
 
             boxes[frame - 1].Add(box);
@@ -285,6 +285,18 @@ namespace Game1
             }
 
             isAnimationComplete = true;
+        }
+
+        public void IncrementFrame()
+        {
+            if (currentFrame >= sprites.Count - 1)
+            {
+                currentFrame = 0;
+            }
+            else
+            {
+                currentFrame++;
+            }
         }
 
         private void NextFrame()

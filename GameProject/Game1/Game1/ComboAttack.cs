@@ -36,6 +36,11 @@ namespace Game1
                 return currentMoveIndex == moves.Count - 1;
             }
 
+            public Animation.State GetLastAttackState()
+            {
+                return moves[moves.Count - 1].GetState();
+            }
+
             public void IncrementMoveIndex()
             {
                 currentMoveIndex++;

@@ -44,8 +44,7 @@ namespace Game1
         {
             currentKeyboardState = Keyboard.GetState(playerIndex);
             inputDirection = InputDirection.NONE;
-            //Reset();
-
+            
             JUMP_PRESS = false;
             ATTACK_PRESS = false;
 
@@ -168,6 +167,11 @@ namespace Game1
                 ATTACK_PRESS = true;
             }
 
+            if ((currentKeyboardState.IsKeyDown(Keys.Z)) && (!oldKeyboardState.IsKeyDown(Keys.Z)))
+            {
+                player.GetCurrentSprite().IncrementFrame();
+            }
+
             if (!player.IsToss() && !player.IsInAnimationAction(Animation.Action.ATTACKING))
             {
                 if (JUMP_PRESS)
@@ -191,9 +195,17 @@ namespace Game1
             {
                 if (!player.IsToss())
                 {
-                    player.SetAnimationState(player.GetCurrentAttackChainState());
+                    if (!player.IsInAnimationAction(Animation.Action.ATTACKING) 
+                            || player.InCurrentAttackCancelState())
+                    {
+                        player.SetAnimationState(player.GetCurrentAttackChainState());
+                    }
+                    else
+                    {
+                        player.SetAnimationState(player.GetCurrentAnimationState());
+                    }
 
-                    if (player.InCurrentAttackCancelState() && !player.GetDefaultAttackChain().InLastAttackState())
+                    if (player.InCurrentAttackCancelState())
                     {
                         //Put in entity reset animation and reset attack info and other stuff in there.
                         player.GetAttackInfo().attackId = (int)Attributes.AttackState.NO_ATTACK_ID - 1;

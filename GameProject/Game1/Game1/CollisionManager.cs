@@ -293,7 +293,7 @@ namespace Game1
                                     {
                                         hit_id++;
                                         attackChain.IncrementMoveIndex();
-                                        attackInfo.lastAttackState = targetAttackInfo.hitByAttackState = entity.GetAnimationState();
+                                        attackInfo.lastAttackState = targetAttackInfo.hitByAttackState = entity.GetCurrentAnimationState();
                                     }
 
                                     target.Toss(-5f);

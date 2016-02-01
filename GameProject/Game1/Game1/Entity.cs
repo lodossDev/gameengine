@@ -17,7 +17,9 @@ namespace Game1
         private Dictionary<Animation.State, Sprite> spriteMap;
         private Animation.Action animationAction;
         private Sprite currentSprite;
-        private Animation.State animationState;
+        private Animation.State currentAnimationState;
+        private Animation.State lastAnimationState;
+
         private Dictionary<Animation.State, int> moveFrames;
         private Dictionary<Animation.State, int> tossFrames;
         private List<BoundingBox> boxes;
@@ -104,7 +106,7 @@ namespace Game1
             id++;
             entityId = id;
 
-            animationState = Animation.State.NONE;
+            currentAnimationState = Animation.State.NONE;
             animationAction = Animation.Action.NONE;
 
             collisionInfo = new Attributes.CollisionInfo();
@@ -152,13 +154,15 @@ namespace Game1
         {
             if (!IsInAnimationState(state))
             {
+                lastAnimationState = currentAnimationState;
+                 
                 attackInfo.attackId = (int)Attributes.AttackState.NO_ATTACK_ID - 1;
                 attackInfo.lastAttackState = Animation.State.NONE;
                 Sprite newSprite = GetSprite(state);
 
                 if (newSprite != null)
                 {
-                    animationState = state;
+                    currentAnimationState = state;
                     currentSprite = newSprite;
                 }
 
@@ -592,12 +596,17 @@ namespace Game1
             return (currentSprite != null 
                         && spriteMap.ContainsKey(state) 
                         && currentSprite == GetSprite(state)
-                        && this.animationState == state);
+                        && this.currentAnimationState == state);
         }
 
-        public Animation.State GetAnimationState()
+        public Animation.State GetCurrentAnimationState()
         {
-            return animationState;
+            return currentAnimationState;
+        }
+
+        public Animation.State GetLastAnimationState()
+        {
+            return lastAnimationState;
         }
 
         public bool IsInAnimationAction(Animation.Action animationAction)
@@ -607,23 +616,23 @@ namespace Game1
 
         public Animation.Action GetAnimationAction()
         {
-            if (GetAnimationState().ToString().Contains("ATTACK"))
+            if (GetCurrentAnimationState().ToString().Contains("ATTACK"))
             {
                 return Animation.Action.ATTACKING;
             }
             else
             {
-                if (GetAnimationState().ToString().Contains("RECOVER"))
+                if (GetCurrentAnimationState().ToString().Contains("RECOVER"))
                 {
                     return Animation.Action.RECOVERY;
                 }
-                else if (GetAnimationState().ToString().Contains("JUMP"))
+                else if (GetCurrentAnimationState().ToString().Contains("JUMP"))
                 {
                     return Animation.Action.JUMPING;
                 }
             }
 
-            switch (GetAnimationState())
+            switch (GetCurrentAnimationState())
             {
                 case Animation.State.NONE:
                     animationAction = Animation.Action.NONE;
@@ -650,28 +659,28 @@ namespace Game1
 
         public bool IsInMoveFrame()
         {
-            return ((moveFrames.ContainsKey(animationState)
-                        && IsInAnimationState(animationState)
-                        && currentSprite.GetCurrentFrame() >= moveFrames[animationState]) 
-                    || !moveFrames.ContainsKey(animationState));
+            return ((moveFrames.ContainsKey(currentAnimationState)
+                        && IsInAnimationState(currentAnimationState)
+                        && currentSprite.GetCurrentFrame() >= moveFrames[currentAnimationState]) 
+                    || !moveFrames.ContainsKey(currentAnimationState));
         }
         
         public int GetMoveFrame()
         {
-            return (moveFrames.ContainsKey(animationState) ? moveFrames[animationState] : 0);
+            return (moveFrames.ContainsKey(currentAnimationState) ? moveFrames[currentAnimationState] : 0);
         }
 
         public bool IsInTossFrame()
         {
-            return ((tossFrames.ContainsKey(animationState)
-                        && IsInAnimationState(animationState)
-                        && currentSprite.GetCurrentFrame() >= tossFrames[animationState])
+            return ((tossFrames.ContainsKey(currentAnimationState)
+                        && IsInAnimationState(currentAnimationState)
+                        && currentSprite.GetCurrentFrame() >= tossFrames[currentAnimationState])
                     || tossFrames.Count == 0);
         }
 
         public int GetTossFrame()
         {
-            return (tossFrames.ContainsKey(animationState) ? tossFrames[animationState] : 0);
+            return (tossFrames.ContainsKey(currentAnimationState) ? tossFrames[currentAnimationState] : 0);
         }
 
         public bool IsFrameComplete(Animation.State state, int frame)
@@ -732,11 +741,14 @@ namespace Game1
 
         public bool InCurrentAttackCancelState()
         {
-            return IsInAnimationState(GetCurrentAttackChainState())
-                        && IsInAnimationAction(Animation.Action.ATTACKING)
-                        //&& IsFrameComplete(GetCurrentAttackChainState(), GetDefaultAttackChain().GetCurrentMove().GetCancelFrame())
-                        && GetCurrentSprite().GetCurrentFrame() >= GetDefaultAttackChain().GetCurrentMove().GetCancelFrame()
-                        && !GetDefaultAttackChain().InLastAttackState();
+            List<ComboAttack.Move> attackStates = defaultAttackChain.GetMoves().FindAll(item => item.GetState().Equals(GetCurrentAnimationState()));
+
+            return IsInAnimationAction(Animation.Action.ATTACKING)
+                        && attackStates.Count > 0 
+                        && IsInAnimationState(attackStates[0].GetState())
+                        && IsFrameComplete(attackStates[0].GetState(), attackStates[0].GetCancelFrame() + 1)
+                        && GetCurrentSprite().GetCurrentFrame() >= attackStates[0].GetCancelFrame()
+                        && !GetDefaultAttackChain().GetLastAttackState().Equals(GetCurrentAnimationState());
         }
 
         public bool InAttackFrame()
@@ -838,7 +850,7 @@ namespace Game1
 
         public void UpdateAnimationLinks(GameTime gameTime)
         {
-            List<Animation.Link> links = animationLinks.FindAll(item => item.GetOnState() == GetAnimationState());
+            List<Animation.Link> links = animationLinks.FindAll(item => item.GetOnState() == GetCurrentAnimationState());
 
             foreach (Animation.Link link in links)
             {
@@ -876,7 +888,7 @@ namespace Game1
         {
             if (InResetState())
             {
-                if (IsFrameComplete(GetAnimationState(), GetCurrentSprite().GetCurrentFrame() + 1))
+                if (IsFrameComplete(GetCurrentAnimationState(), GetCurrentSprite().GetCurrentFrame() + 1))
                 {
                     SetAnimationState(Animation.State.STANCE);
                 }
