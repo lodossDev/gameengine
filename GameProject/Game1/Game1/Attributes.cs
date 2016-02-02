@@ -73,15 +73,19 @@ namespace Game1
 
         public class AttackInfo
         {
-            public int attackId;
             public int hitByAttackId;
             public Animation.State lastAttackState;
-            public Animation.State hitByAttackState;
+            public int lastAttackFrame;
 
             public AttackInfo()
             {
-                attackId = (int)AttackState.NO_ATTACK_ID;
-                hitByAttackId = 0;
+                Reset();
+            }
+
+            public void Reset()
+            {
+                lastAttackFrame = -1;
+                hitByAttackId = -1;
                 lastAttackState = Animation.State.NONE;
             }
         }

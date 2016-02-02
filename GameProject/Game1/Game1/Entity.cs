@@ -155,8 +155,8 @@ namespace Game1
             if (!IsInAnimationState(state))
             {
                 lastAnimationState = currentAnimationState;
-                 
-                attackInfo.attackId = (int)Attributes.AttackState.NO_ATTACK_ID - 1;
+
+                attackInfo.lastAttackFrame = -1;
                 attackInfo.lastAttackState = Animation.State.NONE;
                 Sprite newSprite = GetSprite(state);
 
@@ -736,7 +736,12 @@ namespace Game1
 
         public Animation.State GetCurrentAttackChainState()
         {
-            return defaultAttackChain.GetCurrentMove().GetState();
+            return defaultAttackChain.GetCurrentAttackState();
+        }
+
+        public Animation.State GetPreviousAttackChainState()
+        {
+            return defaultAttackChain.GetPreviousAttackState();
         }
 
         public bool InCurrentAttackCancelState()

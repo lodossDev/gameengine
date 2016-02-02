@@ -101,7 +101,7 @@ namespace Game1
         public bool TouchBottom(Rectangle r1, Rectangle r2, int offset = 15)
         {
             return r1.Top <= r2.Bottom + (r2.Height / 2)
-                        && r1.Top >= r2.Bottom - (r2.Height / 2)
+                        && r1.Top >= r2.Bottom - (r2.Height / 4)
                         && r1.Right >= r2.Left + (r2.Width / offset)
                         && r1.Left <= r2.Right - (r2.Width / offset);
         }
@@ -168,6 +168,7 @@ namespace Game1
 
                         if (target.IsToss())
                         {
+                            //entity.Toss(-5f);
                             //entity.tossVelY = target.tossVelY;
                         }
                     }
@@ -264,12 +265,12 @@ namespace Game1
             }
         }
 
-        private static int hit_id = 1;
+        public static int hit_id = 1;
 
         private void CheckAttack(Entity entity)
         {
             ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
-            Attributes.AttackInfo attackInfo = entity.GetAttackInfo();
+            Attributes.AttackInfo entityAttackInfo = entity.GetAttackInfo();
             List<BoundingBox> attackBoxes = entity.GetCurrentSprite().GetCurrentBoxes(BoundingBox.BoxType.HIT_BOX);
 
             if (attackBoxes != null && attackBoxes.Count > 0)
@@ -280,24 +281,41 @@ namespace Game1
                     {
                         Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
+                        bool hastHit = false;
 
                         if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
-                                && targetAttackInfo.hitByAttackId != attackInfo.attackId
                                 && entity.InAttackFrame())
                         {
+                            //Get all attackboxes for this one frame, you can only hit once in each attack frame.
                             foreach (BoundingBox attack in attackBoxes)
                             {
                                 if (attack.GetBox().Intersects(targetBox))
                                 {
-                                    if (targetAttackInfo.hitByAttackState != attackInfo.lastAttackState)
-                                    {
-                                        hit_id++;
-                                        attackChain.IncrementMoveIndex();
-                                        attackInfo.lastAttackState = targetAttackInfo.hitByAttackState = entity.GetCurrentAnimationState();
-                                    }
+                                    hastHit = true;
+                                }
+                            }
 
-                                    target.Toss(-5f);
-                                    targetAttackInfo.hitByAttackId = attackInfo.attackId = hit_id;
+                            if (hastHit)
+                            {
+                                //This will hit target in different attack frames.
+                                if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
+                                {
+                                    hit_id++;
+                                    entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                }
+
+                                if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
+                                {
+                                    attackChain.IncrementMoveIndex();
+                                    entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
+                                }
+
+                                //Only 1 attack box will hit target.
+                                if (targetAttackInfo.hitByAttackId != hit_id)
+                                {
+                                    target.Toss(-10f);
+                                    entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                    targetAttackInfo.hitByAttackId = hit_id;
                                 }
                             }
                         }

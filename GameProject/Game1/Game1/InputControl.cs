@@ -200,16 +200,12 @@ namespace Game1
                     {
                         player.SetAnimationState(player.GetCurrentAttackChainState());
                     }
-                    else
-                    {
-                        player.SetAnimationState(player.GetCurrentAnimationState());
-                    }
-
+                    
                     if (player.InCurrentAttackCancelState())
                     {
                         //Put in entity reset animation and reset attack info and other stuff in there.
-                        player.GetAttackInfo().attackId = (int)Attributes.AttackState.NO_ATTACK_ID - 1;
                         player.GetAttackInfo().lastAttackState = Animation.State.NONE;
+                        player.GetAttackInfo().lastAttackFrame = -1;
 
                         player.GetCurrentSprite().ResetAnimation();
                     }

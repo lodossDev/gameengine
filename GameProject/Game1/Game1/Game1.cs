@@ -177,19 +177,26 @@ namespace Game1
             leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
 
             leo.SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
-                new ComboAttack.Move(Animation.State.ATTACK1, 2000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK1, 2000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK1, 2000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK4, 2000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK4, 2000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK4, 2000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK2, 2000, 10),
-                new ComboAttack.Move(Animation.State.ATTACK3, 2000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK3, 2000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK3, 2000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK5, 2000, 8),
-                new ComboAttack.Move(Animation.State.ATTACK6, 2000, 10)
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 9),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 9),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 9),
+                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK2, 222000, 10),
+                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 9),
+                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 9),
+                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 9),
+                new ComboAttack.Move(Animation.State.ATTACK5, 222000, 8),
+                new ComboAttack.Move(Animation.State.ATTACK6, 222000, 10)
             }));
+
+            leo.SetFrameDelay(Animation.State.ATTACK1, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK2, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK3, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK4, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK5, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK6, 1);
 
 
             leo2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Stance"));
@@ -314,7 +321,7 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                drum3.Toss(-15);
+                //drum3.Toss(-15);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.K))
@@ -376,11 +383,13 @@ namespace Game1
                 //spriteBatch.DrawString(font1, "ENTITY: " + entity.GetName(), new Vector2(20, i*20), Color.Black);
             }   
 
-            spriteBatch.DrawString(font1, "leo attack state: " + leo.GetDefaultAttackChain().GetCurrentMove().GetState(), new Vector2(20, 40), Color.Black);
-            spriteBatch.DrawString(font1, "leo cancel frame: " + leo.GetDefaultAttackChain().GetCurrentMove().GetCancelFrame(), new Vector2(20, 60), Color.Black);
-            spriteBatch.DrawString(font1, "leo attack state: " + leo.GetCurrentAttackChainState(), new Vector2(20, 90), Color.Black);
-            spriteBatch.DrawString(font1, "drum4 last attackid: " + drum4.GetPosY(), new Vector2(20, 110), Color.Black);
+            spriteBatch.DrawString(font1, "leo last attack frame: " + leo.GetAttackInfo().lastAttackFrame, new Vector2(20, 40), Color.Black);
             
+            spriteBatch.DrawString(font1, "leo  combo atack index: " + leo.GetDefaultAttackChain().GetCurrentMoveIndex(), new Vector2(20, 90), Color.Black);
+            spriteBatch.DrawString(font1, "drum1 hitbyattackid: " + drum.GetAttackInfo().hitByAttackId, new Vector2(20, 110), Color.Black);
+            spriteBatch.DrawString(font1, "drum3 hitbyattackid: " + drum3.GetAttackInfo().hitByAttackId, new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "current attack id: " + CollisionManager.hit_id, new Vector2(20, 170), Color.Black);
+
             //spriteBatch.DrawString(font1, "moveIndex: " + leo.GetDefaultAttackChain().GetCurrentMoveIndex(), new Vector2(20, 60), Color.Black);
 
             /*int i = 1;
