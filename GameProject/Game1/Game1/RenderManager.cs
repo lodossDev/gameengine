@@ -56,7 +56,8 @@ namespace Game1
                         {
                             if (box.Render())
                             {
-                                Setup.spriteBatch.Draw(box.GetSprite(), box.GetBox(), box.GetColor() * BoundingBox.VISIBILITY);
+                                //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * BoundingBox.VISIBILITY);
+                                box.DrawRectangle(false);
                             }
                         }
                     }
@@ -65,7 +66,8 @@ namespace Game1
                     {
                         if (box.Render())
                         {
-                            Setup.spriteBatch.Draw(box.GetSprite(), box.GetBox(), box.GetColor() * BoundingBox.VISIBILITY);
+                            //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * BoundingBox.VISIBILITY);
+                            box.DrawRectangle(false);
                         }
                     }
 

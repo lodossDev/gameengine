@@ -20,13 +20,13 @@ namespace Game1
         public List<Entity> FindBelow(Entity entity)
         {
             List<Entity> found = new List<Entity>();
-            Rectangle entityBox = entity.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+            Rectangle entityBox = entity.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
             foreach (Entity target in entities)
             {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
-                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
                             && InBoundsX(entityBox, targetBox, 20)
@@ -44,13 +44,13 @@ namespace Game1
         public List<Entity> FindAbove(Entity entity)
         {
             List<Entity> found = new List<Entity>();
-            Rectangle entityBox = entity.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+            Rectangle entityBox = entity.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
             foreach (Entity target in entities)
             {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
-                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
                             && InBoundsX(entityBox, targetBox, 20)
@@ -129,13 +129,13 @@ namespace Game1
 
         private void CheckLand(Entity entity)
         {
-            Rectangle entityBox = entity.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+            Rectangle entityBox = entity.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
             
             foreach (Entity target in entities)
             {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
-                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
                            && entityBox.Intersects(targetBox)
@@ -146,7 +146,7 @@ namespace Game1
 
                         //entity.SetGroundBase(target.GetPosY() + entityBox.Height + 5);
                         //entity.SetPosY(-(entityBox.Top - targetBox.Height) + h2);
-                        entity.Toss(5);
+                        //entity.Toss(5);
                     }
                 }
             }
@@ -155,7 +155,7 @@ namespace Game1
             {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
-                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+                    Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
                            && TouchTop(entityBox, targetBox))
@@ -206,8 +206,8 @@ namespace Game1
 
         private void CheckBounds(Entity entity)
         {
-            BoundingBox bb1 = entity.GetBoxes(BoundingBox.BoxType.BODY)[0];
-            Rectangle entityBox = bb1.GetBox();
+            BoundingBox bb1 = entity.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0];
+            Rectangle entityBox = bb1.GetRect();
             Sprite pStance = entity.GetSprite(Animation.State.STANCE);
             int pWidth = entityBox.Width;
             entity.GetCollisionInfo().Reset();
@@ -216,8 +216,8 @@ namespace Game1
             {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
-                    BoundingBox bb2 = target.GetBoxes(BoundingBox.BoxType.BODY)[0];
-                    Rectangle targetBox = bb2.GetBox();
+                    BoundingBox bb2 = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0];
+                    Rectangle targetBox = bb2.GetRect();
                     Sprite tStance = target.GetSprite(Animation.State.STANCE);
                     int tWidth = targetBox.Width;
                     int tHeight = targetBox.Height;
@@ -265,7 +265,7 @@ namespace Game1
             }
         }
 
-        public static int hit_id = 1;
+        public static int hit_id = 0;
 
         private void CheckAttack(Entity entity)
         {
@@ -279,7 +279,7 @@ namespace Game1
                 {
                     if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                     {
-                        Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+                        Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
                         bool hastHit = false;
 
@@ -289,7 +289,7 @@ namespace Game1
                             //Get all attackboxes for this one frame, you can only hit once in each attack frame.
                             foreach (BoundingBox attack in attackBoxes)
                             {
-                                if (attack.GetBox().Intersects(targetBox))
+                                if (attack.GetRect().Intersects(targetBox))
                                 {
                                     hastHit = true;
                                 }
@@ -306,6 +306,7 @@ namespace Game1
 
                                 if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
                                 {
+                                    hit_id++;
                                     attackChain.IncrementMoveIndex();
                                     entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
                                 }
@@ -313,8 +314,7 @@ namespace Game1
                                 //Only 1 attack box will hit target.
                                 if (targetAttackInfo.hitByAttackId != hit_id)
                                 {
-                                    target.Toss(-10f);
-                                    entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                    target.Toss(-5f);
                                     targetAttackInfo.hitByAttackId = hit_id;
                                 }
                             }

@@ -15,8 +15,8 @@ namespace Game1
 
         public static bool InRangeX(Entity e1, Entity e2, float range)
         {
-            Rectangle entityBox = e1.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
-            Rectangle targetBox = e2.GetBoxes(BoundingBox.BoxType.BODY)[0].GetBox();
+            Rectangle entityBox = e1.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
+            Rectangle targetBox = e2.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
             int wx = (entityBox.Width = targetBox.Width);
 
             if (e1.GetDirX() > 0)

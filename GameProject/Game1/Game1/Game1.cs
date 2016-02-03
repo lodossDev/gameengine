@@ -95,7 +95,7 @@ namespace Game1
             leo.SetSpriteOffSet(Animation.State.FALL, 30, -120);
 
             leo.SetAnimationState(Animation.State.STANCE);
-            leo.AddBox(new BoundingBox(BoundingBox.BoxType.BODY, 120, 270, -30, 10));
+            leo.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 120, 270, -30, 10));
             leo.SetScale(1.6f, 2.2f);
             leo.SetPostion(400, 0, 200);
             leo.SetSpriteOffSet(Animation.State.WALK_TOWARDS, 40, -15);
@@ -204,13 +204,13 @@ namespace Game1
 
             leo2.SetAnimationState(Animation.State.STANCE);
             //leo2.SetFrameDelay(Animation.State.STANCE, 10);
-            leo2.AddBox(new BoundingBox(BoundingBox.BoxType.BODY, 120, 220, -30, 60));
+            leo2.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 120, 220, -30, 60));
             
 
             drum = new Entity(Entity.EntityType.OBSTACLE, "DRUM1");
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
-            drum.AddBox(new BoundingBox(BoundingBox.BoxType.BODY, 125, 210, -30, 80));
+            drum.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum.SetScale(2.2f, 2.6f);
             drum.SetPostion(700, 0, 400);
             drum.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -221,7 +221,7 @@ namespace Game1
             drum2 = new Entity(Entity.EntityType.OBSTACLE, "DRUM2");
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum2.SetAnimationState(Animation.State.STANCE);
-            drum2.AddBox(new BoundingBox(BoundingBox.BoxType.BODY, 125, 210, -30, 80));
+            drum2.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum2.SetScale(2.2f, 2.6f);
             drum2.SetPostion(500, 0, 400);
             drum2.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -232,7 +232,7 @@ namespace Game1
             drum3 = new Entity(Entity.EntityType.OBSTACLE, "DRUM3");
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum3.SetAnimationState(Animation.State.STANCE);
-            drum3.AddBox(new BoundingBox(BoundingBox.BoxType.BODY, 125, 210, -30, 80));
+            drum3.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum3.SetScale(2.2f, 2.6f);
             drum3.SetPostion(290, -180, 400);
             drum3.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -243,7 +243,7 @@ namespace Game1
             drum4 = new Entity(Entity.EntityType.OBSTACLE, "DRUM4");
             drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum4.SetAnimationState(Animation.State.STANCE);
-            drum4.AddBox(new BoundingBox(BoundingBox.BoxType.BODY, 125, 210, -30, 80));
+            drum4.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum4.SetScale(2.2f, 2.6f);
             drum4.SetPostion(800, -680, 400);
             drum4.SetGroundBase(-340);

@@ -72,6 +72,7 @@ namespace Game1
                 boxes.Add(frame - 1, new List<BoundingBox>());
 
             boxes[frame - 1].Add(box);
+            boxes[frame - 1][boxes[frame - 1].Count - 1].SetFrame(frame);
         }
 
         public void SetFrameTime(int frame, float frameDelay)
