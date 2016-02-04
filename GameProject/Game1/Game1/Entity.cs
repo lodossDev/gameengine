@@ -542,6 +542,11 @@ namespace Game1
             return GetCurrentSprite().GetCurrentTexture().Height * GetScale().Y;
         }
 
+        public int GetCurrentSpriteFrame()
+        {
+            return GetCurrentSprite().GetCurrentFrame();
+        }
+
         public Sprite GetBaseSprite()
         {
             return baseSprite;

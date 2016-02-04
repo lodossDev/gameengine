@@ -267,6 +267,23 @@ namespace Game1
 
         public static int hit_id = 0;
 
+        private void OnAttack(Entity entity, Entity target)
+        {
+            if (entity != target)
+            {
+                ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
+                attackChain.IncrementMoveIndex();
+            }
+        }
+
+        private void OnHit(Entity target, Entity entity)
+        {
+            if (target != entity)
+            {
+                target.Toss(-5f);
+            }
+        }
+
         private void CheckAttack(Entity entity)
         {
             ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
@@ -275,15 +292,18 @@ namespace Game1
 
             if (attackBoxes != null && attackBoxes.Count > 0)
             {
+                //int resetOnFrame = attackBoxes.FindAll(item => item.GetResetHit() == 1).Count;
+
                 foreach (Entity target in entities)
                 {
                     if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                     {
                         Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
-                        bool hastHit = false;
+                        bool targetHit = false;
 
                         if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
+                                && entity.IsInAnimationAction(Animation.Action.ATTACKING)
                                 && entity.InAttackFrame())
                         {
                             //Get all attackboxes for this one frame, you can only hit once in each attack frame.
@@ -291,30 +311,32 @@ namespace Game1
                             {
                                 if (attack.GetRect().Intersects(targetBox))
                                 {
-                                    hastHit = true;
+                                    targetHit = true;
                                 }
                             }
 
-                            if (hastHit)
+                            if (targetHit)
                             {
                                 //This will hit target in different attack frames.
+                                // Current attack frame has resethit = 1 then.
                                 if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
                                 {
                                     hit_id++;
+                                    OnAttack(entity, target);
                                     entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
                                 }
 
                                 if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
                                 {
                                     hit_id++;
-                                    attackChain.IncrementMoveIndex();
+                                    OnAttack(entity, target);
                                     entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
                                 }
 
                                 //Only 1 attack box will hit target.
                                 if (targetAttackInfo.hitByAttackId != hit_id)
                                 {
-                                    target.Toss(-5f);
+                                    OnHit(target, entity);
                                     targetAttackInfo.hitByAttackId = hit_id;
                                 }
                             }
