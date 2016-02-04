@@ -141,8 +141,8 @@ namespace Game1
                            && entityBox.Intersects(targetBox)
                            && TouchBottom(entityBox, targetBox))
                     {
-                        Debug.WriteLine("E: " + entity.GetName() + " TOP: " + entityBox.Top);
-                        Debug.WriteLine("E: " + target.GetName() + " bottom: " + targetBox.Bottom);
+                        //Debug.WriteLine("E: " + entity.GetName() + " TOP: " + entityBox.Top);
+                        //Debug.WriteLine("E: " + target.GetName() + " bottom: " + targetBox.Bottom);
 
                         //entity.SetGroundBase(target.GetPosY() + entityBox.Height + 5);
                         //entity.SetPosY(-(entityBox.Top - targetBox.Height) + h2);
@@ -267,12 +267,12 @@ namespace Game1
 
         public static int hit_id = 0;
 
-        private void OnAttack(Entity entity, Entity target)
+        private void OnAttack(Entity entity, Entity target, AttackBox attackBox)
         {
             if (entity != target)
             {
                 ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
-                attackChain.IncrementMoveIndex();
+                attackChain.IncrementMoveIndex(attackBox.GetComboStep());
             }
         }
 
@@ -284,19 +284,33 @@ namespace Game1
             }
         }
 
+        /*private List<AttackBox> getAttackBoxes(List<BoundingBox> bboxes)
+        {
+            List<AttackBox> result = new List<AttackBox>();
+
+            if (bboxes != null && bboxes.Count > 0)
+            {
+                foreach (BoundingBox bbox in bboxes)
+                {
+                    result.Add((AttackBox)bbox);
+                }
+            }
+            
+            return result;
+        }*/
+
         private void CheckAttack(Entity entity)
         {
             ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
             Attributes.AttackInfo entityAttackInfo = entity.GetAttackInfo();
-            List<BoundingBox> attackBoxes = entity.GetCurrentSprite().GetCurrentBoxes(BoundingBox.BoxType.HIT_BOX);
+            List<AttackBox> attackBoxes = entity.GetCurrentBoxes(BoundingBox.BoxType.HIT_BOX).Cast<AttackBox>().ToList();
+            AttackBox currentAttackBox = null;
 
             if (attackBoxes != null && attackBoxes.Count > 0)
             {
-                //int resetOnFrame = attackBoxes.FindAll(item => item.GetResetHit() == 1).Count;
-
                 foreach (Entity target in entities)
                 {
-                    if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
+                    if (entity != target)
                     {
                         Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
@@ -307,10 +321,12 @@ namespace Game1
                                 && entity.InAttackFrame())
                         {
                             //Get all attackboxes for this one frame, you can only hit once in each attack frame.
-                            foreach (BoundingBox attack in attackBoxes)
+                            foreach (AttackBox attack in attackBoxes)
                             {
                                 if (attack.GetRect().Intersects(targetBox))
                                 {
+                                    currentAttackBox = attack;
+                                    Debug.WriteLine("### COMBOSTEP: " + currentAttackBox.GetComboStep());
                                     targetHit = true;
                                 }
                             }
@@ -319,18 +335,24 @@ namespace Game1
                             {
                                 //This will hit target in different attack frames.
                                 // Current attack frame has resethit = 1 then.
-                                if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
+                                if (currentAttackBox.GetResetHit() == 1)
                                 {
-                                    hit_id++;
-                                    OnAttack(entity, target);
-                                    entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                    if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
+                                    {
+                                        hit_id++;
+                                        OnAttack(entity, target, currentAttackBox);
+                                        entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                    }
                                 }
-
-                                if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
+                                else
                                 {
-                                    hit_id++;
-                                    OnAttack(entity, target);
-                                    entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
+                                    if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
+                                    {
+                                        hit_id++;
+                                        OnAttack(entity, target, currentAttackBox);
+                                        entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                        entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
+                                    }
                                 }
 
                                 //Only 1 attack box will hit target.

@@ -183,6 +183,16 @@ namespace Game1
             GetSprite(state).AddBox(frame, box);
         }
 
+        public BoundingBox SetBox(Animation.State state, int frame)
+        {
+            return GetSprite(state).GetBoxes(frame).Last();
+        }
+
+        public AttackBox SetAttackBox(Animation.State state, int frame)
+        {
+            return (AttackBox)GetSprite(state).GetBoxes(frame).Last();
+        }
+
         public void SetOffset(Animation.State state, int frame, float x, float y)
         {
             GetSprite(state).SetFrameOffset(frame, x, y);
@@ -589,6 +599,16 @@ namespace Game1
         public List<BoundingBox> GetBoxes(BoundingBox.BoxType type)
         {
             return boxes.FindAll(box => box.GetBoxType() == type);
+        }
+
+        public List<BoundingBox> GetCurrentBoxes()
+        {
+            return GetCurrentSprite().GetCurrentBoxes();
+        }
+
+        public List<BoundingBox> GetCurrentBoxes(BoundingBox.BoxType type)
+        {
+            return GetCurrentSprite().GetCurrentBoxes(type);
         }
 
         public SpriteEffects GetEffects()

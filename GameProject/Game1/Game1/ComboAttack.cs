@@ -54,10 +54,20 @@ namespace Game1
                 return moves[moves.Count - 1].GetState();
             }
 
+            public void IncrementMoveIndex(int step)
+            {
+                currentMoveIndex += step;
+                currentMoveTime = 0f;
+
+                if (currentMoveIndex > moves.Count - 1)
+                {
+                    ResetMove();
+                }
+            }
+
             public void IncrementMoveIndex()
             {
-                currentMoveIndex++;
-                currentMoveTime = 0f;
+                IncrementMoveIndex(1);
             }
 
             public void ResetMove()

@@ -183,12 +183,12 @@ namespace Game1
 
         public List<BoundingBox> GetCurrentBoxes()
         {
-            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame] : null);
+            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame] : new List<BoundingBox>());
         }
 
         public List<BoundingBox> GetCurrentBoxes(BoundingBox.BoxType boxType)
         {
-            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame].FindAll(item => item.GetBoxType() == boxType) : null);
+            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame].FindAll(item => item.GetBoxType() == boxType) : new List<BoundingBox>());
         }
 
         public List<BoundingBox> GetAllBoxes()
@@ -199,6 +199,11 @@ namespace Game1
         public List<BoundingBox> GetAllBoxes(BoundingBox.BoxType boxType)
         {
             return boxes.SelectMany(item => item.Value).ToList().FindAll(item => item.GetBoxType() == boxType);
+        }
+
+        public List<BoundingBox> GetBoxes(int frame)
+        {
+            return boxes[frame - 1];
         }
 
         public Vector2 GetPosition()

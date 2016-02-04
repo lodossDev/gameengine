@@ -113,44 +113,48 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.ATTACK1, 20);
             leo.SetFrameDelay(Animation.State.ATTACK1, 1, 17);
             leo.SetFrameDelay(Animation.State.ATTACK1, 2, 17);
-            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(BoundingBox.BoxType.HIT_BOX, 100, 80, 132, 45));
-            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(BoundingBox.BoxType.HIT_BOX, 100, 80, 59, 99));
-            leo.AddBox(Animation.State.ATTACK1, 7, new AttackBox(BoundingBox.BoxType.HIT_BOX, 150, 50, -10, 210));
-            
+            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 132, 45));
+            leo.SetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(5);
+
+            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 59, 99));
+            leo.SetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(5);
+            leo.AddBox(Animation.State.ATTACK1, 7, new AttackBox(150, 50, -10, 210, 1));
+            leo.SetAttackBox(Animation.State.ATTACK1, 7).SetComboStep(1);
+
 
             leo.AddSprite(Animation.State.ATTACK2, new Sprite("Sprites/Actors/Leo/Attack2", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK2, 50, -75);
             leo.SetFrameDelay(Animation.State.ATTACK2, 20);
-            leo.AddBox(Animation.State.ATTACK2, 6, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK2, 7, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK2, 8, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK2, 6, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK2, 7, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK2, 8, new AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK3, new Sprite("Sprites/Actors/Leo/Attack3", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK3, 90, -25);
             leo.SetFrameDelay(Animation.State.ATTACK3, 20);
-            leo.AddBox(Animation.State.ATTACK3, 6, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK3, 7, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK3, 8, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK3, 6, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK3, 7, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK3, 8, new AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK4, new Sprite("Sprites/Actors/Leo/Attack4", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK4, 50, 10);
             leo.SetFrameDelay(Animation.State.ATTACK4, 15);
-            leo.AddBox(Animation.State.ATTACK4, 3, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK4, 4, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK4, 3, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK4, 4, new AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK5, new Sprite("Sprites/Actors/Leo/Attack5", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK5, 75, -52);
             leo.SetFrameDelay(Animation.State.ATTACK5, 18);
-            leo.AddBox(Animation.State.ATTACK5, 5, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK5, 6, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK5, 5, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK5, 6, new AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK6, new Sprite("Sprites/Actors/Leo/Attack6", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.ATTACK6, 45, -90);
             leo.SetFrameDelay(Animation.State.ATTACK6, 1);
-            leo.AddBox(Animation.State.ATTACK6, 5, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK6, 6, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK6, 7, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK6, 8, new AttackBox(BoundingBox.BoxType.HIT_BOX, 220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 5, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 6, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 7, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 8, new AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.JUMP_ATTACK1, new Sprite("Sprites/Actors/Leo/JumpAttack1", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.JUMP_ATTACK1, 80, -90);

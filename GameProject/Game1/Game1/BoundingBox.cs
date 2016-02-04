@@ -161,17 +161,25 @@ namespace Game1
 
     public class AttackBox : BoundingBox
     {
+        public enum AttackPosition {STANDING, LOW, AIR};
+
         private float zDepth;
         private float hitPauseTime;
         private float painTime;
-        private float hitDamage;
+        private int hitDamage;
         private int hitPoints;
+        private float hitStrength;
         private int resetHit;
+        private int comboStep;
+        private int juggleCost;
+        private AttackPosition attackPosition;
+        
 
-
-        public AttackBox(BoxType type, int w, int h, int x, int y, int resetHit = -1, float zDepth = 30,
-                                    float hitPauseTime = 1 / 60, float painTime = 20 / 60, float hitDamage = 0.2f,
-                                    int hitPoints = 5) : base(type, w, h, x, y)
+        public AttackBox(int w, int h, int x, int y, int resetHit = -1, float zDepth = 30,
+                                    float hitPauseTime = 1 / 60, float painTime = 20 / 60, int hitDamage = 5,
+                                    int hitPoints = 5, float hitStrength = 0.2f, int comboStep = 0, 
+                                    int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.STANDING) 
+                                : base(BoxType.HIT_BOX, w, h, x, y)
         {
             SetResetHit(resetHit);
             SetZdepth(zDepth);
@@ -179,6 +187,10 @@ namespace Game1
             SetPainTime(painTime);
             SetHitDamage(hitDamage);
             SetHitPoints(hitPoints);
+            SetHitStrength(hitStrength);
+            SetComboStep(comboStep);
+            SetJuggleCost(juggleCost);
+            SetAttackPosition(attackPosition);
         }
 
         public void SetZdepth(float depth)
@@ -196,7 +208,7 @@ namespace Game1
             this.painTime = painTime;
         }
 
-        public void SetHitDamage(float damage)
+        public void SetHitDamage(int damage)
         {
             hitDamage = damage;
         }
@@ -206,9 +218,29 @@ namespace Game1
             hitPoints = points;
         }
 
+        public void SetHitStrength(float strength)
+        {
+            hitStrength = strength;
+        }
+
         public void SetResetHit(int hit)
         {
             resetHit = hit;
+        }
+
+        public void SetComboStep(int step)
+        {
+            comboStep = step;
+        }
+
+        public void SetJuggleCost(int cost)
+        {
+            juggleCost = cost;
+        }
+
+        public void SetAttackPosition(AttackPosition position)
+        {
+            attackPosition = position;
         }
 
         public float GetZdepth()
@@ -226,7 +258,7 @@ namespace Game1
             return painTime;
         }
 
-        public float GetHitDamage()
+        public int GetHitDamage()
         {
             return hitDamage;
         }
@@ -236,9 +268,29 @@ namespace Game1
             return hitPoints;
         }
 
+        public float GetHitStrength()
+        {
+            return hitStrength;
+        }
+
         public int GetResetHit()
         {
             return resetHit;
+        }
+
+        public int GetComboStep()
+        {
+            return comboStep;
+        }
+
+        public int GetJuggleCost()
+        {
+            return juggleCost;
+        }
+
+        public AttackPosition GetAttackPosition()
+        {
+            return attackPosition;
         }
     }
 }
