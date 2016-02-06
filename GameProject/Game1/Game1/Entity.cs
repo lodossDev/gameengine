@@ -35,19 +35,11 @@ namespace Game1
         private Vector2 origin;
         private Vector2 scale;
 
-        private float tossHeight;
-        //Move to vector
-        private float tossVelY;
-        private float tossVelX;
-        private float maxTossVelY;
-        private float gravity;
-        private bool tryToss;
-
-        private int entityId;
         private int width;
         private int height;
         private float depth;
         private float depthOffSet;
+
         private float ground;
         private float groundBase;
 
@@ -55,13 +47,14 @@ namespace Game1
         private Vector2 baseOffset;
         private Vector2 basePosition;
 
-        private int health;
-        private bool alive;
-        private bool isToss;
-
         private Attributes.CollisionInfo collisionInfo;
         private Attributes.AttackInfo attackInfo;
-        
+        private Attributes.TossInfo tossInfo;
+
+        private int entityId;
+        private int health;
+        private bool alive;
+
 
         public Entity(EntityType type, string name)
         {
@@ -76,41 +69,36 @@ namespace Game1
             boxes = new List<BoundingBox>();
             scale = new Vector2(1f, 1f);
 
+            currentAnimationState = Animation.State.NONE;
+            animationAction = Animation.Action.NONE;
+
             position = Vector3.Zero;
             convertedPosition = Vector2.Zero;
+
             direction = Vector3.Zero;
+            direction.X = 1;
+
             origin = Vector2.Zero;
             velocity = Vector3.Zero;
 
-            tossHeight = 0f;
-            tossVelY = 0f;
-            maxTossVelY = 10f;
-            tossVelX = 0f;
-            gravity = 0.48f;
-            tryToss = false;
+            width = 0;
+            height = 0;
+            depth = 30f;
+            depthOffSet = 0f;
 
-            alive = true;
-            health = 100;
-
-            isToss = false;
-            direction.X = 1;
-
+            ground = groundBase = 0;
             baseSprite = new Sprite("Sprites/Misc/Marker");
             baseOffset = Vector2.Zero;
             basePosition = Vector2.Zero;
 
-            depth = 30f;
-            ground = groundBase = 0;
-            depthOffSet = 0f;
+            collisionInfo = new Attributes.CollisionInfo();
+            attackInfo = new Attributes.AttackInfo();
+            tossInfo = new Attributes.TossInfo();
 
             id++;
             entityId = id;
-
-            currentAnimationState = Animation.State.NONE;
-            animationAction = Animation.Action.NONE;
-
-            collisionInfo = new Attributes.CollisionInfo();
-            attackInfo = new Attributes.AttackInfo();
+            alive = true;
+            health = 100;
         }
 
         public void AddSprite(Animation.State state, Sprite sprite)
@@ -188,9 +176,14 @@ namespace Game1
             return GetSprite(state).GetBoxes(frame).Last();
         }
 
-        public AttackBox SetAttackBox(Animation.State state, int frame)
+        public AttackBox GetAttackBox(Animation.State state, int frame)
         {
             return (AttackBox)GetSprite(state).GetBoxes(frame).Last();
+        }
+
+        public AttackBox GetAttackBox(Animation.State state, int frame, int index)
+        {
+            return (AttackBox)GetSprite(state).GetBoxes(frame)[index];
         }
 
         public void SetOffset(Animation.State state, int frame, float x, float y)
@@ -532,6 +525,11 @@ namespace Game1
             return currentSprite;
         }
 
+        public int GetCurrentFrame()
+        {
+            return GetCurrentSprite().GetCurrentFrame();
+        }
+
         public float GetSpriteWidth(Animation.State state)
         {
             return GetSprite(state).GetCurrentTexture().Width * GetScale().X;
@@ -636,10 +634,10 @@ namespace Game1
 
         public bool IsInAnimationAction(Animation.Action animationAction)
         {
-            return (GetAnimationAction() == animationAction);
+            return (GetCurrentAnimationAction() == animationAction);
         }
 
-        public Animation.Action GetAnimationAction()
+        public Animation.Action GetCurrentAnimationAction()
         {
             if (GetCurrentAnimationState().ToString().Contains("ATTACK"))
             {
@@ -721,7 +719,7 @@ namespace Game1
 
         public bool IsToss()
         {
-            return isToss;
+            return tossInfo.isToss;
         }
 
         public bool HasLanded()
@@ -739,19 +737,9 @@ namespace Game1
             return GetPosY() < GetGround();
         }
 
-        public float GetTossVelX()
+        public Attributes.TossInfo GetTossInfo()
         {
-            return tossVelX;
-        }
-
-        public float GetTossvelY()
-        {
-            return tossVelY;
-        }
-
-        public float GetMaxTossVelY()
-        {
-            return maxTossVelY;
+            return tossInfo;
         }
 
         public ComboAttack.Chain GetDefaultAttackChain()
@@ -821,59 +809,57 @@ namespace Game1
             }
         }
 
-        public void SetMaxTossVelY(float velY)
-        {
-            maxTossVelY = velY;
-        }
-
         public void Toss(float height = -20, float velX = 0f)
         {
-            tossHeight = height;
-            tossVelY = (height / 2);
-            tossVelX = velX;
-            isToss = true;
-            tryToss = false;
+            tossInfo.height = height;
+            tossInfo.velocity.Y = (height / 2);
+            tossInfo.velocity.X = velX;
+            tossInfo.inTossFrame = false;
+            tossInfo.isToss = true;
+        }
+
+        public void ResetToss()
+        {
+            velocity.Y = 0f;
+            tossInfo.velocity.X = 0f;
+            tossInfo.velocity.Y = 0f;
+            tossInfo.inTossFrame = false;
+            tossInfo.isToss = false;
         }
 
         public void UpdateToss(GameTime gameTime)
         {
             bool alwaysToss = IsInAnimationAction(Animation.Action.FALLING);
 
-            if (isToss || alwaysToss)
+            if (tossInfo.isToss || alwaysToss)
             {
                 if (IsInTossFrame() || alwaysToss)
                 {
-                    if (!tryToss)
+                    if (!tossInfo.inTossFrame)
                     {
-                        MoveY(tossHeight);
-                        velocity.Y = tossVelY;
-                        tryToss = true;
+                        MoveY(tossInfo.height);
+                        velocity.Y = tossInfo.velocity.Y;
+                        tossInfo.inTossFrame = true;
                     }
                 }
 
-                if (tryToss)
+                if (tossInfo.inTossFrame)
                 {
-                    velocity.Y += gravity;
+                    velocity.Y += tossInfo.gravity;
                     
-                    if (velocity.Y >= maxTossVelY)
+                    if (velocity.Y >= tossInfo.maxVelocity.Y)
                     {
-                        velocity.Y = maxTossVelY;
+                        velocity.Y = tossInfo.maxVelocity.Y;
                     }
 
-                    VelX(tossVelX);
+                    VelX(tossInfo.velocity.X);
                 }
 
                 if (GetPosY() > GetGround())
                 {
-                    velocity.Y = 0f;
-                    tossVelX = 0f;
-                    tossVelY = 0f;
-
                     SetPosY(GetGround());
                     SetAnimationState(Animation.State.LAND);
-                    
-                    tryToss = false;
-                    isToss = false;
+                    ResetToss();
                 }
             }
         }

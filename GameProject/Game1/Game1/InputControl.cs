@@ -17,8 +17,7 @@ namespace Game1
         private Entity player;
         private InputDirection inputDirection;
         private PlayerIndex playerIndex;
-        private KeyboardState oldKeyboardState,
-                  currentKeyboardState;
+        private KeyboardState oldKeyboardState, currentKeyboardState;
 
 
         public InputControl(Entity player, PlayerIndex index)
@@ -215,7 +214,7 @@ namespace Game1
                     if (!player.IsInAnimationAction(Animation.Action.ATTACKING)
                             && !player.IsInAnimationAction(Animation.Action.RECOVERY))
                     {
-                        if (player.GetTossVelX() == 0.0)
+                        if (player.GetTossInfo().velocity.X == 0.0)
                         {
                             if (!player.InAir())
                             {

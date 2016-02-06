@@ -113,13 +113,15 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.ATTACK1, 20);
             leo.SetFrameDelay(Animation.State.ATTACK1, 1, 17);
             leo.SetFrameDelay(Animation.State.ATTACK1, 2, 17);
-            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 132, 45));
-            leo.SetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(5);
 
-            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 59, 99));
-            leo.SetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(5);
+            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 132, 45));
+            //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(0);
+
+            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 59, 99, 1));
+            //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(1);
+
             leo.AddBox(Animation.State.ATTACK1, 7, new AttackBox(150, 50, -10, 210, 1));
-            leo.SetAttackBox(Animation.State.ATTACK1, 7).SetComboStep(1);
+            leo.GetAttackBox(Animation.State.ATTACK1, 7).SetComboStep(0);
 
 
             leo.AddSprite(Animation.State.ATTACK2, new Sprite("Sprites/Actors/Leo/Attack2", Animation.Type.ONCE));
@@ -195,13 +197,12 @@ namespace Game1
                 new ComboAttack.Move(Animation.State.ATTACK6, 222000, 10)
             }));
 
-            leo.SetFrameDelay(Animation.State.ATTACK1, 1);
+            /*leo.SetFrameDelay(Animation.State.ATTACK1, 1);
             leo.SetFrameDelay(Animation.State.ATTACK2, 1);
             leo.SetFrameDelay(Animation.State.ATTACK3, 1);
             leo.SetFrameDelay(Animation.State.ATTACK4, 1);
             leo.SetFrameDelay(Animation.State.ATTACK5, 1);
-            leo.SetFrameDelay(Animation.State.ATTACK6, 1);
-
+            leo.SetFrameDelay(Animation.State.ATTACK6, 1);*/
 
             leo2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Stance"));
             leo2.AddSprite(Animation.State.WALK_TOWARDS, new Sprite("Sprites/Actors/Leo/Walk", Animation.Type.ONCE));
@@ -323,19 +324,19 @@ namespace Game1
                 renderManager.ShowBoxes();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (Keyboard.GetState().IsKeyDown(Keys.J))
             {
-                //drum3.Toss(-15);
+                drum3.Toss(-15);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.K))
             {
-                drum3.VelX(-5);
+                drum3.VelX(-25);
                 //drum3.SetIsLeft(true);
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.L))
             {
-                drum3.VelX(5);
+                drum3.VelX(25);
                 //drum3.SetIsLeft(false);
             }
             else
@@ -387,7 +388,7 @@ namespace Game1
                 //spriteBatch.DrawString(font1, "ENTITY: " + entity.GetName(), new Vector2(20, i*20), Color.Black);
             }   
 
-            spriteBatch.DrawString(font1, "leo last attack frame: " + leo.GetAttackInfo().lastAttackFrame, new Vector2(20, 40), Color.Black);
+            spriteBatch.DrawString(font1, "leo last attack frame: " + drum3.GetCollisionInfo().collide_x, new Vector2(20, 40), Color.Black);
             
             spriteBatch.DrawString(font1, "leo  combo atack index: " + leo.GetDefaultAttackChain().GetCurrentMoveIndex(), new Vector2(20, 90), Color.Black);
             spriteBatch.DrawString(font1, "drum1 hitbyattackid: " + drum.GetAttackInfo().hitByAttackId, new Vector2(20, 110), Color.Black);

@@ -29,7 +29,7 @@ namespace Game1
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
-                            && InBoundsX(entityBox, targetBox, 20)
+                            && TouchTop(entityBox, targetBox, 40)
                             && entityBox.Intersects(targetBox)
                             && Math.Abs(entity.GetPosY()) + 20 >= (Math.Abs(target.GetPosY()) + Math.Abs(target.GetHeight())))
                     {
@@ -68,13 +68,13 @@ namespace Game1
         }
 
         //Move these in static helper class........................................
-        public bool InBoundsX(Rectangle r1, Rectangle r2, int offset = 15)
+        public bool InBoundsX(Rectangle r1, Rectangle r2, int offset = 40)
         {
             return (r1.Right >= r2.Left + (r2.Width / offset)
                         && r1.Left <= r2.Right - (r2.Width / offset));
         }
 
-        public bool TouchLeft(Rectangle r1, Rectangle r2, int offset = 4)
+        public bool TouchLeft(Rectangle r1, Rectangle r2, int offset = 40)
         {
             return (r1.Right <= r2.Right
                         && r1.Right >= r2.Left - 5
@@ -82,7 +82,7 @@ namespace Game1
                         && r1.Bottom >= r2.Top + (r2.Width / offset));
         }
 
-        public bool TouchRight(Rectangle r1, Rectangle r2, int offset = 4)
+        public bool TouchRight(Rectangle r1, Rectangle r2, int offset = 40)
         {
             return (r1.Left >= r2.Left
                         && r1.Left <= r2.Right + 5
@@ -90,7 +90,7 @@ namespace Game1
                         && r1.Bottom >= r2.Top + (r2.Width / offset));
         }
 
-        public bool TouchTop(Rectangle r1, Rectangle r2, int offset = 5)
+        public bool TouchTop(Rectangle r1, Rectangle r2, int offset = 40)
         {
             return r1.Bottom >= r2.Top - 1
                         && r1.Bottom <= r2.Top + (r2.Height / 2)
@@ -101,7 +101,7 @@ namespace Game1
         public bool TouchBottom(Rectangle r1, Rectangle r2, int offset = 15)
         {
             return r1.Top <= r2.Bottom + (r2.Height / 2)
-                        && r1.Top >= r2.Bottom - (r2.Height / 4)
+                        && r1.Top >= r2.Bottom - (r2.Height - 5)
                         && r1.Right >= r2.Left + (r2.Width / offset)
                         && r1.Left <= r2.Right - (r2.Width / offset);
         }
@@ -136,8 +136,11 @@ namespace Game1
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
+                    Vector2 x1 = entityBox.GetIntersectionDepth(targetBox);
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
+                           && !(entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ() - target.GetDepth())
+                                   && !(entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ() + target.GetDepth())
                            && entityBox.Intersects(targetBox)
                            && TouchBottom(entityBox, targetBox))
                     {
@@ -146,7 +149,9 @@ namespace Game1
 
                         //entity.SetGroundBase(target.GetPosY() + entityBox.Height + 5);
                         //entity.SetPosY(-(entityBox.Top - targetBox.Height) + h2);
-                        //entity.Toss(5);
+                        //entity.SetPosY(entity.GetPosY() + x1.Y + 5);
+                        //entity.VelY(5);
+                        entity.Toss(5);
                     }
                 }
             }
@@ -158,6 +163,9 @@ namespace Game1
                     Rectangle targetBox = target.GetBoxes(BoundingBox.BoxType.BODY_BOX)[0].GetRect();
 
                     if (EntityHelper.InRangeZ(entity, target, target.GetDepth())
+                           && !(entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ() - target.GetDepth())
+                                    && !(entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ() + target.GetDepth())
+
                            && TouchTop(entityBox, targetBox))
                     {
                         if (entity.GetVelocity().Y > 1)
@@ -226,24 +234,24 @@ namespace Game1
                             && entityBox.Intersects(targetBox))
                     {
                         Vector2 x1 = entityBox.GetIntersectionDepth(targetBox);
-                        
-                        if (!(Math.Abs(entity.GetPosY()) + 2 >= (Math.Abs(target.GetPosY()) + target.GetHeight()))
-                                && !TouchTop(entityBox, targetBox))
+
+                        if ((Math.Abs(entity.GetPosY()) + 20 < (Math.Abs(target.GetPosY()) + target.GetHeight()))
+                                && !TouchBottom(entityBox, targetBox))
                         {
                             if (!(entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ() - target.GetDepth())
                                     && !(entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ() + target.GetDepth()))
                             {
                                 if ((entity.GetDirX() > 0) && TouchLeft(entityBox, targetBox))//left
                                 {
-                                    entity.VelX(0f);
+                                    entity.SetPosX(entity.GetPosX() + x1.X - entity.GetVelocity().X);
+                                    //entity.VelX(0f);
                                     entity.GetCollisionInfo().Left();
-                                    entity.SetPosX(entity.GetPosX() + x1.X + 2);
                                 }
                                 else if ((entity.GetDirX() < 0) && TouchRight(entityBox, targetBox))//right
                                 {
-                                    entity.VelX(0f);
+                                    entity.SetPosX(entity.GetPosX() + x1.X - entity.GetVelocity().X);
+                                    //entity.VelX(0f);
                                     entity.GetCollisionInfo().Right();
-                                    entity.SetPosX(entity.GetPosX() + x1.X - 2);
                                 }
                             }
 
@@ -276,11 +284,12 @@ namespace Game1
             }
         }
 
-        private void OnHit(Entity target, Entity entity)
+        private void OnHit(Entity target, Entity entity, AttackBox attackBox)
         {
             if (target != entity)
             {
-                target.Toss(-5f);
+                //target.Toss(-5 * attackBox.GetHitStrength());
+                target.MoveY(-15 * attackBox.GetHitStrength());
             }
         }
 
@@ -301,7 +310,6 @@ namespace Game1
 
         private void CheckAttack(Entity entity)
         {
-            ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
             Attributes.AttackInfo entityAttackInfo = entity.GetAttackInfo();
             List<AttackBox> attackBoxes = entity.GetCurrentBoxes(BoundingBox.BoxType.HIT_BOX).Cast<AttackBox>().ToList();
             AttackBox currentAttackBox = null;
@@ -326,15 +334,13 @@ namespace Game1
                                 if (attack.GetRect().Intersects(targetBox))
                                 {
                                     currentAttackBox = attack;
-                                    Debug.WriteLine("### COMBOSTEP: " + currentAttackBox.GetComboStep());
                                     targetHit = true;
                                 }
                             }
 
                             if (targetHit)
                             {
-                                //This will hit target in different attack frames.
-                                // Current attack frame has resethit = 1 then.
+                                //This will hit the target in a different attack frame.
                                 if (currentAttackBox.GetResetHit() == 1)
                                 {
                                     if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
@@ -358,7 +364,7 @@ namespace Game1
                                 //Only 1 attack box will hit target.
                                 if (targetAttackInfo.hitByAttackId != hit_id)
                                 {
-                                    OnHit(target, entity);
+                                    OnHit(target, entity, currentAttackBox);
                                     targetAttackInfo.hitByAttackId = hit_id;
                                 }
                             }
