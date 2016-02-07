@@ -16,7 +16,7 @@ namespace Game1
         Entity leo, leo2, drum, drum2, drum3, drum4;
         RenderManager renderManager;
         CollisionManager collisionManager;
-        BoundingBox box1;
+        CLNS.BoundingBox box1;
         SpriteFont font1;
         InputControl control;
         Camera camera;
@@ -95,7 +95,7 @@ namespace Game1
             leo.SetSpriteOffSet(Animation.State.FALL, 30, -120);
 
             leo.SetAnimationState(Animation.State.STANCE);
-            leo.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 120, 270, -30, 10));
+            leo.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 120, 270, -30, 10));
             leo.SetScale(1.6f, 2.2f);
             leo.SetPostion(400, 0, 200);
             leo.SetSpriteOffSet(Animation.State.WALK_TOWARDS, 40, -15);
@@ -114,49 +114,49 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.ATTACK1, 1, 17);
             leo.SetFrameDelay(Animation.State.ATTACK1, 2, 17);
 
-            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 132, 45));
+            leo.AddBox(Animation.State.ATTACK1, 6, new CLNS.AttackBox(100, 80, 132, 45));
             //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(0);
 
-            leo.AddBox(Animation.State.ATTACK1, 6, new AttackBox(100, 80, 59, 99, 1));
+            leo.AddBox(Animation.State.ATTACK1, 6, new CLNS.AttackBox(100, 80, 59, 99, 1));
             //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(1);
 
-            leo.AddBox(Animation.State.ATTACK1, 7, new AttackBox(150, 50, -10, 210, 1));
+            leo.AddBox(Animation.State.ATTACK1, 7, new CLNS.AttackBox(150, 50, -10, 210, 1));
             leo.GetAttackBox(Animation.State.ATTACK1, 7).SetComboStep(0);
 
 
             leo.AddSprite(Animation.State.ATTACK2, new Sprite("Sprites/Actors/Leo/Attack2", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK2, 50, -75);
             leo.SetFrameDelay(Animation.State.ATTACK2, 20);
-            leo.AddBox(Animation.State.ATTACK2, 6, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK2, 7, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK2, 8, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK2, 6, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK2, 7, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK2, 8, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK3, new Sprite("Sprites/Actors/Leo/Attack3", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK3, 90, -25);
             leo.SetFrameDelay(Animation.State.ATTACK3, 20);
-            leo.AddBox(Animation.State.ATTACK3, 6, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK3, 7, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK3, 8, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK3, 6, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK3, 7, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK3, 8, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK4, new Sprite("Sprites/Actors/Leo/Attack4", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK4, 50, 10);
             leo.SetFrameDelay(Animation.State.ATTACK4, 15);
-            leo.AddBox(Animation.State.ATTACK4, 3, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK4, 4, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK4, 3, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK4, 4, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK5, new Sprite("Sprites/Actors/Leo/Attack5", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK5, 75, -52);
             leo.SetFrameDelay(Animation.State.ATTACK5, 18);
-            leo.AddBox(Animation.State.ATTACK5, 5, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK5, 6, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK5, 5, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK5, 6, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK6, new Sprite("Sprites/Actors/Leo/Attack6", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.ATTACK6, 45, -90);
             leo.SetFrameDelay(Animation.State.ATTACK6, 1);
-            leo.AddBox(Animation.State.ATTACK6, 5, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK6, 6, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK6, 7, new AttackBox(220, 230, 20, 30));
-            leo.AddBox(Animation.State.ATTACK6, 8, new AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 5, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 6, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 7, new CLNS.AttackBox(220, 230, 20, 30));
+            leo.AddBox(Animation.State.ATTACK6, 8, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.JUMP_ATTACK1, new Sprite("Sprites/Actors/Leo/JumpAttack1", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.JUMP_ATTACK1, 80, -90);
@@ -209,13 +209,13 @@ namespace Game1
 
             leo2.SetAnimationState(Animation.State.STANCE);
             //leo2.SetFrameDelay(Animation.State.STANCE, 10);
-            leo2.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 120, 220, -30, 60));
+            leo2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 120, 220, -30, 60));
             
 
             drum = new Entity(Entity.EntityType.OBSTACLE, "DRUM1");
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
-            drum.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum.SetScale(2.2f, 2.6f);
             drum.SetPostion(700, 0, 400);
             drum.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -226,7 +226,7 @@ namespace Game1
             drum2 = new Entity(Entity.EntityType.OBSTACLE, "DRUM2");
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum2.SetAnimationState(Animation.State.STANCE);
-            drum2.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum2.SetScale(2.2f, 2.6f);
             drum2.SetPostion(500, 0, 400);
             drum2.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -237,7 +237,7 @@ namespace Game1
             drum3 = new Entity(Entity.EntityType.OBSTACLE, "DRUM3");
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum3.SetAnimationState(Animation.State.STANCE);
-            drum3.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum3.SetScale(2.2f, 2.6f);
             drum3.SetPostion(290, -180, 400);
             drum3.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -248,7 +248,7 @@ namespace Game1
             drum4 = new Entity(Entity.EntityType.OBSTACLE, "DRUM4");
             drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum4.SetAnimationState(Animation.State.STANCE);
-            drum4.AddBox(new BoundingBox(BoundingBox.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum4.SetScale(2.2f, 2.6f);
             drum4.SetPostion(800, -680, 400);
             drum4.SetGroundBase(-340);
@@ -331,12 +331,12 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.K))
             {
-                drum3.VelX(-25);
+                drum3.VelX(-5);
                 //drum3.SetIsLeft(true);
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.L))
             {
-                drum3.VelX(25);
+                drum3.VelX(5);
                 //drum3.SetIsLeft(false);
             }
             else

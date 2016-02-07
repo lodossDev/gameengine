@@ -194,20 +194,7 @@ namespace Game1
             {
                 if (!player.IsToss())
                 {
-                    if (!player.IsInAnimationAction(Animation.Action.ATTACKING) 
-                            || player.InCurrentAttackCancelState())
-                    {
-                        player.SetAnimationState(player.GetCurrentAttackChainState());
-                    }
-                    
-                    if (player.InCurrentAttackCancelState())
-                    {
-                        //Put in entity reset animation and reset attack info and other stuff in there.
-                        player.GetAttackInfo().lastAttackState = Animation.State.NONE;
-                        player.GetAttackInfo().lastAttackFrame = -1;
-
-                        player.GetCurrentSprite().ResetAnimation();
-                    }
+                    player.AttackChainStep();
                 }
                 else
                 {

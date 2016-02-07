@@ -19,7 +19,7 @@ namespace Game1
         private Vector2 position;
         private float frameTimeElapsed;
         private int resetFrame;
-        private Dictionary<int, List<BoundingBox>> boxes;
+        private Dictionary<int, List<CLNS.BoundingBox>> boxes;
         private Animation.Type animationType;
         private SpriteEffects effects;
         private bool isAnimationComplete;
@@ -33,7 +33,7 @@ namespace Game1
             offsets = new List<Vector2>();
             frameTimeElapsed = 0.0f;
             resetFrame = 0;
-            boxes = new Dictionary<int, List<BoundingBox>>();
+            boxes = new Dictionary<int, List<CLNS.BoundingBox>>();
             spriteOffset = Vector2.Zero;
             position = Vector2.Zero;
             this.animationType = animationType;
@@ -66,10 +66,10 @@ namespace Game1
             frameTimeElapsed = 1 / Animation.TICK_RATE;
         }
 
-        public void AddBox(int frame, BoundingBox box)
+        public void AddBox(int frame, CLNS.BoundingBox box)
         {
             if (!boxes.ContainsKey(frame - 1))
-                boxes.Add(frame - 1, new List<BoundingBox>());
+                boxes.Add(frame - 1, new List<CLNS.BoundingBox>());
 
             boxes[frame - 1].Add(box);
             boxes[frame - 1][boxes[frame - 1].Count - 1].SetFrame(frame);
@@ -181,27 +181,27 @@ namespace Game1
             return spriteOffset;
         }
 
-        public List<BoundingBox> GetCurrentBoxes()
+        public List<CLNS.BoundingBox> GetCurrentBoxes()
         {
-            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame] : new List<BoundingBox>());
+            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame] : new List<CLNS.BoundingBox>());
         }
 
-        public List<BoundingBox> GetCurrentBoxes(BoundingBox.BoxType boxType)
+        public List<CLNS.BoundingBox> GetCurrentBoxes(CLNS.BoxType boxType)
         {
-            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame].FindAll(item => item.GetBoxType() == boxType) : new List<BoundingBox>());
+            return (boxes.ContainsKey(currentFrame) ? boxes[currentFrame].FindAll(item => item.GetBoxType() == boxType) : new List<CLNS.BoundingBox>());
         }
 
-        public List<BoundingBox> GetAllBoxes()
+        public List<CLNS.BoundingBox> GetAllBoxes()
         {
             return boxes.SelectMany(item => item.Value).ToList();
         }
 
-        public List<BoundingBox> GetAllBoxes(BoundingBox.BoxType boxType)
+        public List<CLNS.BoundingBox> GetAllBoxes(CLNS.BoxType boxType)
         {
             return boxes.SelectMany(item => item.Value).ToList().FindAll(item => item.GetBoxType() == boxType);
         }
 
-        public List<BoundingBox> GetBoxes(int frame)
+        public List<CLNS.BoundingBox> GetBoxes(int frame)
         {
             return boxes[frame - 1];
         }

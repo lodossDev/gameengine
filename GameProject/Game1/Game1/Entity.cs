@@ -22,7 +22,7 @@ namespace Game1
 
         private Dictionary<Animation.State, int> moveFrames;
         private Dictionary<Animation.State, int> tossFrames;
-        private List<BoundingBox> boxes;
+        private List<CLNS.BoundingBox> boxes;
         private List<Animation.Link> animationLinks;
         private ComboAttack.Chain defaultAttackChain;
 
@@ -66,7 +66,7 @@ namespace Game1
             tossFrames = new Dictionary<Animation.State, int>();
             animationLinks = new List<Animation.Link>();
 
-            boxes = new List<BoundingBox>();
+            boxes = new List<CLNS.BoundingBox>();
             scale = new Vector2(1f, 1f);
 
             currentAnimationState = Animation.State.NONE;
@@ -161,29 +161,29 @@ namespace Game1
             }
         }
 
-        public void AddBox(BoundingBox box)
+        public void AddBox(CLNS.BoundingBox box)
         {
             boxes.Add(box);
         }
 
-        public void AddBox(Animation.State state, int frame, BoundingBox box)
+        public void AddBox(Animation.State state, int frame, CLNS.BoundingBox box)
         {
             GetSprite(state).AddBox(frame, box);
         }
 
-        public BoundingBox SetBox(Animation.State state, int frame)
+        public CLNS.BoundingBox SetBox(Animation.State state, int frame)
         {
             return GetSprite(state).GetBoxes(frame).Last();
         }
 
-        public AttackBox GetAttackBox(Animation.State state, int frame)
+        public CLNS.AttackBox GetAttackBox(Animation.State state, int frame)
         {
-            return (AttackBox)GetSprite(state).GetBoxes(frame).Last();
+            return (CLNS.AttackBox)GetSprite(state).GetBoxes(frame).Last();
         }
 
-        public AttackBox GetAttackBox(Animation.State state, int frame, int index)
+        public CLNS.AttackBox GetAttackBox(Animation.State state, int frame, int index)
         {
-            return (AttackBox)GetSprite(state).GetBoxes(frame)[index];
+            return (CLNS.AttackBox)GetSprite(state).GetBoxes(frame)[index];
         }
 
         public void SetOffset(Animation.State state, int frame, float x, float y)
@@ -577,9 +577,9 @@ namespace Game1
             return basePosition;
         }
 
-        public List<BoundingBox> GetAllFrameBoxes()
+        public List<CLNS.BoundingBox> GetAllFrameBoxes()
         {
-            List<BoundingBox> currentBoxes = new List<BoundingBox>();
+            List<CLNS.BoundingBox> currentBoxes = new List<CLNS.BoundingBox>();
 
             foreach (Sprite sprite in spriteMap.Values)
             {
@@ -589,22 +589,22 @@ namespace Game1
             return currentBoxes;
         }
 
-        public List<BoundingBox> GetBoxes()
+        public List<CLNS.BoundingBox> GetBoxes()
         {
             return boxes;
         }
 
-        public List<BoundingBox> GetBoxes(BoundingBox.BoxType type)
+        public List<CLNS.BoundingBox> GetBoxes(CLNS.BoxType type)
         {
             return boxes.FindAll(box => box.GetBoxType() == type);
         }
 
-        public List<BoundingBox> GetCurrentBoxes()
+        public List<CLNS.BoundingBox> GetCurrentBoxes()
         {
             return GetCurrentSprite().GetCurrentBoxes();
         }
 
-        public List<BoundingBox> GetCurrentBoxes(BoundingBox.BoxType type)
+        public List<CLNS.BoundingBox> GetCurrentBoxes(CLNS.BoxType type)
         {
             return GetCurrentSprite().GetCurrentBoxes(type);
         }
@@ -682,28 +682,28 @@ namespace Game1
 
         public bool IsInMoveFrame()
         {
-            return ((moveFrames.ContainsKey(currentAnimationState)
-                        && IsInAnimationState(currentAnimationState)
-                        && currentSprite.GetCurrentFrame() >= moveFrames[currentAnimationState]) 
-                    || !moveFrames.ContainsKey(currentAnimationState));
+            return ((moveFrames.ContainsKey(GetCurrentAnimationState())
+                        && IsInAnimationState(GetCurrentAnimationState())
+                        && currentSprite.GetCurrentFrame() >= moveFrames[GetCurrentAnimationState()]) 
+                    || !moveFrames.ContainsKey(GetCurrentAnimationState()));
         }
         
         public int GetMoveFrame()
         {
-            return (moveFrames.ContainsKey(currentAnimationState) ? moveFrames[currentAnimationState] : 0);
+            return (moveFrames.ContainsKey(GetCurrentAnimationState()) ? moveFrames[GetCurrentAnimationState()] : 0);
         }
 
         public bool IsInTossFrame()
         {
-            return ((tossFrames.ContainsKey(currentAnimationState)
-                        && IsInAnimationState(currentAnimationState)
-                        && currentSprite.GetCurrentFrame() >= tossFrames[currentAnimationState])
+            return ((tossFrames.ContainsKey(GetCurrentAnimationState())
+                        && IsInAnimationState(GetCurrentAnimationState())
+                        && currentSprite.GetCurrentFrame() >= tossFrames[GetCurrentAnimationState()])
                     || tossFrames.Count == 0);
         }
 
         public int GetTossFrame()
         {
-            return (tossFrames.ContainsKey(currentAnimationState) ? tossFrames[currentAnimationState] : 0);
+            return (tossFrames.ContainsKey(GetCurrentAnimationState()) ? tossFrames[GetCurrentAnimationState()] : 0);
         }
 
         public bool IsFrameComplete(Animation.State state, int frame)
@@ -769,9 +769,24 @@ namespace Game1
                         && !GetDefaultAttackChain().GetLastAttackState().Equals(GetCurrentAnimationState());
         }
 
+        public void AttackChainStep()
+        {
+            if (!IsInAnimationAction(Animation.Action.ATTACKING) 
+                    || InCurrentAttackCancelState())
+            {
+                SetAnimationState(GetCurrentAttackChainState());
+            }
+
+            if (InCurrentAttackCancelState())
+            {
+                GetAttackInfo().Reset();
+                GetCurrentSprite().ResetAnimation();
+            }
+        }
+
         public bool InAttackFrame()
         {
-            List<BoundingBox> attackBoxes = GetCurrentSprite().GetCurrentBoxes(BoundingBox.BoxType.HIT_BOX);
+            List<CLNS.BoundingBox> attackBoxes = GetCurrentSprite().GetCurrentBoxes(CLNS.BoxType.HIT_BOX);
             return IsInAnimationAction(Animation.Action.ATTACKING) && attackBoxes != null && attackBoxes.Count > 0;
         }
 
@@ -940,12 +955,12 @@ namespace Game1
             UpdateToss(gameTime);
 
             //Update bounding boxes.
-            foreach (BoundingBox box in GetAllFrameBoxes())
+            foreach (CLNS.BoundingBox box in GetAllFrameBoxes())
             {
                 box.Update(gameTime, IsLeft(), GetConvertedPosition());
             }
             
-            foreach (BoundingBox box in boxes)
+            foreach (CLNS.BoundingBox box in boxes)
             {
                 box.Update(gameTime, IsLeft(), GetConvertedPosition());
             }
@@ -954,32 +969,6 @@ namespace Game1
             MoveX(velocity.X);
             MoveY(velocity.Y);
             MoveZ(velocity.Z);
-        }
-
-        public void ShowBoxes()
-        {
-            foreach (BoundingBox box in GetAllFrameBoxes())
-            {
-                box.Visible();
-            }
-
-            foreach (BoundingBox box in boxes)
-            {
-                box.Visible();
-            }
-        }
-
-        public void HideBoxes()
-        {
-            foreach(BoundingBox box in GetAllFrameBoxes())
-            {
-                box.Hide();
-            }
-            
-            foreach (BoundingBox box in boxes)
-            {
-                box.Hide();
-            }
         }
 
         public int CompareTo(Entity other)

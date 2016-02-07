@@ -10,25 +10,21 @@ namespace Game1
 {
     public class RenderManager : Manager
     {
+        private bool renderBoxes;
+
         public RenderManager()
         {
-
+            renderBoxes = false;
         }
 
         public void ShowBoxes()
         {
-            foreach (Entity entity in entities)
-            {
-                entity.ShowBoxes();
-            }
+            renderBoxes = true;
         }
 
         public void HideBoxes()
         {
-            foreach (Entity entity in entities)
-            {
-                entity.HideBoxes();
-            }
+            renderBoxes = false;
         }
         
         public void Draw(GameTime gameTime)
@@ -41,7 +37,7 @@ namespace Game1
                 {
                     Sprite currentSprite = entity.GetCurrentSprite();
                     Sprite stance = entity.GetSprite(Animation.State.STANCE);
-                    List<BoundingBox> currentBoxes = currentSprite.GetCurrentBoxes();
+                    List<CLNS.BoundingBox> currentBoxes = currentSprite.GetCurrentBoxes();
 
                     if (stance != null)
                     {
@@ -49,25 +45,28 @@ namespace Game1
                     }
 
                     Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
-                    
-                    if (currentBoxes != null)
+
+                    if (renderBoxes)
                     {
-                        foreach (BoundingBox box in currentBoxes)
+                        if (currentBoxes != null)
                         {
-                            if (box.Render())
+                            foreach (CLNS.BoundingBox box in currentBoxes)
                             {
-                                //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * BoundingBox.VISIBILITY);
-                                box.DrawRectangle(false);
+                                //if (box.Render())
+                                //{
+                                    //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * CLNS.BoundingBox.VISIBILITY);
+                                    box.DrawRectangle(CLNS.DrawType.LINES);
+                                //}
                             }
                         }
-                    }
 
-                    foreach(BoundingBox box in entity.GetBoxes())
-                    {
-                        if (box.Render())
+                        foreach (CLNS.BoundingBox box in entity.GetBoxes())
                         {
-                            //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * BoundingBox.VISIBILITY);
-                            box.DrawRectangle(false);
+                            //if (box.Render())
+                            //{
+                                //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * CLNS.BoundingBox.VISIBILITY);
+                                box.DrawRectangle(CLNS.DrawType.LINES);
+                            //}
                         }
                     }
 
