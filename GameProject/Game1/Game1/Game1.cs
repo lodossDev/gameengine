@@ -21,13 +21,14 @@ namespace Game1
         InputControl control;
         Camera camera;
         float ticks = 0f;
+        Stage1 level1;
 
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 800;
             graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 700;
             Content.RootDirectory = "Content";
         }
 
@@ -95,9 +96,10 @@ namespace Game1
             leo.SetSpriteOffSet(Animation.State.FALL, 30, -120);
 
             leo.SetAnimationState(Animation.State.STANCE);
-            leo.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 120, 270, -30, 10));
+            leo.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            leo.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 105, 180, -20, 100));
             leo.SetScale(1.6f, 2.2f);
-            leo.SetPostion(400, 0, 200);
+            leo.SetPostion(400, 0, 400);
             leo.SetSpriteOffSet(Animation.State.WALK_TOWARDS, 40, -15);
             leo.SetResetFrame(Animation.State.WALK_TOWARDS, 3);
             leo.SetMoveFrame(Animation.State.WALK_TOWARDS, 3);
@@ -110,7 +112,7 @@ namespace Game1
 
             leo.AddSprite(Animation.State.ATTACK1, new Sprite("Sprites/Actors/Leo/Attack1", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK1, 65, -75);
-            leo.SetFrameDelay(Animation.State.ATTACK1, 20);
+            leo.SetFrameDelay(Animation.State.ATTACK1, 18);
             leo.SetFrameDelay(Animation.State.ATTACK1, 1, 17);
             leo.SetFrameDelay(Animation.State.ATTACK1, 2, 17);
 
@@ -209,15 +211,16 @@ namespace Game1
 
             leo2.SetAnimationState(Animation.State.STANCE);
             //leo2.SetFrameDelay(Animation.State.STANCE, 10);
-            leo2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 120, 220, -30, 60));
+            leo2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 120, 160, -30, 60));
             
 
             drum = new Entity(Entity.EntityType.OBSTACLE, "DRUM1");
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
-            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum.SetScale(2.2f, 2.6f);
-            drum.SetPostion(700, 0, 400);
+            drum.SetPostion(700, 0, 200);
             drum.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum.SetDepthOffset(-5);
             drum.SetDepth(20);
@@ -226,9 +229,10 @@ namespace Game1
             drum2 = new Entity(Entity.EntityType.OBSTACLE, "DRUM2");
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum2.SetAnimationState(Animation.State.STANCE);
-            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum2.SetScale(2.2f, 2.6f);
-            drum2.SetPostion(500, 0, 400);
+            drum2.SetPostion(500, 0, 200);
             drum2.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum2.SetDepthOffset(-5);
             drum2.SetDepth(20);
@@ -237,9 +241,10 @@ namespace Game1
             drum3 = new Entity(Entity.EntityType.OBSTACLE, "DRUM3");
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum3.SetAnimationState(Animation.State.STANCE);
-            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum3.SetScale(2.2f, 2.6f);
-            drum3.SetPostion(290, -180, 400);
+            drum3.SetPostion(290, -180, 200);
             drum3.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum3.SetDepthOffset(-5);
             drum3.SetDepth(20);
@@ -248,9 +253,10 @@ namespace Game1
             drum4 = new Entity(Entity.EntityType.OBSTACLE, "DRUM4");
             drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum4.SetAnimationState(Animation.State.STANCE);
-            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum4.SetScale(2.2f, 2.6f);
-            drum4.SetPostion(800, -680, 400);
+            drum4.SetPostion(800, -280, 200);
             drum4.SetGroundBase(-340);
             drum4.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum4.SetDepthOffset(-5);
@@ -267,6 +273,8 @@ namespace Game1
             leo2.SetHeight(180);
             leo.SetHeight(180);
 
+            level1 = new Stage1();
+
             renderManager = new RenderManager();
             renderManager.AddEntity(leo);
             renderManager.AddEntity(leo2);
@@ -274,10 +282,11 @@ namespace Game1
             renderManager.AddEntity(drum2);
             renderManager.AddEntity(drum3);
             renderManager.AddEntity(drum4);
+            renderManager.AddLevel(level1);
 
             collisionManager = new CollisionManager();
             collisionManager.AddEntity(leo);
-            collisionManager.AddEntity(leo2);
+            //collisionManager.AddEntity(leo2);
             collisionManager.AddEntity(drum);
             collisionManager.AddEntity(drum2);
             collisionManager.AddEntity(drum3);
@@ -308,11 +317,17 @@ namespace Game1
                 Exit();
 
             //TimeSpan ts = new TimeSpan(60);
-            
-
             //ticks = (float)ts.TotalMilliseconds;
-
             //collisionManager.Update(gameTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.O))
+            {
+                Setup.isPause = false;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                Setup.isPause = true;
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
@@ -326,7 +341,18 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.J))
             {
-                drum3.Toss(-15);
+                if (Keyboard.GetState().IsKeyDown(Keys.K))
+                {
+                    drum3.Toss(-15, -5);
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.L))
+                {
+                    drum3.Toss(-15, 5);
+                }
+                else
+                {
+                    drum3.Toss(-15);
+                }
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.K))
@@ -344,16 +370,35 @@ namespace Game1
                 drum3.VelX(0);
             }
 
-            control.Update(gameTime);
-            collisionManager.Update(gameTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.U))
+            {
+                level1.ScrollX(-5/2f);
+            }
 
-            //Toss needs to be updated before collision
-            leo.Update(gameTime);
-            leo2.Update(gameTime);
-            drum.Update(gameTime);
-            drum2.Update(gameTime);
-            drum3.Update(gameTime);
-            drum4.Update(gameTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.Y))
+            {
+                level1.ScrollX(5/2f);
+            }
+
+            if (!Setup.isPause)
+            {
+                control.Update(gameTime);
+                collisionManager.Update(gameTime);
+
+                //Toss needs to be updated before collision
+                leo.Update(gameTime);
+                leo2.Update(gameTime);
+                drum.Update(gameTime);
+                drum2.Update(gameTime);
+                drum3.Update(gameTime);
+                drum4.Update(gameTime);
+
+                /*level1.ScrollX(-leo.GetVelocity().X);
+                drum.MoveX(-leo.GetVelocity().X);
+                drum2.MoveX(-leo.GetVelocity().X);
+                drum3.MoveX(-leo.GetVelocity().X);
+                drum4.MoveX(-leo.GetVelocity().X);*/
+            }
            
             // TODO: Add your update logic here
 
@@ -380,20 +425,24 @@ namespace Game1
             
             renderManager.Draw(gameTime); 
 
-            List<Entity> above = collisionManager.FindAbove(leo);
+            List<Entity> above = collisionManager.TouchTop(leo);
             int i = 1;
              foreach(Entity entity in above)
             {
                 i++;
-                //spriteBatch.DrawString(font1, "ENTITY: " + entity.GetName(), new Vector2(20, i*20), Color.Black);
-            }   
+                spriteBatch.DrawString(font1, "BELOW ENTITY: " + entity.GetName(), new Vector2(20, 110+(i*20)), Color.Black);
+            }
 
-            spriteBatch.DrawString(font1, "leo last attack frame: " + drum3.GetCollisionInfo().collide_x, new Vector2(20, 40), Color.Black);
-            
-            spriteBatch.DrawString(font1, "leo  combo atack index: " + leo.GetDefaultAttackChain().GetCurrentMoveIndex(), new Vector2(20, 90), Color.Black);
-            spriteBatch.DrawString(font1, "drum1 hitbyattackid: " + drum.GetAttackInfo().hitByAttackId, new Vector2(20, 110), Color.Black);
-            spriteBatch.DrawString(font1, "drum3 hitbyattackid: " + drum3.GetAttackInfo().hitByAttackId, new Vector2(20, 140), Color.Black);
-            spriteBatch.DrawString(font1, "current attack id: " + CollisionManager.hit_id, new Vector2(20, 170), Color.Black);
+            Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
+            Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
+
+            spriteBatch.DrawString(font1, "drum4 ground: " + drum4.GetGround(), new Vector2(20, 40), Color.Black);
+            spriteBatch.DrawString(font1, "drum 3 HY: " + (Math.Abs(drum3.GetPosY()) + drum3.GetHeight()), new Vector2(20, 60), Color.Black);
+            spriteBatch.DrawString(font1, "leo state: " + leo.GetCurrentAnimationState(), new Vector2(20, 80), Color.Black);
+            spriteBatch.DrawString(font1, "leo isToss: " + leo.IsToss(), new Vector2(20, 100), Color.Black);
+            //spriteBatch.DrawString(font1, "drum1 hitbyattackid: " + drum.GetAttackInfo().hitByAttackId, new Vector2(20, 110), Color.Black);
+            //spriteBatch.DrawString(font1, "drum3 hitbyattackid: " + drum3.GetAttackInfo().hitByAttackId, new Vector2(20, 140), Color.Black);
+            //spriteBatch.DrawString(font1, "current attack id: " + CollisionManager.hit_id, new Vector2(20, 170), Color.Black);
 
             //spriteBatch.DrawString(font1, "moveIndex: " + leo.GetDefaultAttackChain().GetCurrentMoveIndex(), new Vector2(20, 60), Color.Black);
 

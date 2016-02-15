@@ -45,6 +45,9 @@ namespace Game1
                     case BoxType.HIT_BOX:
                         color = Color.Red;
                         break;
+                    case BoxType.HEIGHT_BOX:
+                        color = Color.Yellow;
+                        break;
                     default:
                         color = Color.Blue;
                         break;
@@ -59,6 +62,12 @@ namespace Game1
             public void SetFrame(int frame)
             {
                 this.frame = frame - 1;
+            }
+
+            public void SetOffSet(float x, float y)
+            {
+                offset.X = x;
+                offset.Y = y;
             }
 
             public void Update(GameTime gameTime, bool isLeft, Vector2 position)
@@ -141,7 +150,8 @@ namespace Game1
 
         public class AttackBox : BoundingBox
         {
-            public enum AttackPosition { STANDING, LOW, AIR };
+            public enum AttackPosition { STANDING, LOW, AIR, NONE };
+            public enum BlockPosition { HI, LOW, NONE };
 
             private float zDepth;
             private float hitPauseTime;
@@ -153,12 +163,14 @@ namespace Game1
             private int comboStep;
             private int juggleCost;
             private AttackPosition attackPosition;
+            private BlockPosition blockPosition;
 
 
             public AttackBox(int w, int h, int x, int y, int resetHit = -1, float zDepth = 30,
                                         float hitPauseTime = 1 / 60, float painTime = 20 / 60, int hitDamage = 5,
                                         int hitPoints = 5, float hitStrength = 0.4f, int comboStep = 1,
-                                        int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.STANDING)
+                                        int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.NONE,
+                                        BlockPosition blockPosition = BlockPosition.NONE)
                                     : base(BoxType.HIT_BOX, w, h, x, y)
             {
                 SetResetHit(resetHit);
@@ -223,6 +235,11 @@ namespace Game1
                 attackPosition = position;
             }
 
+            public void SetBlockPosition(BlockPosition position)
+            {
+                blockPosition = position;
+            }
+
             public float GetZdepth()
             {
                 return zDepth;
@@ -271,6 +288,11 @@ namespace Game1
             public AttackPosition GetAttackPosition()
             {
                 return attackPosition;
+            }
+
+            public BlockPosition GetBlockPosition()
+            {
+                return blockPosition;
             }
         }
     }

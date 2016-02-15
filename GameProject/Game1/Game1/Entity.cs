@@ -12,7 +12,7 @@ namespace Game1
     public class Entity : IComparable<Entity>
     {
         private static int id = 0;
-        public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON}
+        public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL}
 
         private Dictionary<Animation.State, Sprite> spriteMap;
         private Animation.Action animationAction;
@@ -134,22 +134,26 @@ namespace Game1
 
         public void SetJumpLink(Animation.State toState)
         {
-            int frames = GetSprite(Animation.State.JUMP_START).GetFrames();
-            SetAnimationLink(Animation.State.JUMP_START, toState, frames);
+            Sprite jumpStart = GetSprite(Animation.State.JUMP_START);
+
+            if (jumpStart != null)
+            {
+                int frames = jumpStart.GetFrames();
+                SetAnimationLink(Animation.State.JUMP_START, toState, frames);
+            }
         }
 
         public void SetAnimationState(Animation.State state)
         {
             if (!IsInAnimationState(state))
             {
-                lastAnimationState = currentAnimationState;
-
                 attackInfo.lastAttackFrame = -1;
                 attackInfo.lastAttackState = Animation.State.NONE;
                 Sprite newSprite = GetSprite(state);
 
                 if (newSprite != null)
                 {
+                    lastAnimationState = currentAnimationState;
                     currentAnimationState = state;
                     currentSprite = newSprite;
                 }
@@ -171,7 +175,7 @@ namespace Game1
             GetSprite(state).AddBox(frame, box);
         }
 
-        public CLNS.BoundingBox SetBox(Animation.State state, int frame)
+        public CLNS.BoundingBox GetLastBoxFrame(Animation.State state, int frame)
         {
             return GetSprite(state).GetBoxes(frame).Last();
         }
@@ -478,7 +482,7 @@ namespace Game1
             return convertedPosition;
         }
 
-        public Vector2 GetOrigin()
+        public virtual Vector2 GetOrigin()
         {
             Sprite sprite = GetCurrentSprite();
             origin.X = sprite.GetCurrentTexture().Width / 2;
@@ -501,6 +505,11 @@ namespace Game1
         public Vector3 GetVelocity()
         {
             return velocity;
+        }
+
+        public int GetSpriteCount()
+        {
+            return spriteMap.Count;
         }
 
         public Sprite GetSprite(Animation.State state)
@@ -724,7 +733,7 @@ namespace Game1
 
         public bool HasLanded()
         {
-            return GetPosY() == GetGround();
+            return GetPosY() >= GetGround();
         }
 
         public bool IsOnGround()
@@ -764,8 +773,8 @@ namespace Game1
             return IsInAnimationAction(Animation.Action.ATTACKING)
                         && attackStates.Count > 0 
                         && IsInAnimationState(attackStates[0].GetState())
-                        && IsFrameComplete(attackStates[0].GetState(), attackStates[0].GetCancelFrame() + 1)
                         && GetCurrentSprite().GetCurrentFrame() >= attackStates[0].GetCancelFrame()
+                        && IsFrameComplete(attackStates[0].GetState(), attackStates[0].GetCancelFrame() + 1)
                         && !GetDefaultAttackChain().GetLastAttackState().Equals(GetCurrentAnimationState());
         }
 
@@ -836,6 +845,7 @@ namespace Game1
         public void ResetToss()
         {
             velocity.Y = 0f;
+            velocity.X = 0f;
             tossInfo.velocity.X = 0f;
             tossInfo.velocity.Y = 0f;
             tossInfo.inTossFrame = false;
@@ -853,21 +863,21 @@ namespace Game1
                     if (!tossInfo.inTossFrame)
                     {
                         MoveY(tossInfo.height);
-                        velocity.Y = tossInfo.velocity.Y;
                         tossInfo.inTossFrame = true;
                     }
                 }
 
                 if (tossInfo.inTossFrame)
                 {
-                    velocity.Y += tossInfo.gravity;
+                    tossInfo.velocity.Y += tossInfo.gravity;
                     
-                    if (velocity.Y >= tossInfo.maxVelocity.Y)
+                    if (tossInfo.velocity.Y >= tossInfo.maxVelocity.Y)
                     {
-                        velocity.Y = tossInfo.maxVelocity.Y;
+                        tossInfo.velocity.Y = tossInfo.maxVelocity.Y;
                     }
 
                     VelX(tossInfo.velocity.X);
+                    VelY(tossInfo.velocity.Y);
                 }
 
                 if (GetPosY() > GetGround())

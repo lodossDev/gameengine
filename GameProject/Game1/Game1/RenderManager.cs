@@ -5,12 +5,14 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace Game1
 {
     public class RenderManager : Manager
     {
         private bool renderBoxes;
+
 
         public RenderManager()
         {
@@ -26,10 +28,60 @@ namespace Game1
         {
             renderBoxes = false;
         }
+
+        public void RenderBoxes(List<CLNS.BoundingBox> spriteBoxes, List<CLNS.BoundingBox> globalBoxes)
+        {
+            if (renderBoxes)
+            {
+                if (spriteBoxes != null && spriteBoxes.Count > 0)
+                {
+                    foreach (CLNS.BoundingBox box in spriteBoxes)
+                    {
+                        box.DrawRectangle(CLNS.DrawType.LINES);
+                    }
+                }
+
+                if (globalBoxes != null && globalBoxes.Count > 0)
+                {
+                    foreach (CLNS.BoundingBox box in globalBoxes)
+                    {
+                        box.DrawRectangle(CLNS.DrawType.LINES);
+                    }
+                }
+            }
+        }
         
         public void Draw(GameTime gameTime)
         {
             entities.Sort();
+
+            foreach(Level level in levels)
+            {
+                /*List<Entity> layers2 = level.GetLayers(2);
+                
+                List<Entity> layers1 = level.GetLayers(1);
+                Debug.WriteLine("LAYERS1: " + layers1.Count);
+
+                foreach (Entity entity in layers1)
+                {
+                    if (entity.Alive())
+                    {
+                        entity.Update(gameTime);
+                        Sprite currentSprite = entity.GetCurrentSprite();
+                        Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
+                    }
+                }
+
+                foreach (Entity entity in layers2)
+                {
+                    if (entity.Alive())
+                    {
+                        entity.Update(gameTime);
+                        Sprite currentSprite = entity.GetCurrentSprite();
+                        Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
+                    }
+                }*/
+            }
 
             foreach (Entity entity in entities)
             {
@@ -37,39 +89,38 @@ namespace Game1
                 {
                     Sprite currentSprite = entity.GetCurrentSprite();
                     Sprite stance = entity.GetSprite(Animation.State.STANCE);
-                    List<CLNS.BoundingBox> currentBoxes = currentSprite.GetCurrentBoxes();
 
                     if (stance != null)
                     {
                         //Setup.spriteBatch.Draw(stance.GetCurrentTexture(), stance.GetPosition(), null, Color.White * 1f, 0f, entity.GetStanceOrigin(), entity.GetScale(), stance.GetEffects(), 0f);
                     }
 
-                    Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
+                    float y1 = 120f * (entity.GetScale().Y / 256);
+                    float x1 = 230f * (entity.GetScale().X / 256);
 
-                    if (renderBoxes)
+                    float x2 = entity.GetPosition().X + (float)((currentSprite.GetSpriteOffSet().X + currentSprite.GetCurrentFrameOffSet().X) * (x1 / entity.GetScale().X));
+
+                    if (entity.IsLeft())
                     {
-                        if (currentBoxes != null)
-                        {
-                            foreach (CLNS.BoundingBox box in currentBoxes)
-                            {
-                                //if (box.Render())
-                                //{
-                                    //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * CLNS.BoundingBox.VISIBILITY);
-                                    box.DrawRectangle(CLNS.DrawType.LINES);
-                                //}
-                            }
-                        }
-
-                        foreach (CLNS.BoundingBox box in entity.GetBoxes())
-                        {
-                            //if (box.Render())
-                            //{
-                                //Setup.spriteBatch.Draw(box.GetSprite(), box.GetRect(), box.GetColor() * CLNS.BoundingBox.VISIBILITY);
-                                box.DrawRectangle(CLNS.DrawType.LINES);
-                            //}
-                        }
+                        x2 = entity.GetPosition().X - (float)((currentSprite.GetSpriteOffSet().X - currentSprite.GetCurrentFrameOffSet().X) * (x1 / entity.GetScale().X));
                     }
 
+                    float a1 = (float)(-entity.GetPosY() * 120f / 256);
+
+                    float y2 = (float)((currentSprite.GetSpriteOffSet().Y + currentSprite.GetCurrentFrameOffSet().Y) * (/*-(y1/4)*/ y1 / entity.GetScale().Y )) + entity.GetPosition().Z + a1;
+                    float y3 = stance.GetCurrentTexture().Height + 10;
+
+                    Vector2 scale = new Vector2(x1, y1);
+                    Vector2 position = new Vector2(x2, y2);
+
+                    position.Y += y3;
+
+                    Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), position, null, Color.Black * 0.6f, 0f, entity.GetOrigin(), scale, currentSprite.GetEffects()/*currentSprite.GetEffects() | SpriteEffects.FlipVertically*/, 0f);
+
+                    Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
+                    
+
+                    RenderBoxes(currentSprite.GetCurrentBoxes(), entity.GetBoxes());
                     Setup.spriteBatch.Draw(entity.GetBaseSprite().GetCurrentTexture(), entity.GetBasePosition(), Color.White * 1f);
                 }
             }

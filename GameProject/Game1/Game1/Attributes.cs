@@ -28,6 +28,7 @@ namespace Game1
             public CollisionState collide_y;
             public CollisionState collide_z;
 
+
             public CollisionInfo() 
             {
                 Reset();

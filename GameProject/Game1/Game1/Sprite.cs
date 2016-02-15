@@ -17,6 +17,7 @@ namespace Game1
         private List<Vector2> offsets;
         private Vector2 spriteOffset;
         private Vector2 position;
+        private Vector2 shadowPostion;
         private float frameTimeElapsed;
         private int resetFrame;
         private Dictionary<int, List<CLNS.BoundingBox>> boxes;
@@ -48,9 +49,29 @@ namespace Game1
             SetResetFrame(resetFrame);
         }
 
+        public Sprite(Texture2D sprite, Animation.Type animationType = Animation.Type.REPEAT, int resetFrame = 1) : this(animationType)
+        {
+            AddTexture(sprite);
+            SetResetFrame(resetFrame);
+        }
+
+        public Sprite(List<Texture2D> sprites, Animation.Type animationType = Animation.Type.REPEAT, int resetFrame = 1) : this(animationType)
+        {
+            AddTextures(sprites);
+            SetResetFrame(resetFrame);
+        }
+
         public void AddTextures(string contentFolder)
         {
             foreach(Texture2D texture in TextureContent.LoadTextures(contentFolder))
+            {
+                AddTexture(texture);
+            }
+        }
+
+        public void AddTextures(List<Texture2D> sprites)
+        {
+            foreach (Texture2D texture in sprites)
             {
                 AddTexture(texture);
             }
@@ -211,6 +232,11 @@ namespace Game1
             return position;
         }
 
+        public Vector2 GetShadowPosition()
+        {
+            return shadowPostion;
+        }
+
         public bool IsBoxFrame()
         {
             return boxes.ContainsKey(currentFrame);
@@ -348,6 +374,9 @@ namespace Game1
             }
 
             this.position.Y = (position.Y + spriteOffset.Y + offsets[currentFrame].Y) + position.Z;
+
+            shadowPostion.X = this.position.X;
+            shadowPostion.Y = (spriteOffset.Y + offsets[currentFrame].Y) + position.Z;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Game1
 {
     public static class Setup
     {
+        public static bool isPause = false;
         public static GraphicsDevice graphicsDevice;
         public static SpriteBatch spriteBatch;
         public static ContentManager contentManager;
