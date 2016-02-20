@@ -6,12 +6,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Game1
 {
     public class CollisionManager : Manager
     {
         public static int hit_id = 0;
+        private SoundEffect hiteffect1;
+        private SoundEffectInstance soundInstance;
+
+        public CollisionManager()
+        {
+            hiteffect1 = Setup.contentManager.Load<SoundEffect>("Sounds//hit1");
+            soundInstance = hiteffect1.CreateInstance();
+        }
 
         public List<Entity> FindBelow(Entity entity)
         {
@@ -29,7 +38,7 @@ namespace Game1
 
                     if (entity.InBoundsZ(target, target.GetDepth())
                             && entityBox.Intersects(targetBox)
-                            && Math.Abs(entity.GetPosY()) + 20 >= Math.Abs(target.GetPosY()) + target.GetHeight())
+                            && Math.Abs(entity.GetPosY()) + 50 >= Math.Abs(target.GetPosY()) + target.GetHeight())
                     {
                         found.Add(target);
                     }
@@ -157,10 +166,10 @@ namespace Game1
         {
             List<Entity> belowEntities = FindBelow(entity);
 
-            if (belowEntities.Count == 0 && entity.GetGround() != entity.GetGroundBase()
-                    && entity.HasLanded() || belowEntities.Count == 0 
-                    && Math.Abs(entity.GetPosY()) != entity.GetGround()
-                    && !entity.IsToss())
+            if ((belowEntities.Count == 0 && entity.GetGround() != entity.GetGroundBase()
+                    && entity.HasLanded()) || (belowEntities.Count == 0 
+                                                    && Math.Abs(entity.GetPosY()) != entity.GetGround()
+                                                    && !entity.IsToss()))
             {
                 entity.SetGround(entity.GetGroundBase());
 
@@ -170,12 +179,6 @@ namespace Game1
                     entity.Toss(5);
                 }
             }
-
-            /*if (belowEntities.Count == 0 && entity.InAir()
-                    && entity.GetGround() != entity.GetGroundBase())
-            {
-                //entity.SetGround(entity.GetGroundBase());
-            }*/
         }
 
         private void CheckLand(Entity entity)
@@ -191,15 +194,16 @@ namespace Game1
                     if (entity.InBoundsZ(target, target.GetDepth())
                            && entityBox.Intersects(targetBox)
                            && entityBox.TouchBottom(targetBox)
+                           && !entityBox.TouchTop(targetBox)
                            && entity.InAir())
                     {
-                        //Debug.WriteLine("E: " + entity.GetName() + " TOP: " + entityBox.Top);
-                        //Debug.WriteLine("E: " + target.GetName() + " bottom: " + targetBox.Bottom);
+                        float depth = entityBox.GetVerticalIntersectionDepth(targetBox);
 
-                        //entity.SetGroundBase(target.GetPosY() + entityBox.Height + 5);
-                        //entity.SetPosY(-(entityBox.Top - targetBox.Height) + h2);
-                        //entity.SetPosY(entity.GetPosY() + x1.Y + 5);
-                        //entity.VelY(5);
+                        if (!target.IsToss())
+                        {
+                            entity.MoveY(depth + 5);
+                        }
+
                         entity.GetTossInfo().velocity.Y = 5;
                     }
                 }
@@ -212,12 +216,32 @@ namespace Game1
                     Rectangle targetBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
                     
                     if (entity.InBoundsZ(target, target.GetDepth())
-                            && entityBox.TouchTop(targetBox))
+                            && entityBox.Intersects(targetBox)
+                            && entityBox.InBoundsX(targetBox, 20))
                     {
+                        List<Entity> above = FindAbove(target);
+                        int totalHeight = (int)Math.Abs(target.GetPosY()) + target.GetHeight() + above.Sum(e => e.GetHeight());
+                        totalHeight = (above.Count == 0 ? (int)Math.Abs(target.GetPosY()) + totalHeight : totalHeight);
+
+                        Debug.WriteLine("TT: " + target.GetName() + ": " + above.Sum(e => e.GetHeight()));
+
+                        Debug.WriteLine("E: " + entity.GetName() + " : T " + target.GetName() + " : " + totalHeight + " : " + target.GetHeight());
+
                         float posy = (Math.Abs(target.GetPosY()) + target.GetHeight() + 1);
 
-                        if (entity.GetVelocity().Y > 2)
+                        if (entity.GetVelocity().Y > 2 && Math.Abs(entity.GetPosY() + 20) > totalHeight)
                         {
+                            entity.SetGround(-posy);
+                        }
+
+                        if (entity.GetVelocity().Y > 2 && Math.Abs(entity.GetPosY()) + 20 > Math.Abs(target.GetPosY()) + target.GetHeight())
+                        {
+                            entity.SetGround(-posy);
+                        }
+
+                        if (target.IsToss() && Math.Abs(entity.GetPosY()) + 50 > Math.Abs(target.GetPosY()) + target.GetHeight())
+                        {
+                           //entity.SetPosY(-posy);
                             entity.SetGround(-posy);
                         }
                     }
@@ -229,9 +253,10 @@ namespace Game1
         {
             List<CLNS.BoundingBox> bboxes = entity.GetBoxes(CLNS.BoxType.BOUNDS_BOX);
             bboxes.AddRange(entity.GetCurrentBoxes(CLNS.BoxType.BOUNDS_BOX));
-            CLNS.BoundingBox entityBox = null;
+            Rectangle entityBox = Rectangle.Empty;
             bool hasCollided = false;
             int ePosY = (int)Math.Abs(entity.GetPosY());
+            int eGround = (int)Math.Abs(entity.GetGround());
 
             foreach (Entity target in entities)
             {
@@ -239,55 +264,49 @@ namespace Game1
                 {
                     List<CLNS.BoundingBox> tboxes = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX);
                     tboxes.AddRange(target.GetCurrentBoxes(CLNS.BoxType.BOUNDS_BOX));
-                    CLNS.BoundingBox targetBox = null;
+                    Rectangle targetBox = Rectangle.Empty;
                     int tPosY = (int)Math.Abs(target.GetPosY());
-                   
+                    int tGround = (int)Math.Abs(target.GetGround());
+
                     if (entity.InRangeZ(target, target.GetDepth())
                             && ePosY + 10 < (tPosY + target.GetHeight() + 1)
-                            && (int)Math.Abs(target.GetGround()) != (ePosY + entity.GetHeight() + 1)
-                            && (int)Math.Abs(entity.GetGround()) < (tPosY + target.GetHeight() + 1))
+                            && tPosY != (ePosY + entity.GetHeight() + 1))
                     {
-                        int yOffset = (int)(Math.Abs((ePosY + entity.GetHeight() + 1) - Math.Abs(target.GetGround())));
-                        Debug.WriteLine("yOffset: " + entity.GetName() + " : " + yOffset + " : " + entity.GetGround() + " : " + (entity.GetGround() + yOffset));
-
                         foreach (CLNS.BoundingBox bb1 in bboxes)
                         {
                             foreach (CLNS.BoundingBox bb2 in tboxes)
                             {
-                                if (bb1.GetRect().Intersects(bb2.GetRect()))
+                                if (bb1.GetRect().Intersects(bb2.GetRect())
+                                        && !bb1.GetRect().TouchBottom(bb2.GetRect()))
                                 { 
-                                    Debug.WriteLine("yOffset: " + entity.GetName() + " : " + yOffset);
-                                    Debug.WriteLine("FF: " + entity.GetName() + " : " + " : ePosy " + (ePosY + entity.GetHeight()) + " ---- " + target.GetName() + " : height: " + (tPosY + target.GetHeight()) + " : " + target.GetGround());
-                                    entityBox = bb1;
-                                    targetBox = bb2;
+                                    entityBox = bb1.GetRect();
+                                    targetBox = bb2.GetRect();
                                     hasCollided = true;
                                 }
                             }
                         }
 
-                        if (hasCollided && entityBox != null && targetBox != null)
+                        if (hasCollided && !entityBox.IsEmpty && !targetBox.IsEmpty)
                         {
                             //Problem with tposy not updating in time for comparison
-                            if (entityBox.GetRect().Intersects(targetBox.GetRect()))
+                            if (entityBox.Intersects(targetBox))
                             {
                                 if (entity.InBoundsZ(target, target.GetDepth()))
                                 {
-                                    float depth = entityBox.GetRect().GetHorizontalIntersectionDepth(targetBox.GetRect());
+                                    float depth = entityBox.GetHorizontalIntersectionDepth(targetBox);
                                     
                                     if (depth != 0)
                                     {
-                                        if (entity.GetDirX() > 0 && entityBox.GetRect().TouchLeft(targetBox.GetRect()))
+                                        if (entity.GetDirX() > 0 && entityBox.TouchLeft(targetBox))
                                         {
-                                            Debug.WriteLine("RIGHT: " + entity.GetName() + " : " + " : ePosy " + (ePosY + entity.GetHeight()) + " ---- " +  target.GetName() + " : height: "  + (tPosY + target.GetHeight()) + " : " + target.GetGround());
                                             entity.VelX(0f);
-                                            entity.MoveX(depth + 2);
+                                            entity.MoveX(depth + 5);
                                             entity.GetCollisionInfo().Right();
                                         }
-                                        else if (entity.GetDirX() < 0 && entityBox.GetRect().TouchRight(targetBox.GetRect()))
+                                        else if (entity.GetDirX() < 0 && entityBox.TouchRight(targetBox))
                                         {
-                                            Debug.WriteLine("LEFT: " + entity.GetName() + " : " + " : ePosy " + (ePosY + entity.GetHeight()) + " ---- " + target.GetName() + " : height: " + (tPosY + target.GetHeight()) + " : " + target.GetGround());
                                             entity.VelX(0f);
-                                            entity.MoveX(depth - 2);
+                                            entity.MoveX(depth - 5);
                                             entity.GetCollisionInfo().Left();
                                         }
                                     }
@@ -319,12 +338,18 @@ namespace Game1
             }
         }
 
+        public static int hitCount = 0;
+
         private void OnHit(Entity target, Entity entity, CLNS.AttackBox attackBox)
         {
             if (target != entity)
             {
-                target.Toss(-10 * attackBox.GetHitStrength());
-                //target.MoveY(-15 * attackBox.GetHitStrength());
+                //soundInstance.Pitch = 0.6f;
+                hitCount++;
+                soundInstance.Play();
+                
+                target.Toss(-15 * attackBox.GetHitStrength());
+                //target.MoveY(-125 * attackBox.GetHitStrength());
             }
         }
 
@@ -401,10 +426,7 @@ namespace Game1
                 entity.GetCollisionInfo().Reset();
 
                 CheckAttack(entity);
-                
                 CheckBounds(entity);
-
-                
                 CheckLand(entity);
                 CheckFall(entity);
             }

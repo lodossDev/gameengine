@@ -22,6 +22,8 @@ namespace Game1
         Camera camera;
         float ticks = 0f;
         Stage1 level1;
+        LifeBar bar;
+        float barHealth = 100f;
 
 
         public Game1()
@@ -256,8 +258,8 @@ namespace Game1
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum4.SetScale(2.2f, 2.6f);
-            drum4.SetPostion(800, -280, 200);
-            drum4.SetGroundBase(-340);
+            drum4.SetPostion(800, -320, 200);
+            drum4.SetGroundBase(-320);
             drum4.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum4.SetDepthOffset(-5);
             drum4.SetDepth(20);
@@ -274,6 +276,7 @@ namespace Game1
             leo.SetHeight(180);
 
             level1 = new Stage1();
+            bar = new LifeBar(0, 0);
 
             renderManager = new RenderManager();
             renderManager.AddEntity(leo);
@@ -339,6 +342,24 @@ namespace Game1
                 renderManager.ShowBoxes();
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Z))
+            {
+                //Setup.rotate += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Setup.scaleY += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //barHealth -= (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                //leo.SetColor(255, 0, 0);
+                leo.Flash(2);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.X))
+            {
+                //Setup.rotate += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Setup.scaleY += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //barHealth += (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
+
+            bar.Percent((int)barHealth);
+
             if (Keyboard.GetState().IsKeyDown(Keys.J))
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.K))
@@ -399,9 +420,9 @@ namespace Game1
                 drum3.MoveX(-leo.GetVelocity().X);
                 drum4.MoveX(-leo.GetVelocity().X);*/
             }
-           
-            // TODO: Add your update logic here
 
+            // TODO: Add your update logic here
+            bar.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -416,16 +437,17 @@ namespace Game1
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Immediate,
-                        BlendState.AlphaBlend,
-                        SamplerState.PointWrap,
+                        BlendState.NonPremultiplied,
+                        SamplerState.PointClamp,
                         null,
                         null,
                         null,
                         null);
-            
+
+
             renderManager.Draw(gameTime); 
 
-            List<Entity> above = collisionManager.TouchTop(leo);
+            List<Entity> above = collisionManager.FindAbove(drum2);
             int i = 1;
              foreach(Entity entity in above)
             {
@@ -436,10 +458,10 @@ namespace Game1
             Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
 
-            spriteBatch.DrawString(font1, "drum4 ground: " + drum4.GetGround(), new Vector2(20, 40), Color.Black);
-            spriteBatch.DrawString(font1, "drum 3 HY: " + (Math.Abs(drum3.GetPosY()) + drum3.GetHeight()), new Vector2(20, 60), Color.Black);
-            spriteBatch.DrawString(font1, "leo state: " + leo.GetCurrentAnimationState(), new Vector2(20, 80), Color.Black);
-            spriteBatch.DrawString(font1, "leo isToss: " + leo.IsToss(), new Vector2(20, 100), Color.Black);
+            spriteBatch.DrawString(font1, "leo hitCount: " + CollisionManager.hitCount, new Vector2(20, 40), Color.Black);
+            spriteBatch.DrawString(font1, "leo trans: " + leo.colorInfo.fadeFrequency, new Vector2(20, 60), Color.Black);
+            spriteBatch.DrawString(font1, "leo flash: " + leo.colorInfo.isFlash, new Vector2(20, 80), Color.Black);
+            spriteBatch.DrawString(font1, "leo flashFinish: " + leo.colorInfo.expired, new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "drum1 hitbyattackid: " + drum.GetAttackInfo().hitByAttackId, new Vector2(20, 110), Color.Black);
             //spriteBatch.DrawString(font1, "drum3 hitbyattackid: " + drum3.GetAttackInfo().hitByAttackId, new Vector2(20, 140), Color.Black);
             //spriteBatch.DrawString(font1, "current attack id: " + CollisionManager.hit_id, new Vector2(20, 170), Color.Black);
@@ -455,6 +477,8 @@ namespace Game1
             //spriteBatch.DrawString(font1, "LEO2 X: " + leo2.GetPosX(), new Vector2(20, 70), Color.Black);
             //spriteBatch.DrawString(font1, "LEO STANCE WIDTH: " + leo.GetSprite(Animation.State.STANCE).GetCurrentTexture().Width, new Vector2(20, 90), Color.Black);
             //spriteBatch.DrawString(font1, "LEO WALKING WIDTH: " + leo.GetSprite(Animation.State.JUMP_START).GetCurrentTexture().Width, new Vector2(20, 110), Color.Black);
+
+            //bar.Render();
             spriteBatch.End();
 
             base.Draw(gameTime);

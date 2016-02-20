@@ -14,5 +14,8 @@ namespace Game1
         public static GraphicsDevice graphicsDevice;
         public static SpriteBatch spriteBatch;
         public static ContentManager contentManager;
+
+        public static float rotate = 0f;
+        public static float scaleX, scaleY = 0f;
     }
 }

@@ -12,11 +12,12 @@ namespace Game1
     public class Entity : IComparable<Entity>
     {
         private static int id = 0;
-        public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL}
+        public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL, LIFE_BAR, OTHER}
 
         private Dictionary<Animation.State, Sprite> spriteMap;
         private Animation.Action animationAction;
         private Sprite currentSprite;
+        public Attributes.ColourInfo colorInfo; 
         private Animation.State currentAnimationState;
         private Animation.State lastAnimationState;
 
@@ -72,6 +73,8 @@ namespace Game1
             currentAnimationState = Animation.State.NONE;
             animationAction = Animation.Action.NONE;
 
+            colorInfo = new Attributes.ColourInfo();
+            
             position = Vector3.Zero;
             convertedPosition = Vector2.Zero;
 
@@ -569,6 +572,11 @@ namespace Game1
             return baseSprite;
         }
 
+        public Color GetSpriteColor()
+        {
+            return colorInfo.GetColor();
+        }
+
         public Vector2 GetBasePosition()
         {
             Sprite stance = GetSprite(Animation.State.STANCE);
@@ -950,12 +958,80 @@ namespace Game1
             }
         }
 
+        public void SetFade(int alpha)
+        {
+            colorInfo.alpha = (float)alpha;
+        }
+
+        public void SetColor(int r, int g, int b)
+        {
+            colorInfo.r = r;
+            colorInfo.g = g;
+            colorInfo.b = b;
+        }
+
+        public void Flash(float time = 5, float speed = 80f)
+        {
+            colorInfo.isFlash = true;
+            colorInfo.expired = false;
+            colorInfo.alpha = 255;
+            colorInfo.fadeFrequency = speed;
+            colorInfo.originalFreq = speed;
+            colorInfo.currentFadeTime = 0f;
+            colorInfo.maxFadeTime = time;
+        }
+
+        public void UpdateFade(GameTime gameTime)
+        {
+            if (colorInfo.isFlash)
+            {
+                if (!colorInfo.expired)
+                {
+                    colorInfo.currentFadeTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (colorInfo.alpha >= 255 || colorInfo.alpha <= 0)
+                    {
+                        colorInfo.fadeFrequency *= -1;
+                    }
+
+                    colorInfo.alpha += colorInfo.fadeFrequency;
+                }
+
+                if (colorInfo.currentFadeTime > colorInfo.maxFadeTime)
+                {
+                    colorInfo.expired = true;
+                }
+                
+                if (colorInfo.expired)
+                {
+                    colorInfo.currentFadeTime = 0f;
+
+                    if (colorInfo.alpha != 255)
+                    {
+                        float freq = colorInfo.originalFreq * 1f;
+
+                        colorInfo.fadeFrequency = 1 * Math.Abs(freq);
+                        colorInfo.alpha += colorInfo.fadeFrequency;
+                    }
+
+                    if (colorInfo.alpha >= 255)
+                    {
+                        colorInfo.alpha = 255;
+                        colorInfo.isFlash = false;
+                        colorInfo.expired = false;
+                    }
+                }
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             foreach (Sprite sprite in spriteMap.Values)
             {
                 sprite.Update(gameTime, position);
             }
+
+            UpdateFade(gameTime);
 
             //Update animation.
             UpdateAnimation(gameTime);

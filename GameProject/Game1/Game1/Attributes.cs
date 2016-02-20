@@ -149,5 +149,36 @@ namespace Game1
                 isToss = false;
             }
         }
+
+        public class ColourInfo
+        {
+            public float alpha;
+            public float fadeFrequency;
+            public float r, g, b;
+            public float currentFadeTime;
+            public float maxFadeTime;
+            public bool isFlash;
+            public bool expired;
+            public float originalFreq;
+            
+            public ColourInfo()
+            {
+                r = 255;
+                g = 255;
+                b = 255;
+                alpha = 255;
+                fadeFrequency = 3f;
+                originalFreq = 3f;
+                currentFadeTime = 0f;
+                maxFadeTime = 100f;
+                isFlash = false;
+                expired = false;
+            }
+            
+            public Color GetColor()
+            {
+                return new Color((byte)r, (byte)g, (byte)b, (byte)MathHelper.Clamp(alpha, 0, 255));
+            } 
+        }
     }
 }
