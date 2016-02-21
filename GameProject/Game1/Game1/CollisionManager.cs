@@ -214,7 +214,8 @@ namespace Game1
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
-                    
+                    float posy = (Math.Abs(target.GetGround()) + target.GetHeight());
+
                     if (entity.InBoundsZ(target, target.GetDepth())
                             && entityBox.Intersects(targetBox)
                             && entityBox.InBoundsX(targetBox, 20))
@@ -222,26 +223,20 @@ namespace Game1
                         List<Entity> above = FindAbove(target);
                         int totalHeight = (int)Math.Abs(target.GetPosY()) + target.GetHeight() + above.Sum(e => e.GetHeight());
                         totalHeight = (above.Count == 0 ? (int)Math.Abs(target.GetPosY()) + totalHeight : totalHeight);
-
-                        Debug.WriteLine("TT: " + target.GetName() + ": " + above.Sum(e => e.GetHeight()));
-
-                        Debug.WriteLine("E: " + entity.GetName() + " : T " + target.GetName() + " : " + totalHeight + " : " + target.GetHeight());
-
-                        float posy = (Math.Abs(target.GetPosY()) + target.GetHeight() + 1);
-
-                        if (entity.GetVelocity().Y > 2 && Math.Abs(entity.GetPosY() + 20) > totalHeight)
+    
+                        if (entity.GetVelocity().Y > 1 && Math.Abs(entity.GetPosY() + 20) > totalHeight)
                         {
                             entity.SetGround(-posy);
                         }
 
-                        if (entity.GetVelocity().Y > 2 && Math.Abs(entity.GetPosY()) + 20 > Math.Abs(target.GetPosY()) + target.GetHeight())
+                        if (entity.GetVelocity().Y > 1 && Math.Abs(entity.GetPosY()) + 20 > Math.Abs(target.GetPosY()) + target.GetHeight())
                         {
                             entity.SetGround(-posy);
                         }
 
                         if (target.IsToss() && Math.Abs(entity.GetPosY()) + 50 > Math.Abs(target.GetPosY()) + target.GetHeight())
                         {
-                           //entity.SetPosY(-posy);
+                            entity.SetPosY(-posy);
                             entity.SetGround(-posy);
                         }
                     }
@@ -269,15 +264,14 @@ namespace Game1
                     int tGround = (int)Math.Abs(target.GetGround());
 
                     if (entity.InRangeZ(target, target.GetDepth())
-                            && ePosY + 10 < (tPosY + target.GetHeight() + 1)
-                            && tPosY != (ePosY + entity.GetHeight() + 1))
+                            && ePosY + 10 < (tPosY + target.GetHeight())
+                            && !(tPosY + 10 > (ePosY + entity.GetHeight())))
                     {
                         foreach (CLNS.BoundingBox bb1 in bboxes)
                         {
                             foreach (CLNS.BoundingBox bb2 in tboxes)
                             {
-                                if (bb1.GetRect().Intersects(bb2.GetRect())
-                                        && !bb1.GetRect().TouchBottom(bb2.GetRect()))
+                                if (bb1.GetRect().Intersects(bb2.GetRect()))
                                 { 
                                     entityBox = bb1.GetRect();
                                     targetBox = bb2.GetRect();
@@ -288,6 +282,9 @@ namespace Game1
 
                         if (hasCollided && !entityBox.IsEmpty && !targetBox.IsEmpty)
                         {
+                            Debug.WriteLine("TT tPosY: " + target.GetName() + ": " + tPosY);
+                            Debug.WriteLine("E: " + entity.GetName() + " : " + (ePosY + entity.GetHeight()));
+
                             //Problem with tposy not updating in time for comparison
                             if (entityBox.Intersects(targetBox))
                             {
