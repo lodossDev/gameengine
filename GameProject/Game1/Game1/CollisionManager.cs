@@ -197,7 +197,7 @@ namespace Game1
                            && !entityBox.TouchTop(targetBox)
                            && entity.InAir())
                     {
-                        float depth = entityBox.GetVerticalIntersectionDepth(targetBox);
+                       /* float depth = entityBox.GetVerticalIntersectionDepth(targetBox);
 
                         if (!target.IsToss())
                         {
@@ -205,6 +205,7 @@ namespace Game1
                         }
 
                         entity.GetTossInfo().velocity.Y = 5;
+                        */
                     }
                 }
             }
@@ -214,7 +215,7 @@ namespace Game1
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
-                    float posy = (Math.Abs(target.GetGround()) + target.GetHeight());
+                    float posy = (Math.Abs(target.GetPosY()) + target.GetHeight());
 
                     if (entity.InBoundsZ(target, target.GetDepth())
                             && entityBox.Intersects(targetBox)
@@ -224,12 +225,12 @@ namespace Game1
                         int totalHeight = (int)Math.Abs(target.GetPosY()) + target.GetHeight() + above.Sum(e => e.GetHeight());
                         totalHeight = (above.Count == 0 ? (int)Math.Abs(target.GetPosY()) + totalHeight : totalHeight);
     
-                        if (entity.GetVelocity().Y > 1 && Math.Abs(entity.GetPosY() + 20) > totalHeight)
+                        if (entity.GetVelocity().Y > 2 && Math.Abs(entity.GetPosY() + 20) > totalHeight)
                         {
                             entity.SetGround(-posy);
                         }
 
-                        if (entity.GetVelocity().Y > 1 && Math.Abs(entity.GetPosY()) + 20 > Math.Abs(target.GetPosY()) + target.GetHeight())
+                        if (entity.GetVelocity().Y > 2 && Math.Abs(entity.GetPosY()) + 20 > Math.Abs(target.GetPosY()) + target.GetHeight())
                         {
                             entity.SetGround(-posy);
                         }
@@ -262,10 +263,19 @@ namespace Game1
                     Rectangle targetBox = Rectangle.Empty;
                     int tPosY = (int)Math.Abs(target.GetPosY());
                     int tGround = (int)Math.Abs(target.GetGround());
+                    int offSetY = 10;
+
+                    if (entity.InRangeZ(target, target.GetDepth()))
+                    {
+                        if (ePosY + 1 > (tPosY + target.GetHeight()))
+                        {
+                            offSetY = 50;
+                        }
+                    }
 
                     if (entity.InRangeZ(target, target.GetDepth())
-                            && ePosY + 10 < (tPosY + target.GetHeight())
-                            && !(tPosY + 10 > (ePosY + entity.GetHeight())))
+                            && ePosY + offSetY < (tPosY + target.GetHeight())
+                            && !(tPosY + offSetY > (ePosY + entity.GetHeight())))
                     {
                         foreach (CLNS.BoundingBox bb1 in bboxes)
                         {
