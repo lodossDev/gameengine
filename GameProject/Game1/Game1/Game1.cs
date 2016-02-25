@@ -275,8 +275,8 @@ namespace Game1
             leo2.SetHeight(180);
             leo.SetHeight(180);
 
-            level1 = new Stage1();
-            bar = new LifeBar(0, 0);
+            //level1 = new Stage1();
+            //bar = new LifeBar(0, 0);
 
             renderManager = new RenderManager();
             renderManager.AddEntity(leo);
@@ -285,7 +285,7 @@ namespace Game1
             renderManager.AddEntity(drum2);
             renderManager.AddEntity(drum3);
             renderManager.AddEntity(drum4);
-            renderManager.AddLevel(level1);
+            //renderManager.AddLevel(level1);
 
             collisionManager = new CollisionManager();
             collisionManager.AddEntity(leo);
@@ -353,13 +353,13 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.X))
             {
-                Setup.rotate += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Setup.rotate -= 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Setup.scaleY += 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //Setup.scaleX -= 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //barHealth += (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
-            bar.Percent((int)barHealth);
+            //bar.Percent((int)barHealth);
 
             if (Keyboard.GetState().IsKeyDown(Keys.J))
             {
@@ -423,7 +423,7 @@ namespace Game1
             }
 
             // TODO: Add your update logic here
-            bar.Update(gameTime);
+            //bar.Update(gameTime);
             base.Update(gameTime);
         }
 

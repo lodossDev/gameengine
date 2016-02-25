@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Game1
 {
@@ -21,6 +22,7 @@ namespace Game1
         private Animation.State currentAnimationState;
         private Animation.State lastAnimationState;
 
+        private Dictionary<Animation.State, SoundEffectInstance> animationSounds;
         private Dictionary<Animation.State, int> moveFrames;
         private Dictionary<Animation.State, int> tossFrames;
         private List<CLNS.BoundingBox> boxes;
@@ -66,6 +68,7 @@ namespace Game1
             moveFrames = new Dictionary<Animation.State, int>();
             tossFrames = new Dictionary<Animation.State, int>();
             animationLinks = new List<Animation.Link>();
+            animationSounds = new Dictionary<Animation.State, SoundEffectInstance>();
 
             boxes = new List<CLNS.BoundingBox>();
             scale = new Vector2(1f, 1f);
@@ -176,6 +179,16 @@ namespace Game1
         public void AddBox(Animation.State state, int frame, CLNS.BoundingBox box)
         {
             GetSprite(state).AddBox(frame, box);
+        }
+
+        public void AddAnimationSound(Animation.State state, String location)
+        {
+            animationSounds.Add(state, Setup.contentManager.Load<SoundEffect>(location).CreateInstance());
+        }
+
+        public SoundEffectInstance GetAnimationSound(Animation.State state)
+        {
+            return animationSounds[state];
         }
 
         public CLNS.BoundingBox GetLastBoxFrame(Animation.State state, int frame)

@@ -18,8 +18,8 @@ namespace Game1
 
         public CollisionManager()
         {
-            hiteffect1 = Setup.contentManager.Load<SoundEffect>("Sounds//hit1");
-            soundInstance = hiteffect1.CreateInstance();
+            //hiteffect1 = Setup.contentManager.Load<SoundEffect>("Sounds//hit1");
+            //soundInstance = hiteffect1.CreateInstance();
         }
 
         public List<Entity> FindBelow(Entity entity)
@@ -353,7 +353,7 @@ namespace Game1
             {
                 //soundInstance.Pitch = 0.6f;
                 hitCount++;
-                soundInstance.Play();
+                //soundInstance.Play();
                 
                 target.Toss(-15 * attackBox.GetHitStrength());
                 //target.MoveY(-125 * attackBox.GetHitStrength());

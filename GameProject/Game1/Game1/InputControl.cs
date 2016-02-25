@@ -148,7 +148,7 @@ namespace Game1
                     inputDirection = InputDirection.LEFT;
                     currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (currentTime >= 100)
+                    if (currentTime >= 120)
                     {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                         player.VelX(-5);
@@ -164,7 +164,7 @@ namespace Game1
 
                     currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (currentTime >= 100)
+                    if (currentTime >= 120)
                     {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                         player.VelX(5);
