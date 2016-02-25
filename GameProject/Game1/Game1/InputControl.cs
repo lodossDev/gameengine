@@ -18,6 +18,7 @@ namespace Game1
         private InputDirection inputDirection;
         private PlayerIndex playerIndex;
         private KeyboardState oldKeyboardState, currentKeyboardState;
+        private float currentTime = 0f;
 
 
         public InputControl(Entity player, PlayerIndex index)
@@ -50,24 +51,28 @@ namespace Game1
             if (UP && currentKeyboardState.IsKeyUp(Keys.Up))
             {
                 player.VelZ(0f);
+                currentTime = 0f;
                 UP = false;
             }
 
             if (DOWN && currentKeyboardState.IsKeyUp(Keys.Down))
             {
                 player.VelZ(0f);
+                currentTime = 0f;
                 DOWN = false;
             }
 
             if (RIGHT && currentKeyboardState.IsKeyUp(Keys.Right))
             {
                 player.VelX(0f);
+                currentTime = 0f;
                 RIGHT = false;
             }
 
             if (LEFT && currentKeyboardState.IsKeyUp(Keys.Left))
             {
                 player.VelX(0f);
+                currentTime = 0f;
                 LEFT = false;
             }
 
@@ -141,16 +146,31 @@ namespace Game1
                 if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
                 {
                     inputDirection = InputDirection.LEFT;
-                    player.SetAnimationState(Animation.State.WALK_TOWARDS);
-                    player.VelX(-5);
+                    currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                    if (currentTime >= 100)
+                    {
+                        player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                        player.VelX(-5);
+                        currentTime = 0f;
+                    }
+
                     player.SetIsLeft(true);
                     LEFT = true;
                 }
                 else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right))
                 {
                     inputDirection = InputDirection.RIGHT;
-                    player.SetAnimationState(Animation.State.WALK_TOWARDS);
-                    player.VelX(5);
+
+                    currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                    if (currentTime >= 100)
+                    {
+                        player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                        player.VelX(5);
+                        currentTime = 0f;
+                    }
+
                     player.SetIsLeft(false);
                     RIGHT = true;
                 }

@@ -301,6 +301,7 @@ namespace Game1
             isAnimationComplete = false;
             ResetFrames();
             currentFrame = 0;
+            frameTimeElapsed = (float)frameDelays[currentFrame];
         }
 
         private void OnFrameComplete()
@@ -335,6 +336,11 @@ namespace Game1
         {
             currentFrame++;
             isFrameComplete[currentFrame] = true;
+        }
+
+        public void SetCurrentFrame(int frame)
+        {
+            currentFrame = frame - 1;
         }
 
         public void UpdateAnimation(GameTime gameTime)

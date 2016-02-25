@@ -108,8 +108,8 @@ namespace Game1
             leo.SetHeight(180);
 
             leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 10);
-            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 1, 10);
-            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 2, 10);
+            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 1, 12);
+            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 2, 12);
             leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 3, 25);
 
             leo.AddSprite(Animation.State.ATTACK1, new Sprite("Sprites/Actors/Leo/Attack1", Animation.Type.ONCE));
@@ -353,8 +353,9 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.X))
             {
-                //Setup.rotate += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                //Setup.scaleY += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Setup.rotate += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Setup.scaleY += 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Setup.scaleX -= 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //barHealth += (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
@@ -458,7 +459,7 @@ namespace Game1
             Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
 
-            spriteBatch.DrawString(font1, "leo hitCount: " + CollisionManager.hitCount, new Vector2(20, 40), Color.Black);
+            spriteBatch.DrawString(font1, "current frame: " + leo.GetCurrentFrame(), new Vector2(20, 40), Color.Black);
             spriteBatch.DrawString(font1, "leo trans: " + leo.colorInfo.fadeFrequency, new Vector2(20, 60), Color.Black);
             spriteBatch.DrawString(font1, "leo flash: " + leo.colorInfo.isFlash, new Vector2(20, 80), Color.Black);
             spriteBatch.DrawString(font1, "leo flashFinish: " + leo.colorInfo.expired, new Vector2(20, 100), Color.Black);

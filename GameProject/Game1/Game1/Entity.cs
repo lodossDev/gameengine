@@ -937,7 +937,7 @@ namespace Game1
         {
             if (InResetState())
             {
-                if (IsFrameComplete(GetCurrentAnimationState(), GetCurrentSprite().GetCurrentFrame() + 1))
+                if (IsFrameComplete(GetCurrentAnimationState(), GetCurrentSprite().GetCurrentFrame() - 1))
                 {
                     SetAnimationState(Animation.State.STANCE);
                 }
