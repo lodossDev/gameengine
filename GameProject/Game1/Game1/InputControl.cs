@@ -17,7 +17,14 @@ namespace Game1
         private Entity player;
         private InputDirection inputDirection;
         private PlayerIndex playerIndex;
+
         private KeyboardState oldKeyboardState, currentKeyboardState;
+        private GamePadState oldPadState, currentPadState;
+
+        private List<Buttons> inputBuffer;
+        public readonly TimeSpan bufferTimeout = TimeSpan.FromMilliseconds(500);
+        public readonly TimeSpan mergeInputTime = TimeSpan.FromMilliseconds(100);
+
         private float currentTime = 0f;
 
 
@@ -27,6 +34,8 @@ namespace Game1
             this.playerIndex = index;
             inputDirection = InputDirection.NONE;
             currentKeyboardState = new KeyboardState();
+            currentPadState = new GamePadState();
+            inputBuffer = new List<Buttons>();
             Reset();
         }
 
@@ -40,11 +49,9 @@ namespace Game1
             ATTACK_PRESS = false;
         }
 
-        public void Update(GameTime gameTime)
+        public void UpdateDefaultControls(GameTime gameTime)
         {
-            currentKeyboardState = Keyboard.GetState(playerIndex);
             inputDirection = InputDirection.NONE;
-            
             JUMP_PRESS = false;
             ATTACK_PRESS = false;
 
@@ -117,8 +124,8 @@ namespace Game1
                 {
                     if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
                     {
-                        inputDirection = InputDirection.DOWN_LEFT;  
-                        player.VelX(-5);                      
+                        inputDirection = InputDirection.DOWN_LEFT;
+                        player.VelX(-5);
                         player.SetIsLeft(true);
                         LEFT = true;
                     }
@@ -140,7 +147,7 @@ namespace Game1
                 }
             }
 
-            if (!IsDirectionalPress() && !player.IsToss() 
+            if (!IsDirectionalPress() && !player.IsToss()
                     && !player.IsInAnimationAction(Animation.Action.ATTACKING))
             {
                 if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
@@ -252,6 +259,21 @@ namespace Game1
                     }
                 }
             }
+        }
+
+        public void ReadCommandBuffer(GameTime gameTime)
+        {
+            Buttons pressedButtons = 0;
+
+
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            currentKeyboardState = Keyboard.GetState(playerIndex);
+            currentPadState = GamePad.GetState(playerIndex);
+
+            UpdateDefaultControls(gameTime);
 
             if (IsInputDirection(InputDirection.NONE))
             {
@@ -262,6 +284,7 @@ namespace Game1
             }
 
             oldKeyboardState = currentKeyboardState;
+            oldPadState = currentPadState;
         }
 
         public InputDirection GetInputDirection()

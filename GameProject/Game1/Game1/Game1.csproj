@@ -48,6 +48,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="InputControl.cs" />
+    <Compile Include="InputHelper.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LifeBar.cs" />
     <Compile Include="Stage1.cs" />

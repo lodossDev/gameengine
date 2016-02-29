@@ -197,7 +197,7 @@ namespace Game1
                            && !entityBox.TouchTop(targetBox)
                            && entity.InAir())
                     {
-                       /* float depth = entityBox.GetVerticalIntersectionDepth(targetBox);
+                        float depth = entityBox.GetVerticalIntersectionDepth(targetBox);
 
                         if (!target.IsToss())
                         {
@@ -205,7 +205,6 @@ namespace Game1
                         }
 
                         entity.GetTossInfo().velocity.Y = 5;
-                        */
                     }
                 }
             }
