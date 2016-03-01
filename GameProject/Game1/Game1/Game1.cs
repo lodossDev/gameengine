@@ -457,12 +457,15 @@ namespace Game1
             }*/
 
             int i = 1;
-            foreach (Buttons button in control.inputBuffer)
+            foreach (InputHelper.Key button in control.inputBuffer)
             {
                 i++;
                 spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 110 + (i * 20)), Color.Black);
             }
-            
+
+            InputHelper.Key bb = InputHelper.Key.B | InputHelper.Key.X;
+            spriteBatch.DrawString(font1, "current frame: " + (bb == (InputHelper.Key.X | InputHelper.Key.B)), new Vector2(20, 40), Color.Black);
+
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
 

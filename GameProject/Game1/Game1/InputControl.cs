@@ -22,7 +22,7 @@ namespace Game1
         private KeyboardState oldKeyboardState, currentKeyboardState;
         private GamePadState oldPadState, currentPadState;
 
-        public List<Buttons> inputBuffer;
+        public List<InputHelper.Key> inputBuffer;
         public readonly float bufferTimeout = 500f;
         public readonly float mergeInputTime = 60f;
         private float lastInputTime = 0f;
@@ -36,7 +36,7 @@ namespace Game1
             inputDirection = InputDirection.NONE;
             currentKeyboardState = new KeyboardState();
             currentPadState = new GamePadState();
-            inputBuffer = new List<Buttons>();
+            inputBuffer = new List<InputHelper.Key>();
             Reset();
         }
 
@@ -264,7 +264,7 @@ namespace Game1
 
         public void ReadInputBuffer(GameTime gameTime)
         {
-            Buttons pressedButton = 0;
+            InputHelper.Key pressedButton = 0;
 
             float time = (float)gameTime.TotalGameTime.TotalMilliseconds;
             float timeSinceLast = time - lastInputTime;
@@ -274,9 +274,12 @@ namespace Game1
                 inputBuffer.Clear();
             }
 
-            pressedButton |= InputHelper.GetButtonsPressed(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
+            pressedButton |= InputHelper.GetPressedButtons(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
 
             bool mergeInput = (inputBuffer.Count > 0 && timeSinceLast < mergeInputTime);
+
+            pressedButton |= InputHelper.GetPressedDirections(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
+
 
             if (pressedButton != 0)
             {
