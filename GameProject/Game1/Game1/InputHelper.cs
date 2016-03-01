@@ -88,7 +88,8 @@ namespace Game1
             return direction;
         }
 
-        public static Buttons GetButtonInput(GamePadState gamePad, KeyboardState keyboard)
+        public static Buttons GetButtonsPressed(GamePadState oldPadState, KeyboardState oldKeyboardState, 
+                                                GamePadState newPadState, KeyboardState newKeyboardState)
         {
             Buttons buttons = None;
 
@@ -98,7 +99,8 @@ namespace Game1
                 Keys key = buttonAndKey.Value;
 
                 // Check the game pad and keyboard for presses.
-                if (gamePad.IsButtonUp(button) || keyboard.IsKeyUp(key))
+                if (oldPadState.IsButtonUp(button) && newPadState.IsButtonDown(button) 
+                        || oldKeyboardState.IsKeyUp(key) && newKeyboardState.IsKeyDown(key))
                 {
                     // Use a bitwise-or to accumulate button presses.
                     buttons |= button;
@@ -107,10 +109,5 @@ namespace Game1
 
             return buttons;
         }
-
-        /*public static void ReadButtons(GameTime gameTime, GamePadState padState, KeyboardState keyboardState)
-        {
-
-        }*/
     }
 }

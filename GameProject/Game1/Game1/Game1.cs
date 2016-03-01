@@ -353,8 +353,8 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.X))
             {
-                Setup.rotate -= 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                Setup.scaleY += 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Setup.rotate -= 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Setup.scaleY += 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //Setup.scaleX -= 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //barHealth += (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
@@ -394,12 +394,12 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.U))
             {
-                level1.ScrollX(-5/2f);
+               // level1.ScrollX(-5/2f);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Y))
             {
-                level1.ScrollX(5/2f);
+                //level1.ScrollX(5/2f);
             }
 
             if (!Setup.isPause)
@@ -446,17 +446,24 @@ namespace Game1
                         null);
 
 
-            renderManager.Draw(gameTime); 
+            renderManager.Draw(gameTime);
 
-            List<Entity> above = collisionManager.FindAbove(drum2);
+            /*List<Entity> above = collisionManager.FindAbove(drum2);
             int i = 1;
-             foreach(Entity entity in above)
+            foreach(Entity entity in above)
             {
                 i++;
                 spriteBatch.DrawString(font1, "BELOW ENTITY: " + entity.GetName(), new Vector2(20, 110+(i*20)), Color.Black);
-            }
+            }*/
 
-            Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
+            int i = 1;
+            foreach (Buttons button in control.inputBuffer)
+            {
+                i++;
+                spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 110 + (i * 20)), Color.Black);
+            }
+            
+            /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
 
             spriteBatch.DrawString(font1, "current frame: " + leo.GetCurrentFrame(), new Vector2(20, 40), Color.Black);

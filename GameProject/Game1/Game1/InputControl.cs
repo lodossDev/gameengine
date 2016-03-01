@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace Game1
 {
@@ -21,11 +22,11 @@ namespace Game1
         private KeyboardState oldKeyboardState, currentKeyboardState;
         private GamePadState oldPadState, currentPadState;
 
-        private List<Buttons> inputBuffer;
-        public readonly TimeSpan bufferTimeout = TimeSpan.FromMilliseconds(500);
-        public readonly TimeSpan mergeInputTime = TimeSpan.FromMilliseconds(100);
-
-        private float currentTime = 0f;
+        public List<Buttons> inputBuffer;
+        public readonly float bufferTimeout = 500f;
+        public readonly float mergeInputTime = 60f;
+        private float lastInputTime = 0f;
+        private float walkPressTime = 0f;
 
 
         public InputControl(Entity player, PlayerIndex index)
@@ -58,28 +59,28 @@ namespace Game1
             if (UP && currentKeyboardState.IsKeyUp(Keys.Up))
             {
                 player.VelZ(0f);
-                currentTime = 0f;
+                walkPressTime = 0f;
                 UP = false;
             }
 
             if (DOWN && currentKeyboardState.IsKeyUp(Keys.Down))
             {
                 player.VelZ(0f);
-                currentTime = 0f;
+                walkPressTime = 0f;
                 DOWN = false;
             }
 
             if (RIGHT && currentKeyboardState.IsKeyUp(Keys.Right))
             {
                 player.VelX(0f);
-                currentTime = 0f;
+                walkPressTime = 0f;
                 RIGHT = false;
             }
 
             if (LEFT && currentKeyboardState.IsKeyUp(Keys.Left))
             {
                 player.VelX(0f);
-                currentTime = 0f;
+                walkPressTime = 0f;
                 LEFT = false;
             }
 
@@ -153,13 +154,13 @@ namespace Game1
                 if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
                 {
                     inputDirection = InputDirection.LEFT;
-                    currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    walkPressTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (currentTime >= 120)
+                    if (walkPressTime >= 120)
                     {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                         player.VelX(-5);
-                        currentTime = 0f;
+                        walkPressTime = 0f;
                     }
 
                     player.SetIsLeft(true);
@@ -169,13 +170,13 @@ namespace Game1
                 {
                     inputDirection = InputDirection.RIGHT;
 
-                    currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    walkPressTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (currentTime >= 120)
+                    if (walkPressTime >= 120)
                     {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                         player.VelX(5);
-                        currentTime = 0f;
+                        walkPressTime = 0f;
                     }
 
                     player.SetIsLeft(false);
@@ -261,11 +262,35 @@ namespace Game1
             }
         }
 
-        public void ReadCommandBuffer(GameTime gameTime)
+        public void ReadInputBuffer(GameTime gameTime)
         {
-            Buttons pressedButtons = 0;
+            Buttons pressedButton = 0;
 
+            float time = (float)gameTime.TotalGameTime.TotalMilliseconds;
+            float timeSinceLast = time - lastInputTime;
 
+            if (timeSinceLast > bufferTimeout)
+            {
+                inputBuffer.Clear();
+            }
+
+            pressedButton |= InputHelper.GetButtonsPressed(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
+
+            bool mergeInput = (inputBuffer.Count > 0 && timeSinceLast < mergeInputTime);
+
+            if (pressedButton != 0)
+            {
+                if (mergeInput)
+                {
+                    inputBuffer[inputBuffer.Count - 1] = inputBuffer[inputBuffer.Count - 1] | pressedButton;
+                    Debug.WriteLine("CURRENT MERGING BTN: " + inputBuffer[inputBuffer.Count - 1]);
+                }
+                else
+                {
+                    inputBuffer.Add(pressedButton);
+                    lastInputTime = time;
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -274,6 +299,7 @@ namespace Game1
             currentPadState = GamePad.GetState(playerIndex);
 
             UpdateDefaultControls(gameTime);
+            ReadInputBuffer(gameTime);
 
             if (IsInputDirection(InputDirection.NONE))
             {
