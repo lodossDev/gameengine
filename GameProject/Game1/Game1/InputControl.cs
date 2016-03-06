@@ -21,11 +21,7 @@ namespace Game1
 
         private KeyboardState oldKeyboardState, currentKeyboardState;
         private GamePadState oldPadState, currentPadState;
-
-        public List<InputHelper.Key> inputBuffer;
-        public readonly float bufferTimeout = 500f;
-        public readonly float mergeInputTime = 60f;
-        private float lastInputTime = 0f;
+        public InputBuffer pressedBuffer;
         private float walkPressTime = 0f;
 
 
@@ -36,7 +32,7 @@ namespace Game1
             inputDirection = InputDirection.NONE;
             currentKeyboardState = new KeyboardState();
             currentPadState = new GamePadState();
-            inputBuffer = new List<InputHelper.Key>();
+            pressedBuffer = new InputBuffer();
             Reset();
         }
 
@@ -264,36 +260,13 @@ namespace Game1
 
         public void ReadInputBuffer(GameTime gameTime)
         {
-            InputHelper.Key pressedButton = 0;
+            InputHelper.KeyPress pressedButtonState = InputHelper.KeyPress.NONE;
+            InputHelper.KeyPress pressedDirectionState = InputHelper.KeyPress.NONE;
 
-            float time = (float)gameTime.TotalGameTime.TotalMilliseconds;
-            float timeSinceLast = time - lastInputTime;
+            pressedButtonState = InputHelper.GetPressedButtons(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
+            pressedDirectionState = InputHelper.GetPressedDirections(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
 
-            if (timeSinceLast > bufferTimeout)
-            {
-                inputBuffer.Clear();
-            }
-
-            pressedButton |= InputHelper.GetPressedButtons(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
-
-            bool mergeInput = (inputBuffer.Count > 0 && timeSinceLast < mergeInputTime);
-
-            pressedButton |= InputHelper.GetPressedDirections(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
-
-
-            if (pressedButton != 0)
-            {
-                if (mergeInput)
-                {
-                    inputBuffer[inputBuffer.Count - 1] = inputBuffer[inputBuffer.Count - 1] | pressedButton;
-                    Debug.WriteLine("CURRENT MERGING BTN: " + inputBuffer[inputBuffer.Count - 1]);
-                }
-                else
-                {
-                    inputBuffer.Add(pressedButton);
-                    lastInputTime = time;
-                }
-            }
+            pressedBuffer.ReadInputBuffer(gameTime, pressedButtonState, pressedDirectionState);
         }
 
         public void Update(GameTime gameTime)
