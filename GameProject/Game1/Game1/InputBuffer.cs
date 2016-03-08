@@ -12,9 +12,9 @@ namespace Game1
     {
         public List<InputHelper.KeyPress> inputBuffer;
         public readonly float bufferTimeout = 600f;
-        public readonly float mergeInputTime = 200f;
+        public readonly float mergeInputTime = 50f;
         private float lastInputTime = 0f;
-        private float timeSinceLast = 0f;
+        public float timeSinceLast = 0f;
         public readonly int MAX_BUFFER = 60;
 
         public InputBuffer()
@@ -61,18 +61,34 @@ namespace Game1
 
         public bool Matches(InputHelper.CommandMove command)
         {
-            if (timeSinceLast > command.GetMaxTime())
+            if (inputBuffer.Count < command.GetMoves().Count)
             {
+                command.Reset();
                 return false;
             }
 
             for (int i = 1; i <= command.GetMoves().Count; ++i)
             {
+                Debug.WriteLine("### STEP_ " + (command.GetMoves().Count - i) + ": " + command.GetMoves()[command.GetMoves().Count - i].GetKeyPress());
+                Debug.WriteLine("### BUFFER: " + inputBuffer[inputBuffer.Count - i]);
+                Debug.WriteLine("### BTN: " + command.GetMoves()[command.GetMoves().Count - i].GetKeyPress());
+
                 if (inputBuffer[inputBuffer.Count - i] == command.GetMoves()[command.GetMoves().Count - i].GetKeyPress())
                 {
-                    command.Increment();
+                    if (command.lastKeyPress != command.GetMoves()[command.GetMoves().Count - i].GetKeyPress())
+                    {
+                        Debug.WriteLine("### MATCHES: " + (inputBuffer[inputBuffer.Count - i] == command.GetMoves()[command.GetMoves().Count - i].GetKeyPress()));
+                        command.lastKeyPress = command.GetMoves()[command.GetMoves().Count - i].GetKeyPress();
+                        command.Increment();
+                        Debug.WriteLine("### POSITION: " + command.currentMoveStep);
+                    }
+                } else
+                {
+                    command.Reset();
                 }
             }
+
+            //Debug.WriteLine("### POSITION: " + command.currentMoveStep);
 
             if (command.IsComplete())
             {

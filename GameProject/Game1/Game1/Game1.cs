@@ -25,6 +25,8 @@ namespace Game1
         LifeBar bar;
         float barHealth = 100f;
 
+        InputHelper.CommandMove command;
+
 
         public Game1()
         {
@@ -295,6 +297,13 @@ namespace Game1
             collisionManager.AddEntity(drum3);
             collisionManager.AddEntity(drum4);
 
+            command = new InputHelper.CommandMove("TEST", Animation.State.ATTACK6, new List<InputHelper.KeyState>
+            {
+                new InputHelper.KeyState(InputHelper.KeyPress.A | InputHelper.KeyPress.X, InputHelper.ButtonState.Pressed),
+                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Pressed),
+                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Pressed)
+            });
+
             control = new InputControl(leo, PlayerIndex.One);
 
             // TODO: use this.Content to load your game content here
@@ -402,6 +411,10 @@ namespace Game1
                 //level1.ScrollX(5/2f);
             }
 
+            command.Update(gameTime); 
+
+            
+
             if (!Setup.isPause)
             {
                 control.Update(gameTime);
@@ -463,8 +476,16 @@ namespace Game1
                 spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 110 + (i * 20)), Color.Black);
             }
 
-            InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
-            spriteBatch.DrawString(font1, "current frame: " + (bb == (InputHelper.KeyPress.X | InputHelper.KeyPress.B)), new Vector2(20, 40), Color.Black);
+            //control.pressedBuffer.Matches(command);
+
+            if (control.pressedBuffer.Matches(command))
+            {
+                leo.SetAnimationState(command.GetAnimationState());
+            }
+
+            //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
+            spriteBatch.DrawString(font1, "STEP: " + command.currentMoveStep, new Vector2(20, 100), Color.Black);
+            spriteBatch.DrawString(font1, "TIME: " + command.currentMoveTime, new Vector2(20, 120), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

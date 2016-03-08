@@ -291,8 +291,8 @@ namespace Game1
 
                         if (hasCollided && !entityBox.IsEmpty && !targetBox.IsEmpty)
                         {
-                            Debug.WriteLine("TT tPosY: " + target.GetName() + ": " + tPosY);
-                            Debug.WriteLine("E: " + entity.GetName() + " : " + (ePosY + entity.GetHeight()));
+                            //Debug.WriteLine("TT tPosY: " + target.GetName() + ": " + tPosY);
+                            //Debug.WriteLine("E: " + entity.GetName() + " : " + (ePosY + entity.GetHeight()));
 
                             //Problem with tposy not updating in time for comparison
                             if (entityBox.Intersects(targetBox))

@@ -95,11 +95,15 @@ namespace Game1
             private float maxTime = 0f;
             private string name;
             private double priority;
-            private int currentMoveStep = 0;
+            public int currentMoveStep = 0;
+            public float currentMoveTime = 0f;
+            private Animation.State animationState;
+            public InputHelper.KeyPress lastKeyPress;
 
-            public CommandMove(string name, List<InputHelper.KeyState> moves, float maxTime = 500f, double priority = 1)
+            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxTime = 600f, double priority = 1)
             {
                 this.name = name;
+                this.animationState = animationState;
                 this.moves = moves;
                 this.maxTime = maxTime;
                 this.priority = priority;
@@ -125,6 +129,11 @@ namespace Game1
                 return priority;
             }
 
+            public Animation.State GetAnimationState()
+            {
+                return animationState;
+            }
+
             public int GetCurrentMoveStep()
             {
                 return currentMoveStep;
@@ -137,12 +146,31 @@ namespace Game1
 
             public void Reset()
             {
+                currentMoveTime = 0f;
                 currentMoveStep = 0;
             }
 
             public bool IsComplete()
             {
-                return (currentMoveStep == moves.Count);
+                return (currentMoveStep > moves.Count);
+            }
+
+            public bool HasExpired()
+            {
+                return currentMoveTime > maxTime;
+            }
+
+            public void Update(GameTime gameTime)
+            {
+                if (currentMoveStep > 0)
+                {
+                    //currentMoveTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                }
+
+                if (HasExpired())
+                {
+                    //Reset();
+                }
             }
         }
 
