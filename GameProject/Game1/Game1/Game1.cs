@@ -470,7 +470,7 @@ namespace Game1
             }*/
 
             int i = 1;
-            foreach (InputHelper.KeyPress button in control.pressedBuffer.inputBuffer)
+            foreach (InputHelper.KeyPress button in control.heldBuffer.inputBuffer)
             {
                 i++;
                 spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 110 + (i * 20)), Color.Black);

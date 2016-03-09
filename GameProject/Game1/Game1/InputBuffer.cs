@@ -11,11 +11,11 @@ namespace Game1
     public class InputBuffer
     {
         public List<InputHelper.KeyPress> inputBuffer;
-        public readonly float bufferTimeout = 600f;
+        public readonly float bufferTimeout = 230f;
         public readonly float mergeInputTime = 50f;
         private float lastInputTime = 0f;
         public float timeSinceLast = 0f;
-        public readonly int MAX_BUFFER = 60;
+        public readonly int MAX_BUFFER = 120;
 
         public InputBuffer()
         {
@@ -26,6 +26,7 @@ namespace Game1
         {
             InputHelper.KeyPress pressedButton = InputHelper.KeyPress.NONE;
 
+            int bufferStep = inputBuffer.Count - 1;
             float time = (float)gameTime.TotalGameTime.TotalMilliseconds;
             timeSinceLast = time - lastInputTime;
 
@@ -43,8 +44,7 @@ namespace Game1
             {
                 if (mergeInput)
                 {
-                    inputBuffer[inputBuffer.Count - 1] = inputBuffer[inputBuffer.Count - 1] | pressedButton;
-                    Debug.WriteLine("CURRENT MERGING BTN: " + inputBuffer[inputBuffer.Count - 1]);
+                    inputBuffer[bufferStep] = inputBuffer[bufferStep] | pressedButton;
                 }
                 else
                 {
@@ -63,41 +63,22 @@ namespace Game1
         {
             if (inputBuffer.Count < command.GetMoves().Count)
             {
-                command.Reset();
                 return false;
             }
 
             for (int i = 1; i <= command.GetMoves().Count; ++i)
             {
-                Debug.WriteLine("### STEP_ " + (command.GetMoves().Count - i) + ": " + command.GetMoves()[command.GetMoves().Count - i].GetKeyPress());
-                Debug.WriteLine("### BUFFER: " + inputBuffer[inputBuffer.Count - i]);
-                Debug.WriteLine("### BTN: " + command.GetMoves()[command.GetMoves().Count - i].GetKeyPress());
+                int commandStep = command.GetMoves().Count - i;
+                int bufferStep = inputBuffer.Count - i;
 
-                if (inputBuffer[inputBuffer.Count - i] == command.GetMoves()[command.GetMoves().Count - i].GetKeyPress())
+                if (inputBuffer[bufferStep] != command.GetMoves()[commandStep].GetKeyPress())
                 {
-                    if (command.lastKeyPress != command.GetMoves()[command.GetMoves().Count - i].GetKeyPress())
-                    {
-                        Debug.WriteLine("### MATCHES: " + (inputBuffer[inputBuffer.Count - i] == command.GetMoves()[command.GetMoves().Count - i].GetKeyPress()));
-                        command.lastKeyPress = command.GetMoves()[command.GetMoves().Count - i].GetKeyPress();
-                        command.Increment();
-                        Debug.WriteLine("### POSITION: " + command.currentMoveStep);
-                    }
-                } else
-                {
-                    command.Reset();
+                    return false;
                 }
             }
 
-            //Debug.WriteLine("### POSITION: " + command.currentMoveStep);
-
-            if (command.IsComplete())
-            {
-                inputBuffer.Clear();
-                command.Reset();
-                return true;
-            }
-
-            return false;
+            inputBuffer.Clear();
+            return true;
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Game1
         private KeyboardState oldKeyboardState, currentKeyboardState;
         private GamePadState oldPadState, currentPadState;
         public InputBuffer pressedBuffer;
+        public InputBuffer releasedBuffer;
+        public InputBuffer heldBuffer;
         private float walkPressTime = 0f;
 
 
@@ -32,7 +34,11 @@ namespace Game1
             inputDirection = InputDirection.NONE;
             currentKeyboardState = new KeyboardState();
             currentPadState = new GamePadState();
+
             pressedBuffer = new InputBuffer();
+            releasedBuffer = new InputBuffer();
+            heldBuffer = new InputBuffer();
+
             Reset();
         }
 
@@ -258,7 +264,7 @@ namespace Game1
             }
         }
 
-        public void ReadInputBuffer(GameTime gameTime)
+        public void ReadPressedInputBuffer(GameTime gameTime)
         {
             InputHelper.KeyPress pressedButtonState = InputHelper.KeyPress.NONE;
             InputHelper.KeyPress pressedDirectionState = InputHelper.KeyPress.NONE;
@@ -269,13 +275,25 @@ namespace Game1
             pressedBuffer.ReadInputBuffer(gameTime, pressedButtonState, pressedDirectionState);
         }
 
+        public void ReadHeldInputBuffer(GameTime gameTime)
+        {
+            InputHelper.KeyPress heldButtonState = InputHelper.KeyPress.NONE;
+            InputHelper.KeyPress heldDirectionState = InputHelper.KeyPress.NONE;
+
+            heldButtonState = InputHelper.GetHeldButtons(currentPadState, currentKeyboardState);
+            heldDirectionState = InputHelper.GetHeldDirections(currentPadState, currentKeyboardState);
+
+            heldBuffer.ReadInputBuffer(gameTime, heldButtonState, heldDirectionState);
+        }
+
         public void Update(GameTime gameTime)
         {
             currentKeyboardState = Keyboard.GetState(playerIndex);
             currentPadState = GamePad.GetState(playerIndex);
 
             UpdateDefaultControls(gameTime);
-            ReadInputBuffer(gameTime);
+            ReadPressedInputBuffer(gameTime);
+            ReadHeldInputBuffer(gameTime);
 
             if (IsInputDirection(InputDirection.NONE))
             {
