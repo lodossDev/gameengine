@@ -11,8 +11,8 @@ namespace Game1
     public class InputBuffer
     {
         public List<InputHelper.KeyPress> inputBuffer;
-        public readonly float bufferTimeout = 230f;
-        public readonly float mergeInputTime = 50f;
+        public readonly float bufferTimeout = 500f;
+        public readonly float mergeInputTime = 120f;
         private float lastInputTime = 0f;
         public float timeSinceLast = 0f;
         public readonly int MAX_BUFFER = 120;
@@ -61,12 +61,30 @@ namespace Game1
 
         public bool Matches(InputHelper.CommandMove command)
         {
-            if (inputBuffer.Count < command.GetMoves().Count)
+            if (inputBuffer.Count < 0)
             {
+                //command.Reset();
                 return false;
             }
 
-            for (int i = 1; i <= command.GetMoves().Count; ++i)
+            InputHelper.KeyPress currentTargetKeyPress = command.GetMoves()[0].GetKeyPress();
+
+            for (int i = 0; i < inputBuffer.Count; i++)
+            {
+                Debug.WriteLine("INPUT BUFFER A: " + inputBuffer[i]);
+                Debug.WriteLine("TARGET PRESS: " + currentTargetKeyPress);
+
+                if (inputBuffer[i] == currentTargetKeyPress)
+                {
+                    if (i < command.GetMoves().Count)
+                    {
+                        currentTargetKeyPress = command.GetMoves()[i + 1].GetKeyPress();
+                        command.Increment();
+                    }
+                }
+            }
+
+            /*for (int i = 1; i <= command.GetMoves().Count; ++i)
             {
                 int commandStep = command.GetMoves().Count - i;
                 int bufferStep = inputBuffer.Count - i;
@@ -74,11 +92,12 @@ namespace Game1
                 if (inputBuffer[bufferStep] != command.GetMoves()[commandStep].GetKeyPress())
                 {
                     return false;
-                }
+                } 
             }
 
             inputBuffer.Clear();
-            return true;
+            return true;*/
+            return false;
         }
     }
 }

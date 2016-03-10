@@ -98,7 +98,6 @@ namespace Game1
             public int currentMoveStep = 0;
             public float currentMoveTime = 0f;
             private Animation.State animationState;
-            public InputHelper.KeyPress lastKeyPress;
 
             public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxTime = 600f, double priority = 1)
             {
@@ -164,12 +163,7 @@ namespace Game1
             {
                 if (currentMoveStep > 0)
                 {
-                    //currentMoveTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                }
-
-                if (HasExpired())
-                {
-                    //Reset();
+                    currentMoveTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
             }
         }

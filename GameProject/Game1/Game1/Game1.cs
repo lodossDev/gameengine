@@ -413,8 +413,6 @@ namespace Game1
 
             command.Update(gameTime); 
 
-            
-
             if (!Setup.isPause)
             {
                 control.Update(gameTime);
@@ -470,7 +468,7 @@ namespace Game1
             }*/
 
             int i = 1;
-            foreach (InputHelper.KeyPress button in control.heldBuffer.inputBuffer)
+            foreach (InputHelper.KeyPress button in control.pressedBuffer.inputBuffer)
             {
                 i++;
                 spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 110 + (i * 20)), Color.Black);
@@ -484,7 +482,7 @@ namespace Game1
             }
 
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
-            spriteBatch.DrawString(font1, "STEP: " + command.currentMoveStep, new Vector2(20, 100), Color.Black);
+            spriteBatch.DrawString(font1, "BUFFER COUNT: " + (control.pressedBuffer.inputBuffer.Count > 0 ? control.pressedBuffer.inputBuffer[0] : 0 ), new Vector2(20, 100), Color.Black);
             spriteBatch.DrawString(font1, "TIME: " + command.currentMoveTime, new Vector2(20, 120), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
