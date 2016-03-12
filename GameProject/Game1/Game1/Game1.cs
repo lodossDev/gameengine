@@ -299,9 +299,9 @@ namespace Game1
 
             command = new InputHelper.CommandMove("TEST", Animation.State.ATTACK6, new List<InputHelper.KeyState>
             {
-                new InputHelper.KeyState(InputHelper.KeyPress.A | InputHelper.KeyPress.X, InputHelper.ButtonState.Pressed),
-                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Pressed),
-                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Pressed)
+                new InputHelper.KeyState(InputHelper.KeyPress.A | InputHelper.KeyPress.X, InputHelper.ButtonState.Held),
+                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Held),
+                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Held),
             });
 
             control = new InputControl(leo, PlayerIndex.One);
@@ -468,7 +468,7 @@ namespace Game1
             }*/
 
             int i = 1;
-            foreach (InputHelper.KeyPress button in control.pressedBuffer.inputBuffer)
+            foreach (InputHelper.KeyPress button in control.heldBuffer.GetBuffer())
             {
                 i++;
                 spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 110 + (i * 20)), Color.Black);
@@ -476,14 +476,14 @@ namespace Game1
 
             //control.pressedBuffer.Matches(command);
 
-            if (control.pressedBuffer.Matches(command))
+            if (control.Matches(command))
             {
                 leo.SetAnimationState(command.GetAnimationState());
             }
 
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
-            spriteBatch.DrawString(font1, "BUFFER COUNT: " + (control.pressedBuffer.inputBuffer.Count > 0 ? control.pressedBuffer.inputBuffer[0] : 0 ), new Vector2(20, 100), Color.Black);
-            spriteBatch.DrawString(font1, "TIME: " + command.currentMoveTime, new Vector2(20, 120), Color.Black);
+            spriteBatch.DrawString(font1, "TIME: " + command.currentMoveTime, new Vector2(20, 100), Color.Black);
+            spriteBatch.DrawString(font1, "STEP: " + command.currentMoveStep, new Vector2(20, 120), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

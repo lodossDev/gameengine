@@ -34,11 +34,12 @@ namespace Game1
             ANY_DIRECTION = UP | DOWN | LEFT | RIGHT,
         }
 
+        [Flags]
         public enum ButtonState
         {
-            Pressed = 0,
-            Released = 1,
-            Held = 2
+            Pressed = 1,
+            Released = 2,
+            Held = 4
         }
 
         public class KeyState
@@ -99,7 +100,7 @@ namespace Game1
             public float currentMoveTime = 0f;
             private Animation.State animationState;
 
-            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxTime = 600f, double priority = 1)
+            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxTime = 400f, double priority = 1)
             {
                 this.name = name;
                 this.animationState = animationState;
@@ -133,12 +134,17 @@ namespace Game1
                 return animationState;
             }
 
+            public InputHelper.KeyState GetCurrentMove()
+            {
+                return moves[currentMoveStep];
+            }
+
             public int GetCurrentMoveStep()
             {
                 return currentMoveStep;
             }
 
-            public void Increment()
+            public void Next()
             {
                 currentMoveStep++;
             }
@@ -151,7 +157,7 @@ namespace Game1
 
             public bool IsComplete()
             {
-                return (currentMoveStep > moves.Count);
+                return (currentMoveStep == moves.Count - 1);
             }
 
             public bool HasExpired()
@@ -165,6 +171,11 @@ namespace Game1
                 {
                     currentMoveTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
+            }
+
+            public void Init()
+            {
+                currentMoveStep = 0;
             }
         }
 

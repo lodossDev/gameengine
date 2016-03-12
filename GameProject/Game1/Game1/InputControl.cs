@@ -286,14 +286,27 @@ namespace Game1
             heldBuffer.ReadInputBuffer(gameTime, heldButtonState, heldDirectionState);
         }
 
+        public void ReadReleasedInputBuffer(GameTime gameTime)
+        {
+            InputHelper.KeyPress releasedButtonState = InputHelper.KeyPress.NONE;
+            InputHelper.KeyPress releasedDirectionState = InputHelper.KeyPress.NONE;
+
+            releasedButtonState = InputHelper.GetReleasedButtons(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
+            releasedDirectionState = InputHelper.GetReleasedDirections(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
+
+            releasedBuffer.ReadInputBuffer(gameTime, releasedButtonState, releasedDirectionState);
+        }
+
         public void Update(GameTime gameTime)
         {
             currentKeyboardState = Keyboard.GetState(playerIndex);
             currentPadState = GamePad.GetState(playerIndex);
 
             UpdateDefaultControls(gameTime);
+
             ReadPressedInputBuffer(gameTime);
             ReadHeldInputBuffer(gameTime);
+            ReadReleasedInputBuffer(gameTime);
 
             if (IsInputDirection(InputDirection.NONE))
             {
@@ -305,6 +318,49 @@ namespace Game1
 
             oldKeyboardState = currentKeyboardState;
             oldPadState = currentPadState;
+        }
+
+        public bool Matches(InputHelper.CommandMove command)
+        {
+            //Held problem
+            if (/*pressedBuffer.GetBuffer().Count < command.GetMoves().Count
+                    || releasedBuffer.GetBuffer().Count < command.GetMoves().Count
+                    || */heldBuffer.GetBuffer().Count < command.GetMoves().Count)
+            {
+                return false;
+            }
+
+            for (int i = 1; i <= command.GetMoves().Count; ++i)
+            {
+                if (command.GetMoves()[command.GetMoves().Count - i].GetState() == InputHelper.ButtonState.Pressed)
+                {
+                    if (pressedBuffer.GetBuffer()[pressedBuffer.GetBuffer().Count - i] != command.GetMoves()[command.GetMoves().Count - i].GetKeyPress())
+                    {
+                        return false;
+                    }
+                }
+                else if (command.GetMoves()[command.GetMoves().Count - i].GetState() == InputHelper.ButtonState.Released
+                        && releasedBuffer.GetBuffer().Count >= 1)
+                {
+                    if (releasedBuffer.GetBuffer()[releasedBuffer.GetBuffer().Count - i] != command.GetMoves()[command.GetMoves().Count - i].GetKeyPress())
+                    {
+                        return false; 
+                    }
+                }
+                else if (command.GetMoves()[command.GetMoves().Count - i].GetState() == InputHelper.ButtonState.Held
+                        && heldBuffer.GetBuffer().Count >= 1)
+                {
+                    if (heldBuffer.GetBuffer()[heldBuffer.GetBuffer().Count - i] != command.GetMoves()[command.GetMoves().Count - i].GetKeyPress())
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            pressedBuffer.GetBuffer().Clear();
+            releasedBuffer.GetBuffer().Clear();
+            heldBuffer.GetBuffer().Clear();
+            return true;
         }
 
         public InputDirection GetInputDirection()
