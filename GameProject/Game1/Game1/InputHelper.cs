@@ -42,27 +42,6 @@ namespace Game1
             Held = 4
         }
 
-        public class KeyState
-        {
-            private InputHelper.KeyPress key;
-            private InputHelper.ButtonState state;
-
-            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state) {
-                this.key = key;
-                this.state = state;
-            }
-
-            public InputHelper.KeyPress GetKeyPress()
-            {
-                return key;
-            } 
-
-            public InputHelper.ButtonState GetState()
-            {
-                return state;
-            }
-        }
-
         internal static readonly Dictionary<Buttons, Keys> NonDirectionButtons = new Dictionary<Buttons, Keys>
         {
             { Buttons.A, Keys.A },
@@ -90,22 +69,63 @@ namespace Game1
             { Keys.Y, InputHelper.KeyPress.Y },
         };
 
+        public class KeyState
+        {
+            private InputHelper.KeyPress key;
+            private InputHelper.ButtonState state;
+            private float maxKeyTime = 0f;
+            private float currentKeyTime = 0f;
+
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float maxKeyTime = 280f) {
+                this.key = key;
+                this.state = state;
+                this.maxKeyTime = maxKeyTime;
+            }
+
+            public InputHelper.KeyPress GetKeyPress()
+            {
+                return key;
+            } 
+
+            public InputHelper.ButtonState GetState()
+            {
+                return state;
+            }
+
+            public float GetMaxKeyTime()
+            {
+                return maxKeyTime;
+            }
+
+            public void Update(GameTime gameTime)
+            {
+                currentKeyTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
+
+            public bool HasExpired()
+            {
+                return currentKeyTime >= maxKeyTime;
+            }
+
+            public void Reset()
+            {
+                currentKeyTime = 0f;
+            }
+        }
+
         public class CommandMove
         {
             private List<InputHelper.KeyState> moves;
-            private float maxTime = 0f;
             private string name;
             private double priority;
             public int currentMoveStep = 0;
-            public float currentMoveTime = 0f;
             private Animation.State animationState;
 
-            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxTime = 400f, double priority = 1)
+            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, double priority = 1)
             {
                 this.name = name;
                 this.animationState = animationState;
                 this.moves = moves;
-                this.maxTime = maxTime;
                 this.priority = priority;
             }
 
@@ -117,11 +137,6 @@ namespace Game1
             public List<InputHelper.KeyState> GetMoves()
             {
                 return moves;
-            }
-
-            public float GetMaxTime()
-            {
-                return maxTime;
             }
 
             public double GetPriority()
@@ -151,31 +166,31 @@ namespace Game1
 
             public void Reset()
             {
-                currentMoveTime = 0f;
+                foreach(InputHelper.KeyState move in moves)
+                {
+                    move.Reset();
+                }
+
                 currentMoveStep = 0;
             }
 
             public bool IsComplete()
             {
-                return (currentMoveStep == moves.Count - 1);
-            }
-
-            public bool HasExpired()
-            {
-                return currentMoveTime > maxTime;
+                return (currentMoveStep > moves.Count - 1);
             }
 
             public void Update(GameTime gameTime)
             {
                 if (currentMoveStep > 0)
                 {
-                    currentMoveTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                }
-            }
+                    InputHelper.KeyState currentKeyState = moves[currentMoveStep];
+                    currentKeyState.Update(gameTime);
 
-            public void Init()
-            {
-                currentMoveStep = 0;
+                    if (currentKeyState.HasExpired())
+                    {
+                        //Reset();
+                    }
+                }
             }
         }
 

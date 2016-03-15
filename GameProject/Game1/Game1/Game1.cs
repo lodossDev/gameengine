@@ -470,7 +470,7 @@ namespace Game1
             }*/
 
             int i = 1;
-            foreach (InputHelper.KeyPress button in control.heldBuffer.GetBuffer())
+            foreach (InputHelper.KeyPress button in control.heldState.GetBuffer())
             {
                 i++;
                 spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 110 + (i * 20)), Color.Black);
@@ -484,7 +484,7 @@ namespace Game1
             }
 
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
-            spriteBatch.DrawString(font1, "TIME: " + command.currentMoveTime, new Vector2(20, 100), Color.Black);
+            spriteBatch.DrawString(font1, "TIME: " + control.pressedState.GetLastInputTime(), new Vector2(20, 100), Color.Black);
             spriteBatch.DrawString(font1, "STEP: " + command.currentMoveStep, new Vector2(20, 120), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

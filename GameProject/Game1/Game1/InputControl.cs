@@ -21,9 +21,11 @@ namespace Game1
 
         private KeyboardState oldKeyboardState, currentKeyboardState;
         private GamePadState oldPadState, currentPadState;
-        public InputBuffer pressedBuffer;
-        public InputBuffer releasedBuffer;
-        public InputBuffer heldBuffer;
+
+        public InputBuffer pressedState;
+        public InputBuffer releasedState;
+        public InputBuffer heldState;
+
         private float walkPressTime = 0f;
 
 
@@ -32,12 +34,13 @@ namespace Game1
             this.player = player;
             this.playerIndex = index;
             inputDirection = InputDirection.NONE;
+
             currentKeyboardState = new KeyboardState();
             currentPadState = new GamePadState();
 
-            pressedBuffer = new InputBuffer();
-            releasedBuffer = new InputBuffer();
-            heldBuffer = new InputBuffer();
+            pressedState = new InputBuffer();
+            releasedState = new InputBuffer();
+            heldState = new InputBuffer();
 
             Reset();
         }
@@ -272,7 +275,7 @@ namespace Game1
             pressedButtonState = InputHelper.GetPressedButtons(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
             pressedDirectionState = InputHelper.GetPressedDirections(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
 
-            pressedBuffer.ReadInputBuffer(gameTime, pressedButtonState, pressedDirectionState);
+            pressedState.ReadInputBuffer(gameTime, pressedButtonState, pressedDirectionState);
         }
 
         public void ReadHeldInputBuffer(GameTime gameTime)
@@ -283,7 +286,7 @@ namespace Game1
             heldButtonState = InputHelper.GetHeldButtons(currentPadState, currentKeyboardState);
             heldDirectionState = InputHelper.GetHeldDirections(currentPadState, currentKeyboardState);
 
-            heldBuffer.ReadInputBuffer(gameTime, heldButtonState, heldDirectionState);
+            heldState.ReadInputBuffer(gameTime, heldButtonState, heldDirectionState);
         }
 
         public void ReadReleasedInputBuffer(GameTime gameTime)
@@ -294,7 +297,27 @@ namespace Game1
             releasedButtonState = InputHelper.GetReleasedButtons(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
             releasedDirectionState = InputHelper.GetReleasedDirections(oldPadState, oldKeyboardState, currentPadState, currentKeyboardState);
 
-            releasedBuffer.ReadInputBuffer(gameTime, releasedButtonState, releasedDirectionState);
+            releasedState.ReadInputBuffer(gameTime, releasedButtonState, releasedDirectionState);
+        }
+
+        public InputBuffer GetNextBuffer(InputHelper.KeyState currentKeyPress)
+        {
+            InputBuffer currentBuffer = null;
+
+            if (currentKeyPress.GetState() == InputHelper.ButtonState.Pressed)
+            {
+                currentBuffer = pressedState;
+            }
+            else if (currentKeyPress.GetState() == InputHelper.ButtonState.Released)
+            {
+                currentBuffer = releasedState;
+            }
+            else if (currentKeyPress.GetState() == InputHelper.ButtonState.Held)
+            {
+                currentBuffer = heldState;
+            }
+
+            return currentBuffer;
         }
 
         public void Update(GameTime gameTime)
@@ -303,7 +326,7 @@ namespace Game1
             currentPadState = GamePad.GetState(playerIndex);
 
             UpdateDefaultControls(gameTime);
-
+            
             ReadPressedInputBuffer(gameTime);
             ReadHeldInputBuffer(gameTime);
             ReadReleasedInputBuffer(gameTime);
@@ -322,86 +345,24 @@ namespace Game1
 
         public bool Matches(InputHelper.CommandMove command)
         {
-            int currentMoveStep = command.GetMoves().Count - 1;
-            InputHelper.KeyState currentKeyPress = command.GetMoves()[currentMoveStep];
-            InputBuffer currentBuffer = null;
+            command.currentMoveStep = 0;
+            InputHelper.KeyState currentKeyPress = command.GetCurrentMove();
+            InputBuffer currentBuffer = GetNextBuffer(currentKeyPress);
 
-            if (currentKeyPress.GetState() == InputHelper.ButtonState.Pressed)
+            for (int i = 0; i < currentBuffer.GetBuffer().Count; i ++)
             {
-                currentBuffer = pressedBuffer;
-            }
-            else if (currentKeyPress.GetState() == InputHelper.ButtonState.Released)
-            {
-                currentBuffer = releasedBuffer;
-            }
-            else if (currentKeyPress.GetState() == InputHelper.ButtonState.Held)
-            {
-                currentBuffer = heldBuffer;
-            }
-
-            if (currentBuffer == null)
-            {
-                return false;
-            }
-
-            for (int i = 1; i <= command.GetMoves().Count; ++i)
-            {
-                if (currentKeyPress.GetState() == InputHelper.ButtonState.Pressed
-                        && currentBuffer.GetBuffer().Count >= command.GetMoves().Count
-                        && currentMoveStep > 0)
+                if (currentBuffer.GetBuffer()[i] == currentKeyPress.GetKeyPress()
+                        && command.GetCurrentMoveStep() < command.GetMoves().Count - 1)
                 {
-                    if (currentBuffer.GetBuffer()[currentBuffer.GetBuffer().Count - i] == currentKeyPress.GetKeyPress())
-                    {
-                        currentMoveStep--;
-                        currentKeyPress = command.GetMoves()[currentMoveStep];
-                        command.currentMoveStep = currentMoveStep;
-                        Debug.WriteLine("STEP: " + currentMoveStep);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else if (currentKeyPress.GetState() == InputHelper.ButtonState.Released
-                            && currentBuffer.GetBuffer().Count >= command.GetMoves().Count
-                            && currentMoveStep > 0)
-                {
-                    if (currentBuffer.GetBuffer()[currentBuffer.GetBuffer().Count - i] == currentKeyPress.GetKeyPress())
-                    {
-                        currentMoveStep--;
-                        currentKeyPress = command.GetMoves()[currentMoveStep];
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else if (currentKeyPress.GetState() == InputHelper.ButtonState.Held
-                            && currentBuffer.GetBuffer().Count >= command.GetMoves().Count
-                            && currentMoveStep > 0)
-                {
-                    if (currentBuffer.GetBuffer()[currentBuffer.GetBuffer().Count - i] == currentKeyPress.GetKeyPress())
-                    {
-                        currentMoveStep--;
-                        currentKeyPress = command.GetMoves()[currentMoveStep];
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    command.Next();
+                    currentKeyPress = command.GetCurrentMove();
+                    currentBuffer = GetNextBuffer(currentKeyPress);
                 }
             }
 
-            command.currentMoveStep = currentMoveStep;
-            Debug.WriteLine("STEP: " + currentMoveStep);
-
-            if (currentMoveStep <= 0)
+            if (command.IsComplete())
             {
-                pressedBuffer.GetBuffer().Clear();
-                releasedBuffer.GetBuffer().Clear();
-                heldBuffer.GetBuffer().Clear();
-
-                currentMoveStep = command.GetMoves().Count - 1;
+                command.Reset();
                 return true;
             }
 

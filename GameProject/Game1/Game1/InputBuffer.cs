@@ -63,5 +63,10 @@ namespace Game1
         {
             return inputBuffer;
         }
+
+        public float GetLastInputTime()
+        {
+            return lastInputTime;
+        }
     }
 }
