@@ -82,7 +82,7 @@ namespace Game1
                 this.maxKeyTime = maxKeyTime;
             }
 
-            public InputHelper.KeyPress GetKeyPress()
+            public InputHelper.KeyPress GetKey()
             {
                 return key;
             } 

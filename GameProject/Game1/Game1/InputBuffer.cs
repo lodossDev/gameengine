@@ -11,15 +11,17 @@ namespace Game1
     public class InputBuffer
     {
         private List<InputHelper.KeyPress> inputBuffer;
-        public readonly float bufferTimeout = 600f;
+        public readonly float bufferTimeout = 26600f;
         public readonly float mergeInputTime = 120f;
         private float lastInputTime = 0f;
         private float timeSinceLast = 0f;
         public readonly int MAX_BUFFER = 120;
+        private InputHelper.ButtonState stateType;
 
-        public InputBuffer()
+        public InputBuffer(InputHelper.ButtonState stateType)
         {
             inputBuffer = new List<InputHelper.KeyPress>(MAX_BUFFER);
+            this.stateType = stateType;
         }
 
         public void ReadInputBuffer(GameTime gameTime, InputHelper.KeyPress currentButtonState, InputHelper.KeyPress currentDirectionState)
@@ -67,6 +69,11 @@ namespace Game1
         public float GetLastInputTime()
         {
             return lastInputTime;
+        }
+
+        public InputHelper.ButtonState GetStateType()
+        {
+            return stateType;
         }
     }
 }

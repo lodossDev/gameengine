@@ -38,9 +38,9 @@ namespace Game1
             currentKeyboardState = new KeyboardState();
             currentPadState = new GamePadState();
 
-            pressedState = new InputBuffer();
-            releasedState = new InputBuffer();
-            heldState = new InputBuffer();
+            pressedState = new InputBuffer(InputHelper.ButtonState.Pressed);
+            releasedState = new InputBuffer(InputHelper.ButtonState.Released);
+            heldState = new InputBuffer(InputHelper.ButtonState.Held);
 
             Reset();
         }
@@ -343,26 +343,52 @@ namespace Game1
             oldPadState = currentPadState;
         }
 
+        private void ResetBuffers()
+        {
+            pressedState.GetBuffer().Clear();
+            releasedState.GetBuffer().Clear();
+            heldState.GetBuffer().Clear();
+        }
+
         public bool Matches(InputHelper.CommandMove command)
         {
             command.currentMoveStep = 0;
             InputHelper.KeyState currentKeyPress = command.GetCurrentMove();
             InputBuffer currentBuffer = GetNextBuffer(currentKeyPress);
 
-            for (int i = 0; i < currentBuffer.GetBuffer().Count; i ++)
+            if (currentBuffer.GetStateType() == currentKeyPress.GetState())
             {
-                if (currentBuffer.GetBuffer()[i] == currentKeyPress.GetKeyPress()
-                        && command.GetCurrentMoveStep() < command.GetMoves().Count - 1)
+                for (int i = 0; i < currentBuffer.GetBuffer().Count; i++)
                 {
-                    command.Next();
-                    currentKeyPress = command.GetCurrentMove();
-                    currentBuffer = GetNextBuffer(currentKeyPress);
+                    if (currentBuffer.GetBuffer()[i] == currentKeyPress.GetKey())
+                    {
+                        Debug.WriteLine("STATE: " + currentKeyPress.GetState());
+                        Debug.WriteLine("BEFORE BUFFER: " + currentBuffer.GetStateType());
+                        Debug.WriteLine("KEY: " + currentKeyPress.GetKey());
+                        Debug.WriteLine("STEP: " + command.GetCurrentMoveStep());
+                        command.Next();
+
+                        if (command.GetCurrentMoveStep() >= command.GetMoves().Count - 1)
+                        {
+                            currentKeyPress = command.GetMoves()[command.GetMoves().Count - 1];
+                        }
+                        else
+                        {
+                            currentKeyPress = command.GetCurrentMove();
+                        }
+
+                        currentBuffer = GetNextBuffer(currentKeyPress);
+                        
+                        Debug.WriteLine("NEXT BUFFER: " + currentBuffer.GetStateType());
+                    }
                 }
             }
 
             if (command.IsComplete())
             {
+                Debug.WriteLine("IS COMPLETE");
                 command.Reset();
+                ResetBuffers();
                 return true;
             }
 
