@@ -188,7 +188,7 @@ namespace Game1
 
                     if (currentKeyState.HasExpired())
                     {
-                        //Reset();
+                        Reset();
                     }
                 }
             }
