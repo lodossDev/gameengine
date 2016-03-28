@@ -76,10 +76,18 @@ namespace Game1
             private float maxKeyTime = 0f;
             private float currentKeyTime = 0f;
 
-            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float maxKeyTime = 280f) {
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float maxKeyTime = 22200f) {
                 this.key = key;
                 this.state = state;
-                this.maxKeyTime = maxKeyTime;
+
+                if (state == ButtonState.Held)
+                {
+                    this.maxKeyTime = 222900f;
+                }
+                else
+                {
+                    this.maxKeyTime = maxKeyTime;
+                }
             }
 
             public InputHelper.KeyPress GetKey()
@@ -183,6 +191,11 @@ namespace Game1
             {
                 if (currentMoveStep > 0)
                 {
+                    if (currentMoveStep > moves.Count - 1)
+                    {
+                        currentMoveStep = moves.Count - 1;
+                    }
+
                     InputHelper.KeyState currentKeyState = moves[currentMoveStep];
                     currentKeyState.Update(gameTime);
 

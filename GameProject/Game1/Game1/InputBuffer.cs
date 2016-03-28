@@ -11,14 +11,14 @@ namespace Game1
     public class InputBuffer
     {
         private List<InputHelper.KeyPress> inputBuffer;
-        public readonly float bufferTimeout = 200f;
+        public readonly float bufferTimeout = 600f;
         public readonly float mergeInputTime = 120f;
         private float lastInputTime = 0f;
         private float timeSinceLast = 0f;
         public readonly int MAX_BUFFER = 120;
         private InputHelper.ButtonState stateType;
 
-        public InputBuffer(InputHelper.ButtonState stateType, float bufferTimeout = 200f)
+        public InputBuffer(InputHelper.ButtonState stateType, float bufferTimeout = 600f)
         {
             inputBuffer = new List<InputHelper.KeyPress>(MAX_BUFFER);
             this.bufferTimeout = bufferTimeout;
