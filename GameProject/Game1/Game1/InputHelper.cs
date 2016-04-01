@@ -73,21 +73,19 @@ namespace Game1
         {
             private InputHelper.KeyPress key;
             private InputHelper.ButtonState state;
-            private float maxKeyTime = 0f;
-            private float currentKeyTime = 0f;
+            private float keyHeldTime = 0f;
 
-            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float maxKeyTime = 22200f) {
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float keyHeldTime = 5) {
                 this.key = key;
                 this.state = state;
+                this.keyHeldTime = keyHeldTime;
+            }
 
-                if (state == ButtonState.Held)
-                {
-                    this.maxKeyTime = 222900f;
-                }
-                else
-                {
-                    this.maxKeyTime = maxKeyTime;
-                }
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state)
+            {
+                this.key = key;
+                this.state = state;
+                this.keyHeldTime = 0f;
             }
 
             public InputHelper.KeyPress GetKey()
@@ -100,24 +98,9 @@ namespace Game1
                 return state;
             }
 
-            public float GetMaxKeyTime()
+            public float GetKeyHeldTime()
             {
-                return maxKeyTime;
-            }
-
-            public void Update(GameTime gameTime)
-            {
-                currentKeyTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            }
-
-            public bool HasExpired()
-            {
-                return currentKeyTime >= maxKeyTime;
-            }
-
-            public void Reset()
-            {
-                currentKeyTime = 0f;
+                return keyHeldTime;
             }
         }
 
@@ -127,13 +110,17 @@ namespace Game1
             private string name;
             private double priority;
             public int currentMoveStep = 0;
+            public float currentMoveTime = 0f;
+            private float maxMoveTime = 500f;
             private Animation.State animationState;
 
-            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, double priority = 1)
+
+            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxMoveTime = 2600f, double priority = 1)
             {
                 this.name = name;
                 this.animationState = animationState;
                 this.moves = moves;
+                this.maxMoveTime = maxMoveTime;
                 this.priority = priority;
             }
 
@@ -174,11 +161,7 @@ namespace Game1
 
             public void Reset()
             {
-                foreach(InputHelper.KeyState move in moves)
-                {
-                    move.Reset();
-                }
-
+                currentMoveTime = 0f;
                 currentMoveStep = 0;
             }
 
@@ -196,10 +179,9 @@ namespace Game1
                         currentMoveStep = moves.Count - 1;
                     }
 
-                    InputHelper.KeyState currentKeyState = moves[currentMoveStep];
-                    currentKeyState.Update(gameTime);
+                    currentMoveTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (currentKeyState.HasExpired())
+                    if (currentMoveTime >= maxMoveTime)
                     {
                         Reset();
                     }

@@ -357,17 +357,29 @@ namespace Game1
 
             for (int i = 0; i < heldState.GetBuffer().Count - 1; i++)
             {
-                bool reset = (releasedState.GetBuffer().Count >= i + 1
-                                    && releasedState.GetBuffer()[i] == currentKeyState.GetKey());
+                bool reset = (releasedState.GetBuffer().Count >= i + 2
+                                    && releasedState.GetBuffer()[i + 1] == currentKeyState.GetKey());
 
                 if (heldState.GetBuffer()[i + 1] == currentKeyState.GetKey() && reset == false)
+                {
                     held++;
+                }
                 else
                 {
                     held = 0;
+                    command.Reset();
                     break;
                 }
             }
+
+            if (held >= currentKeyState.GetKeyHeldTime())
+            {
+                command.Next();
+                currentKeyState = command.GetCurrentMove();
+                currentBuffer = GetNextBuffer(currentKeyState);
+            }
+            
+            
 
             Debug.WriteLine("HELD COUNT: " + held);
         }
@@ -380,10 +392,11 @@ namespace Game1
             if (currentKeyPress.GetState() == InputHelper.ButtonState.Pressed
                         || currentKeyPress.GetState() == InputHelper.ButtonState.Released)
             {
-                for (int i = 0; i < currentBuffer.GetBuffer().Count; i++)
-                {
-                
-                    if (currentBuffer.GetBuffer()[i] == currentKeyPress.GetKey())
+                Debug.WriteLine("IN PRESSED OR RELEASED");
+               
+                //for (int i = 0; i < currentBuffer.GetBuffer().Count; i++)
+                //{
+                    if (currentBuffer.GetCurrentInputState() == currentKeyPress.GetKey())
                     {
                         command.Next();
 
@@ -399,12 +412,7 @@ namespace Game1
                         currentBuffer = GetNextBuffer(currentKeyPress);
                         Debug.WriteLine("NEXT BUFFER: " + currentKeyPress.GetState());
                     }
-                    else
-                    {
-                        command.currentMoveStep = 0;
-                    }
-               
-                }
+                //}
             }
             else
             {
