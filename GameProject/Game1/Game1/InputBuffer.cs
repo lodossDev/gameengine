@@ -11,16 +11,16 @@ namespace Game1
     public class InputBuffer
     {
         private List<InputHelper.KeyPress> inputBuffer;
-        public readonly float bufferTimeout = 500f;
+        public readonly float bufferTimeout = 400f;
         public readonly float mergeInputTime = 120f;
         private float lastInputTime = 0f;
         private float timeSinceLast = 0f;
         public readonly int MAX_BUFFER = 120;
         private InputHelper.ButtonState stateType;
-        private List<InputHelper.KeyPress> inputState;
-        private int currentStateStep;
+        public List<InputHelper.KeyPress> inputState;
+        public int currentStateStep;
 
-        public InputBuffer(InputHelper.ButtonState stateType, float bufferTimeout = 500f)
+        public InputBuffer(InputHelper.ButtonState stateType, float bufferTimeout = 400f)
         {
             inputBuffer = new List<InputHelper.KeyPress>(MAX_BUFFER);
             inputState = new List<InputHelper.KeyPress>(MAX_BUFFER);
@@ -29,7 +29,7 @@ namespace Game1
             this.bufferTimeout = bufferTimeout;
             this.stateType = stateType;
 
-            InitInputState();
+            InitiateState();
         }
 
         public void ReadInputBuffer(GameTime gameTime, InputHelper.KeyPress currentButtonState, InputHelper.KeyPress currentDirectionState)
@@ -66,6 +66,7 @@ namespace Game1
 
                     inputBuffer.Add(pressedButton);
                     AddInputState(pressedButton);
+
                     lastInputTime = time;
                 }
             }
@@ -75,7 +76,6 @@ namespace Game1
             if (currentStateStep >= MAX_BUFFER - 1)
             {
                 ClearInputState();
-                currentStateStep = 0;
             }
         }
 
@@ -84,7 +84,7 @@ namespace Game1
             inputState[currentStateStep] = keyPress;
         }
 
-        private void InitInputState()
+        private void InitiateState()
         {
             for (int i = 0; i < MAX_BUFFER - 1; i++)
             {
@@ -98,19 +98,35 @@ namespace Game1
             {
                 inputState[i] = InputHelper.KeyPress.NONE;
             }
+
+            currentStateStep = 0;
         }
 
         public InputHelper.KeyPress GetCurrentInputState()
         {
-            int step = currentStateStep - 1;
-            if (step < 0) step = 0;
+            return GetCurrentInputState(currentStateStep - 1);
+        }
 
-            return inputState[step];
+        public InputHelper.KeyPress GetCurrentInputState(int index)
+        {
+            if (index < 0) return InputHelper.KeyPress.NONE;
+            if (index > inputState.Count - 1) return InputHelper.KeyPress.NONE;
+
+            return inputState[index];
         }
 
         public List<InputHelper.KeyPress> GetBuffer()
         {
             return inputBuffer;
+        }
+
+        public InputHelper.KeyPress GetBufferState(int index)
+        {
+            if (inputBuffer.Count == 0) return InputHelper.KeyPress.NONE;
+            if (index > inputBuffer.Count - 1) return InputHelper.KeyPress.NONE;
+
+            if (index < 0) index = 0;
+            return inputBuffer[index];
         }
 
         public float GetLastInputTime()
