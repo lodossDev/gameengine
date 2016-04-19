@@ -343,7 +343,7 @@ namespace Game1
             }
             else if (currentKeyPress.GetState() == InputHelper.ButtonState.Held)
             {
-                currentBuffer = pressedState;
+                currentBuffer = heldState;
             }
 
             return currentBuffer;
@@ -351,9 +351,15 @@ namespace Game1
 
         private void checkHeld(InputHelper.CommandMove command, InputHelper.KeyState currentKeyState, InputBuffer currentBuffer)
         {
-            int held = 1;
+            int held = 0;
             Debug.WriteLine("HELD KEY: " + currentKeyState.GetState());
             currentKeyState = command.GetCurrentMove();
+
+            if (command.IsMaxNegativeReached() == true)
+            {
+                command.Reset();
+                held = 0;
+            }
 
             for (int i = 0; i < heldState.GetBuffer().Count - 1; i++)
             {
@@ -363,12 +369,14 @@ namespace Game1
                 if (reset)
                 {
                     held = 0;
+                    command.IncrementNegativeCount();
                     break;
                 }
 
                 if (heldState.GetBuffer()[i + 1] == currentKeyState.GetKey())
                 {
                     held++;
+                    command.ResetNegativeEdge();
                 }
                 else
                 {
@@ -379,12 +387,15 @@ namespace Game1
             }
 
             Debug.WriteLine("HELD COUNT: " + held);
+            Debug.WriteLine("HELD TIME: " + currentKeyState.GetKeyHeldTime());
 
             if (held >= currentKeyState.GetKeyHeldTime())
             {
                 command.Next();
-                currentKeyState = command.GetCurrentMove();
-                currentBuffer = GetNextBuffer(currentKeyState);
+            }
+            else
+            {
+                command.IncrementNegativeCount();
             }
         }
 
@@ -393,19 +404,15 @@ namespace Game1
             InputHelper.KeyState currentKeyPress = command.GetCurrentMove();
             InputBuffer currentBuffer = GetNextBuffer(currentKeyPress);
 
-            int step = command.currentMoveStep - 1;
-            if (step < 0) step = 0;
-
-            InputHelper.KeyState previousState = command.GetMoves()[step];
-            Debug.WriteLine("PREVIOUS STATE: " + previousState.GetState());
-            Debug.WriteLine("CURRENT STATE: " + currentKeyPress.GetState());
-            Debug.WriteLine("CURRENT KEY: " + currentKeyPress.GetKey());
-
-            Debug.WriteLine("currentBuffer: " + currentBuffer.GetStateType());
-
             if (currentKeyPress.GetState() == InputHelper.ButtonState.Pressed
                    || currentKeyPress.GetState() == InputHelper.ButtonState.Released)
             {
+                if (command.IsMaxNegativeReached() == true)
+                {
+                    command.Reset();
+                    return false;
+                }
+
                 if (currentBuffer.GetCurrentInputState() == currentKeyPress.GetKey())
                 {
                     command.Next();
@@ -421,6 +428,10 @@ namespace Game1
 
                     currentBuffer = GetNextBuffer(currentKeyPress);
                     Debug.WriteLine("NEXT BUFFER: " + currentKeyPress.GetState());
+                }
+                else
+                {
+                    command.IncrementNegativeCount();
                 }
             }
             else

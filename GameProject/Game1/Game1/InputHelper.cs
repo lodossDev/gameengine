@@ -69,16 +69,28 @@ namespace Game1
             { Keys.Y, InputHelper.KeyPress.Y },
         };
 
+        internal static readonly int NEGATIVE_EDGE_PRESS = 30;
+
         public class KeyState
         {
             private InputHelper.KeyPress key;
             private InputHelper.ButtonState state;
+            private int negativeEdge = NEGATIVE_EDGE_PRESS;
             private float keyHeldTime = 0f;
 
-            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float keyHeldTime = 5) {
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float keyHeldTime = 5, int negativeEdge = 30) {
                 this.key = key;
                 this.state = state;
+                this.negativeEdge = negativeEdge;
                 this.keyHeldTime = keyHeldTime;
+            }
+
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, int negativeEdge = 30)
+            {
+                this.key = key;
+                this.state = state;
+                this.negativeEdge = negativeEdge;
+                this.keyHeldTime = 0f;
             }
 
             public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state)
@@ -98,6 +110,11 @@ namespace Game1
                 return state;
             }
 
+            public int GetNegativeEdge()
+            {
+                return negativeEdge;
+            }
+
             public float GetKeyHeldTime()
             {
                 return keyHeldTime;
@@ -112,10 +129,11 @@ namespace Game1
             public int currentMoveStep = 0;
             public float currentMoveTime = 0f;
             private float maxMoveTime = 500f;
+            private int currentNegativeEdge = 0;
             private Animation.State animationState;
 
 
-            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxMoveTime = 26000000f, double priority = 1)
+            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxMoveTime = 10000f, double priority = 1)
             {
                 this.name = name;
                 this.animationState = animationState;
@@ -154,13 +172,40 @@ namespace Game1
                 return currentMoveStep;
             }
 
+            public int GetCurrentNegativeEdgeExpire()
+            {
+                return GetCurrentMove().GetNegativeEdge();
+            }
+
+            public int GetNegativeCount()
+            {
+                return currentNegativeEdge;
+            }
+
+            public bool IsMaxNegativeReached()
+            {
+                return (GetNegativeCount() >= GetCurrentNegativeEdgeExpire());
+            }
+
+            public void ResetNegativeEdge()
+            {
+                currentNegativeEdge = 0;
+            }
+
+            public void IncrementNegativeCount()
+            {
+                currentNegativeEdge++;
+            }
+
             public void Next()
             {
+                currentNegativeEdge = 0;
                 currentMoveStep++;
             }
 
             public void Reset()
             {
+                currentNegativeEdge = 0;
                 currentMoveTime = 0f;
                 currentMoveStep = 0;
             }
