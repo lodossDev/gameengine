@@ -102,6 +102,11 @@ namespace Game1
             currentStateStep = 0;
         }
 
+        public int GetCurrentStateStep()
+        {
+            return currentStateStep;
+        }
+
         public InputHelper.KeyPress GetCurrentInputState()
         {
             return GetCurrentInputState(currentStateStep - 1);

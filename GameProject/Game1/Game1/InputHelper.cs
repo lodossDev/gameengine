@@ -69,7 +69,7 @@ namespace Game1
             { Keys.Y, InputHelper.KeyPress.Y },
         };
 
-        internal static readonly int NEGATIVE_EDGE_PRESS = 30;
+        internal static readonly int NEGATIVE_EDGE_PRESS = 15;
 
         public class KeyState
         {
@@ -78,14 +78,14 @@ namespace Game1
             private int negativeEdge = NEGATIVE_EDGE_PRESS;
             private float keyHeldTime = 0f;
 
-            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float keyHeldTime = 5, int negativeEdge = 30) {
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, float keyHeldTime = 5, int negativeEdge = 15) {
                 this.key = key;
                 this.state = state;
                 this.negativeEdge = negativeEdge;
                 this.keyHeldTime = keyHeldTime;
             }
 
-            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, int negativeEdge = 30)
+            public KeyState(InputHelper.KeyPress key, InputHelper.ButtonState state, int negativeEdge = 15)
             {
                 this.key = key;
                 this.state = state;
@@ -126,8 +126,8 @@ namespace Game1
             private List<InputHelper.KeyState> moves;
             private string name;
             private double priority;
-            public int currentMoveStep = 0;
-            public float currentMoveTime = 0f;
+            private int currentMoveStep = 0;
+            private float currentMoveTime = 0f;
             private float maxMoveTime = 500f;
             private int currentNegativeEdge = 0;
             private Animation.State animationState;
@@ -160,6 +160,14 @@ namespace Game1
             public Animation.State GetAnimationState()
             {
                 return animationState;
+            }
+
+            public InputHelper.KeyState GetPreviousMove()
+            {
+                int temp = currentMoveStep - 1;
+                if (temp < 0) return null;
+
+                return moves[temp];
             }
 
             public InputHelper.KeyState GetCurrentMove()
@@ -214,7 +222,7 @@ namespace Game1
             {
                 return (currentMoveStep > moves.Count - 1);
             }
-
+            
             public void Update(GameTime gameTime)
             {
                 if (currentMoveStep > 0)
