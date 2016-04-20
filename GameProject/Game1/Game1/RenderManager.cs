@@ -95,7 +95,7 @@ namespace Game1
                         //Setup.spriteBatch.Draw(stance.GetCurrentTexture(), stance.GetPosition(), null, Color.White * 1f, 0f, entity.GetStanceOrigin(), entity.GetScale(), stance.GetEffects(), 0f);
                     }
 
-                    float y1 = 90f * (entity.GetScale().Y / 256); 
+                    float y1 = 120f * (entity.GetScale().Y / 256); 
                     float x1 = 230f * (entity.GetScale().X / 256);
 
                     float x2 = entity.GetPosition().X + (float)((currentSprite.GetSpriteOffSet().X + currentSprite.GetCurrentFrameOffSet().X) * (x1 / entity.GetScale().X));
@@ -107,16 +107,15 @@ namespace Game1
 
                     float a1 = (float)(-entity.GetPosY() * 120f / 256);
 
-                    float y2 = (float)((currentSprite.GetSpriteOffSet().Y + currentSprite.GetCurrentFrameOffSet().Y) * (y1 * 0.1f)) + entity.GetPosition().Z + a1;
-                    float y3 = stance.GetCurrentTexture().Height + 160;
+                    float y2 = (float)((currentSprite.GetSpriteOffSet().Y + currentSprite.GetCurrentFrameOffSet().Y) * (y1 / entity.GetScale().Y)) + entity.GetPosition().Z + a1;
+                    float y3 = stance.GetCurrentTexture().Height;
 
                     
                     Vector2 position = new Vector2(x2, y2);
                     Vector2 scale = new Vector2(x1 /*+ Setup.scaleX*/, y1  + Setup.scaleY);
                     position.Y += y3;
 
-
-                    Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), position, null, Color.Black * 0.6f, Setup.rotate, entity.GetOrigin(), scale, /*currentSprite.GetEffects()*/currentSprite.GetEffects() | SpriteEffects.FlipVertically, 0f);
+                    Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), position, null, Color.Black * 0.6f, Setup.rotate, entity.GetOrigin(), scale, currentSprite.GetEffects()/*currentSprite.GetEffects() | SpriteEffects.FlipVertically*/, 0f);
                     Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, entity.GetSpriteColor(), 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
                     
 

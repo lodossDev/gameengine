@@ -817,6 +817,11 @@ namespace Game1
             return attackInfo;
         }
 
+        public bool IsJumping()
+        {
+            return (IsToss() || IsInAnimationAction(Animation.Action.JUMPING));
+        }
+
         public void SetJump(float height = -25f, float velX = 0f) 
         {
             Toss(height, velX);
