@@ -22,9 +22,9 @@ namespace Game1
         private KeyboardState oldKeyboardState, currentKeyboardState;
         private GamePadState oldPadState, currentPadState;
 
-        public InputBuffer pressedState;
-        public InputBuffer releasedState;
-        public InputBuffer heldState;
+        private InputBuffer pressedState;
+        private InputBuffer releasedState;
+        private InputBuffer heldState;
         private float walkPressTime = 0f;
 
 
@@ -41,11 +41,6 @@ namespace Game1
             releasedState = new InputBuffer(InputHelper.ButtonState.Released);
             heldState = new InputBuffer(InputHelper.ButtonState.Held, 200);
 
-            Reset();
-        }
-
-        public void Reset()
-        {
             UP = false;
             DOWN = false;
             LEFT = false;
@@ -54,7 +49,7 @@ namespace Game1
             ATTACK_PRESS = false;
         }
 
-        public void UpdateDefaultControls(GameTime gameTime)
+        private void Reset()
         {
             inputDirection = InputDirection.NONE;
             JUMP_PRESS = false;
@@ -97,6 +92,11 @@ namespace Game1
             {
                 ATTACK_PRESS = false;
             }
+        }
+
+        public void UpdateDefaultControls(GameTime gameTime)
+        {
+            Reset();
 
             if (!player.IsToss() && !player.IsInAnimationAction(Animation.Action.ATTACKING))
             {

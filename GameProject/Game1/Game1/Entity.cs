@@ -16,7 +16,6 @@ namespace Game1
         public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL, LIFE_BAR, OTHER}
 
         private Dictionary<Animation.State, Sprite> spriteMap;
-        private Animation.Action animationAction;
         private Sprite currentSprite;
         public Attributes.ColourInfo colorInfo; 
         private Animation.State currentAnimationState;
@@ -74,7 +73,6 @@ namespace Game1
             scale = new Vector2(1f, 1f);
 
             currentAnimationState = Animation.State.NONE;
-            animationAction = Animation.Action.NONE;
 
             colorInfo = new Attributes.ColourInfo();
             
@@ -664,50 +662,54 @@ namespace Game1
 
         public bool IsInAnimationAction(Animation.Action animationAction)
         {
-            return (GetCurrentAnimationAction() == animationAction);
+            Animation.Action currentAction = GetCurrentAnimationAction();
+            return (currentAction == animationAction);
         }
 
         public Animation.Action GetCurrentAnimationAction()
         {
-            if (GetCurrentAnimationState().ToString().Contains("ATTACK"))
+            Animation.Action currentAction = Animation.Action.NONE;
+            Animation.State currentState = GetCurrentAnimationState();
+
+            if (currentState.ToString().Contains("ATTACK"))
             {
                 return Animation.Action.ATTACKING;
             }
             else
             {
-                if (GetCurrentAnimationState().ToString().Contains("RECOVER"))
+                if (currentState.ToString().Contains("RECOVER"))
                 {
                     return Animation.Action.RECOVERY;
                 }
-                else if (GetCurrentAnimationState().ToString().Contains("JUMP"))
+                else if (currentState.ToString().Contains("JUMP"))
                 {
                     return Animation.Action.JUMPING;
                 }
             }
 
-            switch (GetCurrentAnimationState())
+            switch (currentState)
             {
                 case Animation.State.NONE:
-                    animationAction = Animation.Action.NONE;
+                    currentAction = Animation.Action.NONE;
                     break;
                 case Animation.State.STANCE:
-                    animationAction = Animation.Action.IDLE;
+                    currentAction = Animation.Action.IDLE;
                     break;
                 case Animation.State.FALL:
-                    animationAction = Animation.Action.FALLING;
+                    currentAction = Animation.Action.FALLING;
                     break;
                 case Animation.State.WALK_TOWARDS:
-                    animationAction = Animation.Action.WALKING;
+                    currentAction = Animation.Action.WALKING;
                     break;
                 case Animation.State.LAND:
-                    animationAction = Animation.Action.LANDING;
+                    currentAction = Animation.Action.LANDING;
                     break;
                 default:
-                    animationAction = Animation.Action.NONE;
+                    currentAction = Animation.Action.NONE;
                     break;
             }
 
-            return animationAction;
+            return currentAction;
         }
 
         public bool IsInMoveFrame()
@@ -828,6 +830,11 @@ namespace Game1
         public Attributes.AttackInfo GetAttackInfo()
         {
             return attackInfo;
+        }
+
+        public bool IsJumping()
+        {
+            return (IsToss() || IsInAnimationAction(Animation.Action.JUMPING));
         }
 
         public void SetJump(float height = -25f, float velX = 0f) 

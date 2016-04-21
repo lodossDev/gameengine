@@ -87,7 +87,7 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.JUMP, 15);
 
             leo.AddSprite(Animation.State.JUMP_TOWARDS, new Sprite("Sprites/Actors/Leo/JumpTowards", Animation.Type.REPEAT, 13));
-            leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 10);
+            leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 17);
 
             leo.SetSpriteOffSet(Animation.State.JUMP, 30, -120);
             leo.SetSpriteOffSet(Animation.State.JUMP_TOWARDS, 30, -120);
@@ -158,7 +158,7 @@ namespace Game1
 
             leo.AddSprite(Animation.State.ATTACK6, new Sprite("Sprites/Actors/Leo/Attack6", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.ATTACK6, 45, -90);
-            leo.SetFrameDelay(Animation.State.ATTACK6, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK6, 17);
             leo.AddBox(Animation.State.ATTACK6, 5, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK6, 6, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK6, 7, new CLNS.AttackBox(220, 230, 20, 30));
@@ -470,12 +470,12 @@ namespace Game1
                 spriteBatch.DrawString(font1, "BELOW ENTITY: " + entity.GetName(), new Vector2(20, 110+(i*20)), Color.Black);
             }*/
 
-            int i = 1;
+            /*int i = 1;
             foreach (InputHelper.KeyPress button in control.heldState.GetBuffer())
             {
                 i++;
                 spriteBatch.DrawString(font1, "BUTTON: " + button, new Vector2(20, 160 + (i * 20)), Color.Black);
-            }
+            }*/
 
             //control.pressedBuffer.Matches(command);
 
