@@ -1113,3 +1113,15 @@ C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Ga
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\SharpDX.RawInput.xml
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\SharpDX.Direct3D9.xml
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\obj\x86\Debug\Game1.csprojResolveAssemblyReference.cache
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sounds\hit1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\bg.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\ddbg1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\ddpanel1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\pal.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\panel.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\bar.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\Bar\bar.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\container.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\Container\container.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\placeholder.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\Placeholder\placeholder.xnb

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/Amir Hafeez/Desktop/LATEST GAME ATTEMPT/gameengine/GameProject/Game1/Game1/Content/Sprites/Actors/Leo/Attack5/Attack5_00.png</SourceFile>
-  <SourceTime>2016-04-17T13:54:46.503071+01:00</SourceTime>
+  <SourceTime>2016-01-29T20:42:06+00:00</SourceTime>
   <DestFile>C:/Users/Amir Hafeez/Desktop/LATEST GAME ATTEMPT/gameengine/GameProject/Game1/Game1/Content/bin/Windows/Sprites/Actors/Leo/Attack5/Attack5_00.xnb</DestFile>
-  <DestTime>2016-04-17T13:58:23.5905615+01:00</DestTime>
+  <DestTime>2016-04-21T22:08:37.8899616+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T18:14:44+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

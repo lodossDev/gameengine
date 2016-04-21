@@ -87,7 +87,9 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.JUMP, 15);
 
             leo.AddSprite(Animation.State.JUMP_TOWARDS, new Sprite("Sprites/Actors/Leo/JumpTowards", Animation.Type.REPEAT, 13));
+            
             leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 17);
+            leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 1, 8);
 
             leo.SetSpriteOffSet(Animation.State.JUMP, 30, -120);
             leo.SetSpriteOffSet(Animation.State.JUMP_TOWARDS, 30, -120);
