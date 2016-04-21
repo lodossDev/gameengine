@@ -365,6 +365,8 @@ namespace Game1
             List<CLNS.AttackBox> attackBoxes = entity.GetCurrentBoxes(CLNS.BoxType.HIT_BOX).Cast<CLNS.AttackBox>().ToList();
             CLNS.AttackBox currentAttackBox = null;
 
+            if (entity.IsInAnimationAction(Animation.Action.ATTACKING) && entity.InCurrentAttackCancelState()) hit_id++;
+
             if (attackBoxes != null && attackBoxes.Count > 0)
             {
                 foreach (Entity target in entities)
@@ -391,6 +393,8 @@ namespace Game1
 
                             if (targetHit)
                             {
+                                soundInstance.Play();
+
                                 //This will hit the target in a different attack frame.
                                 if (currentAttackBox.GetResetHit() == 1)
                                 {
