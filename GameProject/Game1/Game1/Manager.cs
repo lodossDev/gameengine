@@ -17,17 +17,17 @@ namespace Game1
             levels = new List<Level>();
         }
 
-        public void AddEntity(Entity entity)
+        public virtual void AddEntity(Entity entity)
         {
             entities.Add(entity);
         }
 
-        public void AddLevel(Level level)
+        public virtual void AddLevel(Level level)
         {
             levels.Add(level);
         }
 
-        public void AddEntity(List<Entity> entities)
+        public virtual void AddEntity(List<Entity> entities)
         {
             this.entities.AddRange(entities);
         }

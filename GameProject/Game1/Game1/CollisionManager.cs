@@ -14,12 +14,14 @@ namespace Game1
     {
         public static int hit_id = 0;
         private SoundEffect hiteffect1;
-        private SoundEffectInstance soundInstance;
+        private SoundEffectInstance soundInstance, soundInstance2;
 
         public CollisionManager()
         {
             hiteffect1 = Setup.contentManager.Load<SoundEffect>("Sounds//hit1");
             soundInstance = hiteffect1.CreateInstance();
+
+            soundInstance2 = Setup.contentManager.Load<SoundEffect>("Sounds//test").CreateInstance();
         }
 
         public List<Entity> FindBelow(Entity entity)
@@ -365,8 +367,6 @@ namespace Game1
             List<CLNS.AttackBox> attackBoxes = entity.GetCurrentBoxes(CLNS.BoxType.HIT_BOX).Cast<CLNS.AttackBox>().ToList();
             CLNS.AttackBox currentAttackBox = null;
 
-            if (entity.IsInAnimationAction(Animation.Action.ATTACKING) && entity.InCurrentAttackCancelState()) hit_id++;
-
             if (attackBoxes != null && attackBoxes.Count > 0)
             {
                 foreach (Entity target in entities)
@@ -393,7 +393,18 @@ namespace Game1
 
                             if (targetHit)
                             {
-                                soundInstance.Play();
+                                /*if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
+                                {
+                                    hit_id++;
+
+                                    if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
+                                    {
+                                        OnAttack(entity, target, currentAttackBox);
+                                        entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
+                                    }
+
+                                    entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                }*/
 
                                 //This will hit the target in a different attack frame.
                                 if (currentAttackBox.GetResetHit() == 1)
@@ -411,7 +422,7 @@ namespace Game1
                                     {
                                         hit_id++;
                                         OnAttack(entity, target, currentAttackBox);
-                                        entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                        //entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
                                         entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
                                     }
                                 }
@@ -419,6 +430,7 @@ namespace Game1
                                 //Only 1 attack box will hit target.
                                 if (targetAttackInfo.hitByAttackId != hit_id)
                                 {
+                                    hiteffect1.CreateInstance().Play();
                                     OnHit(target, entity, currentAttackBox);
                                     targetAttackInfo.hitByAttackId = hit_id;
                                 }

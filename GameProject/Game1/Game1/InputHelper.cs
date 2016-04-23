@@ -121,7 +121,7 @@ namespace Game1
             }
         }
 
-        public class CommandMove
+        public class CommandMove : IComparable<CommandMove>
         {
             private List<InputHelper.KeyState> moves;
             private string name;
@@ -239,6 +239,16 @@ namespace Game1
                         Reset();
                     }
                 }
+            }
+
+            public int CompareTo(CommandMove other)
+            {
+                if (other == null)
+                {
+                    return 0;
+                }
+
+                return GetPriority().CompareTo(other.GetPriority());
             }
         }
 

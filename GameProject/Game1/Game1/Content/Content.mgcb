@@ -1972,3 +1972,9 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/LifeBars/RedEarth/Placeholder/placeholder.png
 
+#begin Sounds/test.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/test.wav
+

@@ -98,7 +98,7 @@ namespace Game1
         {
             Reset();
 
-            if (!player.IsToss() && !player.IsInAnimationAction(Animation.Action.ATTACKING))
+            if (player.IsNonActionState())
             {
                 if (!DOWN && currentKeyboardState.IsKeyDown(Keys.Up))
                 {
@@ -152,8 +152,7 @@ namespace Game1
                 }
             }
 
-            if (!IsDirectionalPress() && !player.IsToss()
-                    && !player.IsInAnimationAction(Animation.Action.ATTACKING))
+            if (!IsDirectionalPress() && player.IsNonActionState())
             {
                 if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
                 {
@@ -203,7 +202,7 @@ namespace Game1
                 player.GetCurrentSprite().IncrementFrame();
             }
 
-            if (!player.IsToss() && !player.IsInAnimationAction(Animation.Action.ATTACKING))
+            if (player.IsNonActionState())
             {
                 if (JUMP_PRESS)
                 {
@@ -329,7 +328,7 @@ namespace Game1
             heldState.GetBuffer().Clear();
         }
 
-        public InputBuffer GetNextBuffer(InputHelper.KeyState currentKeyPress)
+        private InputBuffer GetNextBuffer(InputHelper.KeyState currentKeyPress)
         {
             InputBuffer currentBuffer = null;
 
@@ -349,7 +348,7 @@ namespace Game1
             return currentBuffer;
         }
 
-        private void checkHeld(InputHelper.CommandMove command, InputHelper.KeyState currentKeyState, InputBuffer currentBuffer)
+        private void checkHeld(InputHelper.CommandMove command, InputHelper.KeyState currentKeyState)
         {
             int held = 0;
             Debug.WriteLine("HELD KEY: " + currentKeyState.GetState());
@@ -447,7 +446,7 @@ namespace Game1
             else
             {
                 Debug.WriteLine("IN HELD");
-                checkHeld(command, currentKeyState, currentBuffer);
+                checkHeld(command, currentKeyState);
             }
 
             if (command.IsComplete())
@@ -486,6 +485,21 @@ namespace Game1
                         || IsInputDirection(InputDirection.DOWN_RIGHT)
                         || IsInputDirection(InputDirection.UP_LEFT)
                         || IsInputDirection(InputDirection.UP_RIGHT));
+        }
+
+        public InputBuffer GetPressedState()
+        {
+            return pressedState;
+        }
+
+        public InputBuffer GetReleasedState()
+        {
+            return releasedState;
+        }
+
+        public InputBuffer GetHeldState()
+        {
+            return heldState;
         }
     }
 }

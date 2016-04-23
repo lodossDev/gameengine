@@ -21,12 +21,13 @@ namespace Game1
         private Animation.State currentAnimationState;
         private Animation.State lastAnimationState;
 
-        private Dictionary<Animation.State, SoundEffectInstance> animationSounds;
+        private Dictionary<Animation.State, SoundEffect> animationSounds;
         private Dictionary<Animation.State, int> moveFrames;
         private Dictionary<Animation.State, int> tossFrames;
         private List<CLNS.BoundingBox> boxes;
         private List<Animation.Link> animationLinks;
         private ComboAttack.Chain defaultAttackChain;
+        private List<InputHelper.CommandMove> commandMoves;
 
         private string name;
         private EntityType type;
@@ -67,7 +68,7 @@ namespace Game1
             moveFrames = new Dictionary<Animation.State, int>();
             tossFrames = new Dictionary<Animation.State, int>();
             animationLinks = new List<Animation.Link>();
-            animationSounds = new Dictionary<Animation.State, SoundEffectInstance>();
+            animationSounds = new Dictionary<Animation.State, SoundEffect>();
 
             boxes = new List<CLNS.BoundingBox>();
             scale = new Vector2(1f, 1f);
@@ -98,6 +99,7 @@ namespace Game1
             collisionInfo = new Attributes.CollisionInfo();
             attackInfo = new Attributes.AttackInfo();
             tossInfo = new Attributes.TossInfo();
+            commandMoves = new List<InputHelper.CommandMove>();
 
             id++;
             entityId = id;
@@ -181,12 +183,22 @@ namespace Game1
 
         public void AddAnimationSound(Animation.State state, String location)
         {
-            animationSounds.Add(state, Setup.contentManager.Load<SoundEffect>(location).CreateInstance());
+            animationSounds.Add(state, Setup.contentManager.Load<SoundEffect>(location));
         }
 
-        public SoundEffectInstance GetAnimationSound(Animation.State state)
+        public SoundEffect GetAnimationSound(Animation.State state)
         {
             return animationSounds[state];
+        }
+
+        public void AddCommandMove(InputHelper.CommandMove commandMove)
+        {
+            commandMoves.Add(commandMove);
+        }
+
+        public List<InputHelper.CommandMove> GetCommandMoves()
+        {
+            return commandMoves;
         }
 
         public CLNS.BoundingBox GetLastBoxFrame(Animation.State state, int frame)
@@ -794,11 +806,10 @@ namespace Game1
             List<ComboAttack.Move> attackStates = defaultAttackChain.GetMoves().FindAll(item => item.GetState().Equals(GetCurrentAnimationState()));
 
             return IsInAnimationAction(Animation.Action.ATTACKING)
-                        && attackStates.Count > 0 
+                        && attackStates.Count > 0
                         && IsInAnimationState(attackStates[0].GetState())
                         && GetCurrentSprite().GetCurrentFrame() >= attackStates[0].GetCancelFrame()
-                        && IsFrameComplete(attackStates[0].GetState(), attackStates[0].GetCancelFrame() + 1)
-                        && !GetDefaultAttackChain().GetLastAttackState().Equals(GetCurrentAnimationState());
+                        && IsFrameComplete(attackStates[0].GetState(), attackStates[0].GetCancelFrame() + 1);
         }
 
         public void AttackChainStep()
@@ -832,7 +843,7 @@ namespace Game1
             return attackInfo;
         }
 
-        public bool IsJumping()
+        public bool IsJumpingOrInAir()
         {
             return (IsToss() || IsInAnimationAction(Animation.Action.JUMPING));
         }
@@ -1095,6 +1106,11 @@ namespace Game1
             {
                 return z1.CompareTo(z2);
             }
+        }
+
+        public bool IsNonActionState()
+        {
+            return (!IsToss() && !IsInAnimationAction(Animation.Action.ATTACKING));
         }
     }
 }

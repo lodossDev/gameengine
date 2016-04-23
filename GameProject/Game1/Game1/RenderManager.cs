@@ -13,7 +13,6 @@ namespace Game1
     {
         private bool renderBoxes;
 
-
         public RenderManager()
         {
             renderBoxes = false;

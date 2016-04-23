@@ -50,6 +50,7 @@
     <Compile Include="InputBuffer.cs" />
     <Compile Include="InputControl.cs" />
     <Compile Include="InputHelper.cs" />
+    <Compile Include="InputManager.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LifeBar.cs" />
     <Compile Include="Stage1.cs" />

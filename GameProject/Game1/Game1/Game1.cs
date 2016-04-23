@@ -25,6 +25,7 @@ namespace Game1
         LifeBar bar;
         float barHealth = 100f;
 
+        InputManager inputManager;
         InputHelper.CommandMove command;
 
 
@@ -160,7 +161,7 @@ namespace Game1
 
             leo.AddSprite(Animation.State.ATTACK6, new Sprite("Sprites/Actors/Leo/Attack6", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.ATTACK6, 45, -90);
-            leo.SetFrameDelay(Animation.State.ATTACK6, 17);
+            leo.SetFrameDelay(Animation.State.ATTACK6, 1);
             leo.AddBox(Animation.State.ATTACK6, 5, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK6, 6, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK6, 7, new CLNS.AttackBox(220, 230, 20, 30));
@@ -191,18 +192,18 @@ namespace Game1
             leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
 
             leo.SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK2, 222000, 10),
-                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 9),
-                new ComboAttack.Move(Animation.State.ATTACK5, 222000, 8),
-                new ComboAttack.Move(Animation.State.ATTACK6, 222000, 10)
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
+                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
+                new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
+                new ComboAttack.Move(Animation.State.ATTACK2, 222000, 8),
+                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK3, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK5, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK6, 222000, 8)
             }));
 
             /*leo.SetFrameDelay(Animation.State.ATTACK1, 1);
@@ -309,7 +310,11 @@ namespace Game1
                 new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Released)
             });
 
-            control = new InputControl(leo, PlayerIndex.One);
+            leo.AddCommandMove(command);
+            //control = new InputControl(leo, PlayerIndex.One);
+
+            inputManager = new InputManager();
+            inputManager.AddControl(leo, PlayerIndex.One);
 
             // TODO: use this.Content to load your game content here
         }
@@ -414,14 +419,13 @@ namespace Game1
             if (Keyboard.GetState().IsKeyDown(Keys.Y))
             {
                 //level1.ScrollX(5/2f);
-            }
-
-            command.Update(gameTime); 
+            } 
 
             if (!Setup.isPause)
             {
-                control.Update(gameTime);
-                collisionManager.Update(gameTime);
+                //control.Update(gameTime);
+                inputManager.Update(gameTime);
+                //collisionManager.Update(gameTime);
 
                 //Toss needs to be updated before collision
                 leo.Update(gameTime);
@@ -431,6 +435,7 @@ namespace Game1
                 drum3.Update(gameTime);
                 drum4.Update(gameTime);
 
+                collisionManager.Update(gameTime);
                 /*level1.ScrollX(-leo.GetVelocity().X);
                 drum.MoveX(-leo.GetVelocity().X);
                 drum2.MoveX(-leo.GetVelocity().X);
@@ -481,14 +486,14 @@ namespace Game1
 
             //control.pressedBuffer.Matches(command);
 
-            if (control.Matches(command))
+            /*if (control.Matches(command))
             {
                 leo.SetAnimationState(command.GetAnimationState());
-            }
+            }*/
 
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
-            spriteBatch.DrawString(font1, "STEP: " + command.GetNegativeCount(), new Vector2(20, 120), Color.Black);
+            spriteBatch.DrawString(font1, "STEP: " + leo.InCurrentAttackCancelState(), new Vector2(20, 120), Color.Black);
             spriteBatch.DrawString(font1, "COUNT: " + command.GetCurrentMoveStep(), new Vector2(20, 140), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
