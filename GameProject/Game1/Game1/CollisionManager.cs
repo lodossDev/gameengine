@@ -15,13 +15,16 @@ namespace Game1
         public static int hit_id = 0;
         private SoundEffect hiteffect1;
         private SoundEffectInstance soundInstance, soundInstance2;
+        private RenderManager renderManager;
 
-        public CollisionManager()
+        public CollisionManager(RenderManager renderManager)
         {
             hiteffect1 = Setup.contentManager.Load<SoundEffect>("Sounds//hit1");
             soundInstance = hiteffect1.CreateInstance();
 
             soundInstance2 = Setup.contentManager.Load<SoundEffect>("Sounds//test").CreateInstance();
+
+            this.renderManager = renderManager;
         }
 
         public List<Entity> FindBelow(Entity entity)
@@ -352,11 +355,20 @@ namespace Game1
         {
             if (target != entity)
             {
-                //soundInstance.Pitch = 0.6f;
                 hitCount++;
-                //soundInstance.Play();
-                
+                hiteffect1.CreateInstance().Play();
+
                 target.Toss(-15 * attackBox.GetHitStrength());
+
+                Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
+                hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
+                hitSpark1.SetAnimationState(Animation.State.STANCE);
+                hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
+                hitSpark1.SetScale(1.2f, 1.2f);
+                hitSpark1.SetPostion(attackBox.GetRect().X, (attackBox.GetRect().Y / 2) - (attackBox.GetOffset().Y / 2), target.GetPosZ()+5);
+                hitSpark1.SetFade(225);
+
+                renderManager.AddEntity(hitSpark1);
                 //target.MoveY(-125 * attackBox.GetHitStrength());
             }
         }
@@ -393,19 +405,6 @@ namespace Game1
 
                             if (targetHit)
                             {
-                                /*if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
-                                {
-                                    hit_id++;
-
-                                    if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
-                                    {
-                                        OnAttack(entity, target, currentAttackBox);
-                                        entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
-                                    }
-
-                                    entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
-                                }*/
-
                                 //This will hit the target in a different attack frame.
                                 if (currentAttackBox.GetResetHit() == 1)
                                 {
@@ -422,7 +421,7 @@ namespace Game1
                                     {
                                         hit_id++;
                                         OnAttack(entity, target, currentAttackBox);
-                                        //entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                        entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
                                         entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
                                     }
                                 }
@@ -430,7 +429,6 @@ namespace Game1
                                 //Only 1 attack box will hit target.
                                 if (targetAttackInfo.hitByAttackId != hit_id)
                                 {
-                                    hiteffect1.CreateInstance().Play();
                                     OnHit(target, entity, currentAttackBox);
                                     targetAttackInfo.hitByAttackId = hit_id;
                                 }

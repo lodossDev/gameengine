@@ -28,7 +28,7 @@ namespace Game1
             renderBoxes = false;
         }
 
-        public void RenderBoxes(List<CLNS.BoundingBox> spriteBoxes, List<CLNS.BoundingBox> globalBoxes)
+        private void RenderBoxes(List<CLNS.BoundingBox> spriteBoxes, List<CLNS.BoundingBox> globalBoxes)
         {
             if (renderBoxes)
             {
@@ -49,7 +49,26 @@ namespace Game1
                 }
             }
         }
-        
+
+        public void Update(GameTime gameTime)
+        {
+            var itemToRemove = entities.SingleOrDefault(item => item.IsEntity(Entity.EntityType.HIT_FLASH) && item.GetCurrentSprite().IsAnimationComplete());
+
+            Debug.WriteLine("TO DELETE: " + itemToRemove);
+
+            if (itemToRemove != null)
+                entities.Remove(itemToRemove);
+
+            foreach (Entity entity in entities)
+            {
+                if (entity.Alive())
+                {
+                    entity.Update(gameTime);
+                }
+            }
+        }
+
+
         public void Draw(GameTime gameTime)
         {
             entities.Sort();

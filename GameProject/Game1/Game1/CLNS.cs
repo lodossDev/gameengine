@@ -11,7 +11,7 @@ namespace Game1
     public class CLNS
     {
         public static float VISIBILITY = 0.4f;
-        public static int thickness = 1;
+        public static int THICKNESS = 1;
         public enum BoxType { HIT_BOX, BODY_BOX, BOUNDS_BOX, HEIGHT_BOX }
         public enum DrawType { LINES, FILL }
 
@@ -118,10 +118,10 @@ namespace Game1
             {
                 if (drawType == DrawType.LINES || drawType == DrawType.FILL)
                 {
-                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y), sprite, color, thickness); //top bar 
-                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y + rect.Height), new Vector2((int)rect.X + rect.Width + 1 * thickness, (int)rect.Y + rect.Height), sprite, color, thickness); //bottom bar 
-                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X, (int)rect.Y + rect.Height), sprite, color, thickness); //left bar 
-                    drawStraightLine(new Vector2((int)rect.X + rect.Width, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y + rect.Height), sprite, color, thickness); //right bar 
+                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y), sprite, color, THICKNESS); //top bar 
+                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y + rect.Height), new Vector2((int)rect.X + rect.Width + 1 * THICKNESS, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //bottom bar 
+                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //left bar 
+                    drawStraightLine(new Vector2((int)rect.X + rect.Width, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //right bar 
                 }
                 
                 if (drawType == DrawType.FILL)

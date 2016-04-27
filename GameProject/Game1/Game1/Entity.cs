@@ -13,11 +13,11 @@ namespace Game1
     public class Entity : IComparable<Entity>
     {
         private static int id = 0;
-        public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL, LIFE_BAR, OTHER}
+        public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL, LIFE_BAR, OTHER, HIT_FLASH}
 
         private Dictionary<Animation.State, Sprite> spriteMap;
         private Sprite currentSprite;
-        public Attributes.ColourInfo colorInfo; 
+        private Attributes.ColourInfo colorInfo; 
         private Animation.State currentAnimationState;
         private Animation.State lastAnimationState;
 
