@@ -127,6 +127,7 @@ namespace Game1
             //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(0);
 
             leo.AddBox(Animation.State.ATTACK1, 6, new CLNS.AttackBox(100, 80, 59, 99, 1));
+            leo.AddBox(Animation.State.ATTACK1, 6, new CLNS.AttackBox(100, 80, 159, 99, 1));
             //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(1);
 
             leo.AddBox(Animation.State.ATTACK1, 7, new CLNS.AttackBox(150, 50, -10, 210, 1));

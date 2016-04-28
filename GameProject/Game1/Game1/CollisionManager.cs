@@ -360,15 +360,7 @@ namespace Game1
 
                 target.Toss(-15 * attackBox.GetHitStrength());
 
-                Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
-                hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
-                hitSpark1.SetAnimationState(Animation.State.STANCE);
-                hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
-                hitSpark1.SetScale(1.2f, 1.2f);
-                hitSpark1.SetPostion(attackBox.GetRect().X, (attackBox.GetRect().Y / 2) - (attackBox.GetOffset().Y / 2), target.GetPosZ()+5);
-                hitSpark1.SetFade(225);
-
-                renderManager.AddEntity(hitSpark1);
+                
                 //target.MoveY(-125 * attackBox.GetHitStrength());
             }
         }
@@ -378,6 +370,7 @@ namespace Game1
             Attributes.AttackInfo entityAttackInfo = entity.GetAttackInfo();
             List<CLNS.AttackBox> attackBoxes = entity.GetCurrentBoxes(CLNS.BoxType.HIT_BOX).Cast<CLNS.AttackBox>().ToList();
             CLNS.AttackBox currentAttackBox = null;
+            int hitCount = 0;
 
             if (attackBoxes != null && attackBoxes.Count > 0)
             {
@@ -397,41 +390,58 @@ namespace Game1
                             foreach (CLNS.AttackBox attack in attackBoxes)
                             {
                                 if (attack.GetRect().Intersects(targetBox))
-                                {
-                                    currentAttackBox = attack;
-                                    targetHit = true;
+                                { 
+                                    if (targetAttackInfo.lastAttackFrame < 2)
+                                    {
+                                        Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
+                                        hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
+                                        hitSpark1.SetAnimationState(Animation.State.STANCE);
+                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
+                                        hitSpark1.SetScale(1.2f, 1.2f);
+                                        hitSpark1.SetPostion(attack.GetRect().X, (attack.GetRect().Y / 5) + (attack.GetOffset().Y / 2), target.GetPosZ() + 5);
+                                        hitSpark1.SetFade(225);
+
+                                        renderManager.AddEntity(hitSpark1);
+                                        
+                                    }
+
+                                    targetAttackInfo.lastAttackFrame ++;
+                                    Debug.WriteLine("hitCount: " + hitCount );
+
+                                    //This will hit the target in a different attack frame.
+                                    if (attack.GetResetHit() == 1)
+                                    {
+                                        if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
+                                        {
+                                            hit_id++;
+                                            OnAttack(entity, target, attack);
+                                            entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
+                                        {
+                                            hit_id++;
+                                            OnAttack(entity, target, attack);
+                                            entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                            entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
+                                        }
+                                    }
+
+                                    //Only 1 attack box will hit target.
+                                    if (targetAttackInfo.hitByAttackId != hit_id)
+                                    {
+                                        OnHit(target, entity, attack);
+                                        targetAttackInfo.lastAttackFrame = -1;
+                                        targetAttackInfo.hitByAttackId = hit_id;
+                                    }
                                 }
                             }
 
                             if (targetHit)
                             {
-                                //This will hit the target in a different attack frame.
-                                if (currentAttackBox.GetResetHit() == 1)
-                                {
-                                    if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
-                                    {
-                                        hit_id++;
-                                        OnAttack(entity, target, currentAttackBox);
-                                        entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
-                                    }
-                                }
-                                else
-                                {
-                                    if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
-                                    {
-                                        hit_id++;
-                                        OnAttack(entity, target, currentAttackBox);
-                                        entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
-                                        entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
-                                    }
-                                }
-
-                                //Only 1 attack box will hit target.
-                                if (targetAttackInfo.hitByAttackId != hit_id)
-                                {
-                                    OnHit(target, entity, currentAttackBox);
-                                    targetAttackInfo.hitByAttackId = hit_id;
-                                }
+                               
                             }
                         }
                     }

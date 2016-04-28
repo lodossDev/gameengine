@@ -52,12 +52,7 @@ namespace Game1
 
         public void Update(GameTime gameTime)
         {
-            var itemToRemove = entities.SingleOrDefault(item => item.IsEntity(Entity.EntityType.HIT_FLASH) && item.GetCurrentSprite().IsAnimationComplete());
-
-            Debug.WriteLine("TO DELETE: " + itemToRemove);
-
-            if (itemToRemove != null)
-                entities.Remove(itemToRemove);
+            entities.RemoveAll(item => item.IsEntity(Entity.EntityType.HIT_FLASH) && item.GetCurrentSprite().IsAnimationComplete());
 
             foreach (Entity entity in entities)
             {
