@@ -119,9 +119,9 @@ namespace Game1
 
             leo.AddSprite(Animation.State.ATTACK1, new Sprite("Sprites/Actors/Leo/Attack1", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK1, 65, -75);
-            leo.SetFrameDelay(Animation.State.ATTACK1, 1);
-            leo.SetFrameDelay(Animation.State.ATTACK1, 1, 1);
-            leo.SetFrameDelay(Animation.State.ATTACK1, 2, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK1, 12);
+            leo.SetFrameDelay(Animation.State.ATTACK1, 1, 11);
+            leo.SetFrameDelay(Animation.State.ATTACK1, 2, 11);
 
             leo.AddBox(Animation.State.ATTACK1, 6, new CLNS.AttackBox(100, 80, 132, 45));
             //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(0);
@@ -195,7 +195,7 @@ namespace Game1
             leo.SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
                 new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
                 new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7)/*,
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
@@ -204,7 +204,7 @@ namespace Game1
                 new ComboAttack.Move(Animation.State.ATTACK3, 222000, 7),
                 new ComboAttack.Move(Animation.State.ATTACK3, 222000, 7),
                 new ComboAttack.Move(Animation.State.ATTACK5, 222000, 7),
-                new ComboAttack.Move(Animation.State.ATTACK6, 222000, 8)
+                new ComboAttack.Move(Animation.State.ATTACK6, 222000, 8)*/
             }));
 
             /*leo.SetFrameDelay(Animation.State.ATTACK1, 1);
@@ -506,7 +506,7 @@ namespace Game1
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
-            spriteBatch.DrawString(font1, "COUNT: " + command.GetCurrentMoveStep(), new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "COUNT: " + drum.GetAttackInfo().hitByAttackFrameCount, new Vector2(20, 140), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

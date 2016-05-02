@@ -370,7 +370,7 @@ namespace Game1
             Attributes.AttackInfo entityAttackInfo = entity.GetAttackInfo();
             List<CLNS.AttackBox> attackBoxes = entity.GetCurrentBoxes(CLNS.BoxType.HIT_BOX).Cast<CLNS.AttackBox>().ToList();
             CLNS.AttackBox currentAttackBox = null;
-            int hitCount = 0;
+            List<CLNS.AttackBox> attackBoxesHitInFrame = new List<CLNS.AttackBox>();
 
             if (attackBoxes != null && attackBoxes.Count > 0)
             {
@@ -391,21 +391,12 @@ namespace Game1
                             {
                                 if (attack.GetRect().Intersects(targetBox))
                                 { 
-                                    if (targetAttackInfo.lastAttackFrame < 2)
+                                    if (currentAttackBox != attack)
                                     {
-                                        Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
-                                        hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
-                                        hitSpark1.SetAnimationState(Animation.State.STANCE);
-                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
-                                        hitSpark1.SetScale(1.2f, 1.2f);
-                                        hitSpark1.SetPostion(attack.GetRect().X, (attack.GetRect().Y / 5) + (attack.GetOffset().Y / 2), target.GetPosZ() + 5);
-                                        hitSpark1.SetFade(225);
-
-                                        renderManager.AddEntity(hitSpark1);
-                                        
+                                        attackBoxesHitInFrame.Add(attack);
+                                        currentAttackBox = attack;
                                     }
-
-                                    targetAttackInfo.lastAttackFrame ++;
+                                    
                                     Debug.WriteLine("hitCount: " + hitCount );
 
                                     //This will hit the target in a different attack frame.
@@ -424,7 +415,6 @@ namespace Game1
                                         {
                                             hit_id++;
                                             OnAttack(entity, target, attack);
-                                            entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
                                             entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
                                         }
                                     }
@@ -433,11 +423,28 @@ namespace Game1
                                     if (targetAttackInfo.hitByAttackId != hit_id)
                                     {
                                         OnHit(target, entity, attack);
-                                        targetAttackInfo.lastAttackFrame = -1;
+                                        targetAttackInfo.hitByAttackFrameCount = 0;
                                         targetAttackInfo.hitByAttackId = hit_id;
+                                    }
+
+                                    if (targetAttackInfo.hitByAttackFrameCount < attackBoxesHitInFrame.Count)
+                                    {
+                                        Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
+                                        hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
+                                        hitSpark1.SetAnimationState(Animation.State.STANCE);
+                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
+                                        hitSpark1.SetScale(1.2f, 1.2f);
+                                        hitSpark1.SetPostion(target.GetPosX() + (attack.GetOffset().X / 1.8f), (target.GetPosY()) + (attack.GetOffset().Y / 2), target.GetPosZ() + 5);
+                                        hitSpark1.SetFade(225);
+
+                                        renderManager.AddEntity(hitSpark1);
+                                        targetAttackInfo.hitByAttackFrameCount++;
                                     }
                                 }
                             }
+                            
+
+                            Debug.WriteLine("ATTACKBOXES SIZES: " + attackBoxesHitInFrame.Count);
 
                             if (targetHit)
                             {

@@ -77,6 +77,7 @@ namespace Game1
             public int hitByAttackId;
             public Animation.State lastAttackState;
             public int lastAttackFrame;
+            public int hitByAttackFrameCount;
 
             public AttackInfo()
             {
@@ -88,6 +89,7 @@ namespace Game1
                 lastAttackFrame = -1;
                 hitByAttackId = -1;
                 lastAttackState = Animation.State.NONE;
+                hitByAttackFrameCount = 0;
             }
         }
 
