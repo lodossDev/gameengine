@@ -429,12 +429,17 @@ namespace Game1
 
                                     if (targetAttackInfo.hitByAttackFrameCount < attackBoxesHitInFrame.Count)
                                     {
+                                        float y1 = Math.Abs(target.GetPosY());
+                                        float y2 = Math.Abs(entity.GetPosY());
+                                        float f2 = (y1 > y2 ? (-y2 + -(y1/2) - 20) : (-y1 + -y2) - 40);
+                                        float y3 = f2 + attack.GetOffset().Y;
+
                                         Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
                                         hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
                                         hitSpark1.SetAnimationState(Animation.State.STANCE);
                                         hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
                                         hitSpark1.SetScale(1.2f, 1.2f);
-                                        hitSpark1.SetPostion(target.GetPosX() + (attack.GetOffset().X / 1.8f), (target.GetPosY()) + (attack.GetOffset().Y / 2), target.GetPosZ() + 5);
+                                        hitSpark1.SetPostion(target.GetPosX() + (attack.GetOffset().X / 1.8f), y3, target.GetPosZ() + 5);
                                         hitSpark1.SetFade(225);
 
                                         renderManager.AddEntity(hitSpark1);

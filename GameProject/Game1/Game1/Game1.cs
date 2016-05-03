@@ -253,6 +253,7 @@ namespace Game1
             drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum3.SetScale(2.2f, 2.6f);
             drum3.SetPostion(290, -180, 200);
+            drum3.SetGroundBase(-180);
             drum3.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum3.SetDepthOffset(-5);
             drum3.SetDepth(20);
@@ -506,7 +507,8 @@ namespace Game1
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
-            spriteBatch.DrawString(font1, "COUNT: " + drum.GetAttackInfo().hitByAttackFrameCount, new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "leo: " + leo.GetPosY(), new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "drum3: " + drum3.GetPosY(), new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
