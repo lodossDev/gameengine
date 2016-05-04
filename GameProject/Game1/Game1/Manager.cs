@@ -7,7 +7,7 @@ namespace Game1
 {
     public class Manager
     {
-        protected List<Entity> entities;
+        public List<Entity> entities;
         protected List<Level> levels;
 
 

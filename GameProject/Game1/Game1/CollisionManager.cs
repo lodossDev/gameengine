@@ -390,14 +390,13 @@ namespace Game1
                             foreach (CLNS.AttackBox attack in attackBoxes)
                             {
                                 if (attack.GetRect().Intersects(targetBox))
-                                { 
+                                {
+                                    attackBoxesHitInFrame.Add(attack);
                                     if (currentAttackBox != attack)
                                     {
-                                        attackBoxesHitInFrame.Add(attack);
-                                        currentAttackBox = attack;
+                                        
+                                       // currentAttackBox = attack;
                                     }
-                                    
-                                    Debug.WriteLine("hitCount: " + hitCount );
 
                                     //This will hit the target in a different attack frame.
                                     if (attack.GetResetHit() == 1)
@@ -427,29 +426,42 @@ namespace Game1
                                         targetAttackInfo.hitByAttackId = hit_id;
                                     }
 
-                                    if (targetAttackInfo.hitByAttackFrameCount < attackBoxesHitInFrame.Count)
+                                    if (targetAttackInfo.hitByAttackFrameCount < attackBoxesHitInFrame.Count && currentAttackBox != attack)
                                     {
                                         float y1 = Math.Abs(target.GetPosY());
                                         float y2 = Math.Abs(entity.GetPosY());
                                         float f2 = (y1 > y2 ? (-y2 + -(y1/2) - 20) : (-y1 + -y2) - 40);
                                         float y3 = f2 + attack.GetOffset().Y;
+                                        float x1 = 0;
+
+                                        if (entity.IsLeft())
+                                        {
+                                            x1 = (entity.GetPosX() - ((attack.GetRect().Width/2) + attack.GetOffset().X - 5));
+                                        }
+                                        else
+                                        {
+                                            x1 = (entity.GetPosX() + ((attack.GetRect().Width/2) + attack.GetOffset().X + 5));
+                                        }
+
+                                        y3 = ((target.GetPosY()/2) + entity.GetPosY()/2)  + (attack.GetOffset().Y/1.2f);
 
                                         Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
                                         hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
                                         hitSpark1.SetAnimationState(Animation.State.STANCE);
                                         hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
                                         hitSpark1.SetScale(1.2f, 1.2f);
-                                        hitSpark1.SetPostion(target.GetPosX() + (attack.GetOffset().X / 1.8f), y3, target.GetPosZ() + 5);
+                                        hitSpark1.SetPostion(x1, y3, target.GetPosZ() + 5);
                                         hitSpark1.SetFade(225);
 
                                         renderManager.AddEntity(hitSpark1);
+                                        currentAttackBox = attack;
                                         targetAttackInfo.hitByAttackFrameCount++;
                                     }
                                 }
                             }
-                            
 
-                            Debug.WriteLine("ATTACKBOXES SIZES: " + attackBoxesHitInFrame.Count);
+                            Debug.WriteLine("AttackBoxes: " + attackBoxesHitInFrame.Count);
+                            Debug.WriteLine("SparkCount: " + renderManager.entities.FindAll(item => item.IsEntity(Entity.EntityType.HIT_FLASH)).ToList().Count);
 
                             if (targetHit)
                             {
