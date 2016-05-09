@@ -152,6 +152,7 @@ namespace Game1
         {
             public enum AttackPosition { STANDING, LOW, AIR, NONE };
             public enum BlockPosition { HI, LOW, NONE };
+            public enum SparkRenderType { ALL, FRAME, ONCE }
 
             private float zDepth;
             private float hitPauseTime;
@@ -164,15 +165,23 @@ namespace Game1
             private int juggleCost;
             private AttackPosition attackPosition;
             private BlockPosition blockPosition;
+            private SparkRenderType sparkRenderType;
+            private Effect.EffectState sparkState;
+            private Vector2 sparkOffset;
 
 
             public AttackBox(int w, int h, int x, int y, int resetHit = -1, float zDepth = 30,
                                         float hitPauseTime = 1 / 60, float painTime = 20 / 60, int hitDamage = 5,
                                         int hitPoints = 5, float hitStrength = 0.4f, int comboStep = 1,
                                         int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.NONE,
-                                        BlockPosition blockPosition = BlockPosition.NONE)
+                                        BlockPosition blockPosition = BlockPosition.NONE,
+                                        SparkRenderType sparkRenderFrame = SparkRenderType.FRAME,
+                                        Effect.EffectState sparkState = Effect.EffectState.NONE,
+                                        float sparkX = 0, float sparkY = 0)
                                     : base(BoxType.HIT_BOX, w, h, x, y)
             {
+                sparkOffset = Vector2.Zero;
+
                 SetResetHit(resetHit);
                 SetZdepth(zDepth);
                 SetHitPauseTime(hitPauseTime);
@@ -183,6 +192,9 @@ namespace Game1
                 SetComboStep(comboStep);
                 SetJuggleCost(juggleCost);
                 SetAttackPosition(attackPosition);
+                SetSparkRenderType(sparkRenderFrame);
+                SetSparkState(sparkState);
+                SetSparkOffset(sparkX, sparkY);
             }
 
             public void SetZdepth(float depth)
@@ -240,6 +252,22 @@ namespace Game1
                 blockPosition = position;
             }
 
+            public void SetSparkRenderType(SparkRenderType sparkRenderFrame)
+            {
+                this.sparkRenderType = sparkRenderFrame;
+            }
+
+            public void SetSparkState(Effect.EffectState sparkState)
+            {
+                this.sparkState = sparkState;
+            }
+
+            public void SetSparkOffset(float x1, float y1)
+            {
+                sparkOffset.X = x1;
+                sparkOffset.Y = y1;
+            }
+
             public float GetZdepth()
             {
                 return zDepth;
@@ -293,6 +321,21 @@ namespace Game1
             public BlockPosition GetBlockPosition()
             {
                 return blockPosition;
+            }
+
+            public SparkRenderType GetSparkRenderType()
+            {
+                return sparkRenderType;
+            }
+
+            public Effect.EffectState GetSparkState()
+            {
+                return sparkState;
+            }
+
+            public Vector2 GetSparkOffset()
+            {
+                return sparkOffset;
             }
         }
     }

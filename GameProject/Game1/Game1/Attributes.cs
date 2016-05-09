@@ -75,9 +75,11 @@ namespace Game1
         public class AttackInfo
         {
             public int hitByAttackId;
+            public int hitByStaticAttackId;
             public Animation.State lastAttackState;
             public int lastAttackFrame;
             public int hitByAttackFrameCount;
+
 
             public AttackInfo()
             {
@@ -87,7 +89,7 @@ namespace Game1
             public void Reset()
             {
                 lastAttackFrame = -1;
-                hitByAttackId = -1;
+                hitByAttackId = hitByStaticAttackId = - 1;
                 lastAttackState = Animation.State.NONE;
                 hitByAttackFrameCount = 0;
             }
@@ -95,7 +97,8 @@ namespace Game1
 
         public class FrameInfo
         {
-            public enum FrameState{NO_FRAME = -1}
+            public enum FrameState { NO_FRAME = -1 }
+
             private int startFrame;
             private int endFrame;
 
@@ -129,6 +132,11 @@ namespace Game1
             public void SetEndFrame(int ex)
             {
                 endFrame = ex;
+            }
+
+            public bool IsInFrame(int currentFrame)
+            {
+                return (currentFrame >= startFrame && currentFrame <= endFrame);
             }
         }
 

@@ -12,7 +12,8 @@ namespace Game1
 {
     public class CollisionManager : Manager
     {
-        public static int hit_id = 0;
+        public static int current_hit_id = 0;
+        public static int static_hit_id = 0;
         private SoundEffect hiteffect1;
         private SoundEffectInstance soundInstance, soundInstance2;
         private RenderManager renderManager;
@@ -359,18 +360,20 @@ namespace Game1
                 hiteffect1.CreateInstance().Play();
 
                 target.Toss(-15 * attackBox.GetHitStrength());
-
-                
                 //target.MoveY(-125 * attackBox.GetHitStrength());
             }
+        }
+
+        private float TargetBodyDist(Entity target, Entity entity, CLNS.AttackBox attack)
+        {
+            float x1 = (target.GetPosX() + target.GetWidth());
+            return x1 + (attack.GetOffset().X/2);
         }
 
         private void CheckAttack(Entity entity)
         {
             Attributes.AttackInfo entityAttackInfo = entity.GetAttackInfo();
             List<CLNS.AttackBox> attackBoxes = entity.GetCurrentBoxes(CLNS.BoxType.HIT_BOX).Cast<CLNS.AttackBox>().ToList();
-            CLNS.AttackBox currentAttackBox = null;
-            List<CLNS.AttackBox> attackBoxesHitInFrame = new List<CLNS.AttackBox>();
 
             if (attackBoxes != null && attackBoxes.Count > 0)
             {
@@ -380,6 +383,7 @@ namespace Game1
                     {
                         Rectangle targetBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
+                        Dictionary<Animation.State, List<CLNS.AttackBox>> attackBoxesHitInFrame = new Dictionary<Animation.State, List<CLNS.AttackBox>>();
                         bool targetHit = false;
 
                         if (entity.InRangeZ(target, target.GetDepth())
@@ -391,59 +395,75 @@ namespace Game1
                             {
                                 if (attack.GetRect().Intersects(targetBox))
                                 {
-                                    attackBoxesHitInFrame.Add(attack);
-                                    if (currentAttackBox != attack)
+                                    if(attackBoxesHitInFrame.ContainsKey(entity.GetCurrentAnimationState()) == false)
                                     {
-                                        
-                                       // currentAttackBox = attack;
+                                        attackBoxesHitInFrame.Add(entity.GetCurrentAnimationState(), new List<CLNS.AttackBox>());
                                     }
 
+                                    attackBoxesHitInFrame[entity.GetCurrentAnimationState()].Add(attack);
+                                    targetHit = true;
+                                   
                                     //This will hit the target in a different attack frame.
                                     if (attack.GetResetHit() == 1)
                                     {
                                         if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame())
                                         {
-                                            hit_id++;
+                                            current_hit_id++;
                                             OnAttack(entity, target, attack);
                                             entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                        }
+
+                                        if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
+                                        {
+                                            static_hit_id++;
+                                            entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
                                         }
                                     }
                                     else
                                     {
                                         if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState())
                                         {
-                                            hit_id++;
+                                            current_hit_id++;
+                                            static_hit_id++;
                                             OnAttack(entity, target, attack);
                                             entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
                                         }
                                     }
 
                                     //Only 1 attack box will hit target.
-                                    if (targetAttackInfo.hitByAttackId != hit_id)
+                                    if (targetAttackInfo.hitByAttackId != current_hit_id)
                                     {
                                         OnHit(target, entity, attack);
                                         targetAttackInfo.hitByAttackFrameCount = 0;
-                                        targetAttackInfo.hitByAttackId = hit_id;
+                                        targetAttackInfo.hitByAttackId = current_hit_id;
                                     }
+                                }
+                            }
 
-                                    if (targetAttackInfo.hitByAttackFrameCount < attackBoxesHitInFrame.Count && currentAttackBox != attack)
+                            if (targetHit && attackBoxesHitInFrame.Count > 0)
+                            {
+                                List<CLNS.AttackBox> currentAttacks = attackBoxesHitInFrame[entity.GetCurrentAnimationState()];
+                                CLNS.AttackBox firstAttackBox = currentAttacks[0];
+
+                                //Defaults to CLNS.AttackBox.SparkRenderType.ALL
+                                int sparkTargetCount = currentAttacks.Count;
+
+                                if (firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
+                                        || firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
+                                {
+                                    sparkTargetCount = 1;
+                                }
+
+                                foreach (CLNS.AttackBox attack in currentAttacks)
+                                {
+                                    if (firstAttackBox.GetSparkRenderType() != CLNS.AttackBox.SparkRenderType.ONCE
+                                            && targetAttackInfo.hitByAttackFrameCount < sparkTargetCount 
+                                                    || firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE 
+                                                            && targetAttackInfo.hitByStaticAttackId != static_hit_id)
                                     {
-                                        float y1 = Math.Abs(target.GetPosY());
-                                        float y2 = Math.Abs(entity.GetPosY());
-                                        float f2 = (y1 > y2 ? (-y2 + -(y1/2) - 20) : (-y1 + -y2) - 40);
-                                        float y3 = f2 + attack.GetOffset().Y;
-                                        float x1 = 0;
-
-                                        if (entity.IsLeft())
-                                        {
-                                            x1 = (entity.GetPosX() - ((attack.GetRect().Width/2) + attack.GetOffset().X - 5));
-                                        }
-                                        else
-                                        {
-                                            x1 = (entity.GetPosX() + ((attack.GetRect().Width/2) + attack.GetOffset().X + 5));
-                                        }
-
-                                        y3 = ((target.GetPosY()/2) + entity.GetPosY()/2)  + (attack.GetOffset().Y/1.2f);
+                                        float y1 = Math.Abs(entity.GetPosY());
+                                        float x1 = TargetBodyDist(target, entity, attack);
+                                        float y3 = -(y1) - (attack.GetRect().Height / 1.5f) + (attack.GetOffset().Y);
 
                                         Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
                                         hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
@@ -454,19 +474,18 @@ namespace Game1
                                         hitSpark1.SetFade(225);
 
                                         renderManager.AddEntity(hitSpark1);
-                                        currentAttackBox = attack;
                                         targetAttackInfo.hitByAttackFrameCount++;
+
+                                        if (firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
+                                        {
+                                            targetAttackInfo.hitByStaticAttackId = static_hit_id;
+                                        }
                                     }
                                 }
                             }
 
                             Debug.WriteLine("AttackBoxes: " + attackBoxesHitInFrame.Count);
                             Debug.WriteLine("SparkCount: " + renderManager.entities.FindAll(item => item.IsEntity(Entity.EntityType.HIT_FLASH)).ToList().Count);
-
-                            if (targetHit)
-                            {
-                               
-                            }
                         }
                     }
                 }

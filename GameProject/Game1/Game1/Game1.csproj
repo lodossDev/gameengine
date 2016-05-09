@@ -45,6 +45,7 @@
     <Compile Include="CollisionHelper.cs" />
     <Compile Include="CollisionManager.cs" />
     <Compile Include="ComboAttack.cs" />
+    <Compile Include="Effect.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="InputBuffer.cs" />

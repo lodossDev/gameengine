@@ -131,6 +131,7 @@ namespace Game1
             //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(1);
 
             leo.AddBox(Animation.State.ATTACK1, 7, new CLNS.AttackBox(150, 50, -10, 210, 1));
+            leo.AddBox(Animation.State.ATTACK1, 7, new CLNS.AttackBox(150, 50, -60, 160, 1));
             leo.GetAttackBox(Animation.State.ATTACK1, 7).SetComboStep(0);
 
 
@@ -265,7 +266,7 @@ namespace Game1
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum4.SetScale(2.2f, 2.6f);
-            drum4.SetPostion(800, -320, 200);
+            drum4.SetPostion(900, -320, 200);
             drum4.SetGroundBase(-320);
             drum4.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum4.SetDepthOffset(-5);
@@ -504,11 +505,22 @@ namespace Game1
                 leo.SetAnimationState(command.GetAnimationState());
             }*/
 
+            float x3 = 0;
+
+            if (leo.GetPosX() > drum.GetPosX())
+            {
+                x3 = (leo.GetPosX() - drum.GetPosX());
+            }
+            else
+            {
+                x3 = (drum.GetPosX() - leo.GetPosX());
+            }
+
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
             spriteBatch.DrawString(font1, "leo: " + leo.GetPosY(), new Vector2(20, 140), Color.Black);
-            spriteBatch.DrawString(font1, "drum3: " + drum3.GetPosY(), new Vector2(20, 160), Color.Black);
+            spriteBatch.DrawString(font1, "drum3: " + drum.GetAttackInfo().hitByStaticAttackId, new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
