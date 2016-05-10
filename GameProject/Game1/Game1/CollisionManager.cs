@@ -383,6 +383,7 @@ namespace Game1
                     {
                         Rectangle targetBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
+                        //leave as normal list
                         Dictionary<Animation.State, List<CLNS.AttackBox>> attackBoxesHitInFrame = new Dictionary<Animation.State, List<CLNS.AttackBox>>();
                         bool targetHit = false;
 
@@ -479,6 +480,12 @@ namespace Game1
                                         if (firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
                                         {
                                             targetAttackInfo.hitByStaticAttackId = static_hit_id;
+                                        }
+
+                                        if (firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
+                                                || firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
+                                        {
+                                            break;
                                         }
                                     }
                                 }
