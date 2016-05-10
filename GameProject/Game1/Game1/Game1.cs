@@ -54,7 +54,7 @@ namespace Game1
             Setup.spriteBatch = spriteBatch;
 
             camera = new Camera();
-            camera.Pos = new Vector2(800f, 0.0f);
+            camera.Pos = new Vector2(Setup.graphicsDevice.Viewport.Width, Setup.graphicsDevice.Viewport.Height);
 
             base.Initialize();
         }
@@ -390,6 +390,20 @@ namespace Game1
                 barHealth += (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.N))
+            {
+                camera.Zoom += 0.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Vector2 pos = new Vector2(-(camera.Zoom * 3f), 0);
+                camera.Move(pos);
+            }
+            
+            if (Keyboard.GetState().IsKeyDown(Keys.M))
+            {
+                camera.Zoom -= 0.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Vector2 pos = new Vector2((camera.Zoom * 3f), 0);
+                camera.Move(pos);
+            }
+
             bar.Percent((int)barHealth);
 
             if (Keyboard.GetState().IsKeyDown(Keys.J))
@@ -478,7 +492,7 @@ namespace Game1
                         null,
                         null,
                         null,
-                        null);
+                        camera.get_transformation());
 
 
             renderManager.Draw(gameTime);
@@ -520,7 +534,7 @@ namespace Game1
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
             spriteBatch.DrawString(font1, "leo: " + leo.GetPosY(), new Vector2(20, 140), Color.Black);
-            spriteBatch.DrawString(font1, "drum3: " + drum.GetAttackInfo().hitByStaticAttackId, new Vector2(20, 160), Color.Black);
+            spriteBatch.DrawString(font1, "drum3: " + camera.Pos.X, new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

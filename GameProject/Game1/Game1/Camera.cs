@@ -54,7 +54,7 @@ namespace Game1
             Matrix.CreateTranslation(new Vector3(-_pos.X, -_pos.Y, 0)) *
                 Matrix.CreateRotationZ(Rotation) *
                 Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
-                Matrix.CreateTranslation(new Vector3(Setup.graphicsDevice.Viewport.Width * 0.5f, Setup.graphicsDevice.Viewport.Height * 0.5f, 0));
+                Matrix.CreateTranslation(new Vector3(Setup.graphicsDevice.Viewport.Width, Setup.graphicsDevice.Viewport.Height, 0));
             return _transform;
         }
     }
