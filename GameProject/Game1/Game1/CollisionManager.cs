@@ -12,8 +12,8 @@ namespace Game1
 {
     public class CollisionManager : Manager
     {
-        public static int current_hit_id = 0;
-        public static int static_hit_id = 0;
+        public static long current_hit_id = 0;
+        public static long static_hit_id = 0;
         private SoundEffect hiteffect1;
         private SoundEffectInstance soundInstance, soundInstance2;
         private RenderManager renderManager;
@@ -347,6 +347,7 @@ namespace Game1
             {
                 ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
                 attackChain.IncrementMoveIndex(attackBox.GetComboStep());
+                entity.GetAttackInfo().hitPauseTime = 1000f;
             }
         }
 
@@ -364,20 +365,26 @@ namespace Game1
             }
         }
 
-        private float TargetBodyDist(Entity target, Entity entity, CLNS.AttackBox attack)
+        private float TargetBodyX(Entity target, Entity entity, CLNS.AttackBox attack)
         {
-            float x1 = (target.GetPosX() + (target.GetWidth()/2));
+            float x1 = (target.GetPosX() + (target.GetWidth() / 2));
 
             if (entity.GetPosX() >= target.GetPosX() + (target.GetWidth() / 2))
             {
-                x1 = (target.GetPosX() + target.GetWidth());
+                x1 = (target.GetPosX() + (target.GetWidth() / 2));
             }
             else if (entity.GetPosX() <= target.GetPosX() + (target.GetWidth() / 2))
             {
-                x1 = (target.GetPosX() - target.GetWidth());
+                x1 = (target.GetPosX() - (target.GetWidth() / 2));
             }
 
-            return x1 + (attack.GetOffset().X/2);
+            return x1 + (attack.GetOffset().X / 2);
+        }
+
+        private float TargetBodyY(Entity target, Entity entity, CLNS.AttackBox attack)
+        {
+            float y1 = entity.GetPosY();
+            return (y1) - (attack.GetRect().Height / 1.5f) + (attack.GetOffset().Y);
         }
 
         private void CheckAttack(Entity entity)
@@ -466,16 +473,15 @@ namespace Game1
                                                     || attack.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE 
                                                             && targetAttackInfo.hitByStaticAttackId != static_hit_id)
                                     {
-                                        float y1 = Math.Abs(entity.GetPosY());
-                                        float x1 = TargetBodyDist(target, entity, attack);
-                                        float y3 = -(y1) - (attack.GetRect().Height / 1.5f) + (attack.GetOffset().Y);
+                                        float x1 = TargetBodyX(target, entity, attack);
+                                        float y1 = TargetBodyY(target, entity, attack);
 
                                         Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
                                         hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
                                         hitSpark1.SetAnimationState(Animation.State.STANCE);
                                         hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
                                         hitSpark1.SetScale(1.2f, 1.2f);
-                                        hitSpark1.SetPostion(x1, y3, target.GetPosZ() + 5);
+                                        hitSpark1.SetPostion(x1, y1, target.GetPosZ() + 1);
                                         hitSpark1.SetFade(225);
 
                                         renderManager.AddEntity(hitSpark1);

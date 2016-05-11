@@ -952,6 +952,11 @@ namespace Game1
             }
         }
 
+        public bool IsNonActionState()
+        {
+            return (!IsToss() && !IsInAnimationAction(Animation.Action.ATTACKING));
+        }
+
         public bool InResetState()
         {
             return (!InAir()
@@ -1055,8 +1060,29 @@ namespace Game1
             }
         }
 
+        public bool IsPauseHit(GameTime gameTime)
+        {
+            bool isPauseHit = false;
+
+            if (attackInfo.hitPauseTime > 0)
+            {
+                attackInfo.hitPauseTime -= (5 * (float)gameTime.ElapsedGameTime.Milliseconds);
+                isPauseHit = true;
+            }
+
+            if (attackInfo.hitPauseTime < 0)
+            {
+                attackInfo.hitPauseTime = 0;
+                isPauseHit = false;
+            }
+
+            return isPauseHit;
+        }
+
         public void Update(GameTime gameTime)
         {
+            bool isPauseHit = IsPauseHit(gameTime);
+
             foreach (Sprite sprite in spriteMap.Values)
             {
                 sprite.Update(gameTime, position);
@@ -1065,7 +1091,8 @@ namespace Game1
             UpdateFade(gameTime);
 
             //Update animation.
-            UpdateAnimation(gameTime);
+            if(!isPauseHit)UpdateAnimation(gameTime);
+
             UpdateDefaultAttackChain(gameTime);
 
             //Update physics.
@@ -1106,11 +1133,6 @@ namespace Game1
             {
                 return z1.CompareTo(z2);
             }
-        }
-
-        public bool IsNonActionState()
-        {
-            return (!IsToss() && !IsInAnimationAction(Animation.Action.ATTACKING));
         }
     }
 }

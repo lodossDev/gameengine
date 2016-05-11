@@ -194,9 +194,9 @@ namespace Game1
             leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
 
             leo.SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7)/*,
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 6),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 6)/*,
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
@@ -537,7 +537,7 @@ namespace Game1
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
-            spriteBatch.DrawString(font1, "leo: " + leo.GetPosY(), new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "leo: " + leo.GetAttackInfo().hitPauseTime, new Vector2(20, 140), Color.Black);
             spriteBatch.DrawString(font1, "drum3: " + camera.Pos.X, new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

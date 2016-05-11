@@ -74,11 +74,12 @@ namespace Game1
 
         public class AttackInfo
         {
-            public int hitByAttackId;
-            public int hitByStaticAttackId;
+            public long hitByAttackId;
+            public long hitByStaticAttackId;
             public Animation.State lastAttackState;
             public int lastAttackFrame;
             public int hitByAttackFrameCount;
+            public float hitPauseTime;
 
 
             public AttackInfo()
@@ -92,6 +93,7 @@ namespace Game1
                 hitByAttackId = hitByStaticAttackId = - 1;
                 lastAttackState = Animation.State.NONE;
                 hitByAttackFrameCount = 0;
+                hitPauseTime = 0;
             }
         }
 
