@@ -234,6 +234,7 @@ namespace Game1
             drum.SetDepthOffset(-5);
             drum.SetDepth(20);
             drum.SetHeight(170);
+            drum.SetWidth(125);
 
             drum2 = new Entity(Entity.EntityType.OBSTACLE, "DRUM2");
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
@@ -246,6 +247,7 @@ namespace Game1
             drum2.SetDepthOffset(-5);
             drum2.SetDepth(20);
             drum2.SetHeight(170);
+            drum2.SetWidth(125);
 
             drum3 = new Entity(Entity.EntityType.OBSTACLE, "DRUM3");
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
@@ -259,6 +261,7 @@ namespace Game1
             drum3.SetDepthOffset(-5);
             drum3.SetDepth(20);
             drum3.SetHeight(170);
+            drum3.SetWidth(125);
 
             drum4 = new Entity(Entity.EntityType.OBSTACLE, "DRUM4");
             drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
@@ -272,6 +275,7 @@ namespace Game1
             drum4.SetDepthOffset(-5);
             drum4.SetDepth(20);
             drum4.SetHeight(170);
+            drum4.SetWidth(125);
 
             /*hitSpark1 = new Entity(Entity.EntityType.OTHER, "SPARK1");
             hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.REPEAT));

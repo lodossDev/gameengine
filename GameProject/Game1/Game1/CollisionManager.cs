@@ -366,7 +366,17 @@ namespace Game1
 
         private float TargetBodyDist(Entity target, Entity entity, CLNS.AttackBox attack)
         {
-            float x1 = (target.GetPosX() + target.GetWidth());
+            float x1 = (target.GetPosX() + (target.GetWidth()/2));
+
+            if (entity.GetPosX() >= target.GetPosX() + (target.GetWidth() / 2))
+            {
+                x1 = (target.GetPosX() + target.GetWidth());
+            }
+            else if (entity.GetPosX() <= target.GetPosX() + (target.GetWidth() / 2))
+            {
+                x1 = (target.GetPosX() - target.GetWidth());
+            }
+
             return x1 + (attack.GetOffset().X/2);
         }
 
@@ -381,10 +391,10 @@ namespace Game1
                 {
                     if (entity != target)
                     {
+                        //Get all body boxes for collision with attack boxes
                         Rectangle targetBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
-                        //leave as normal list
-                        Dictionary<Animation.State, List<CLNS.AttackBox>> attackBoxesHitInFrame = new Dictionary<Animation.State, List<CLNS.AttackBox>>();
+                        List<CLNS.AttackBox> attackBoxesHitInFrame = new List<CLNS.AttackBox>();
                         bool targetHit = false;
 
                         if (entity.InRangeZ(target, target.GetDepth())
@@ -396,12 +406,7 @@ namespace Game1
                             {
                                 if (attack.GetRect().Intersects(targetBox))
                                 {
-                                    if(attackBoxesHitInFrame.ContainsKey(entity.GetCurrentAnimationState()) == false)
-                                    {
-                                        attackBoxesHitInFrame.Add(entity.GetCurrentAnimationState(), new List<CLNS.AttackBox>());
-                                    }
-
-                                    attackBoxesHitInFrame[entity.GetCurrentAnimationState()].Add(attack);
+                                    attackBoxesHitInFrame.Add(attack);
                                     targetHit = true;
                                    
                                     //This will hit the target in a different attack frame.
@@ -443,23 +448,22 @@ namespace Game1
 
                             if (targetHit && attackBoxesHitInFrame.Count > 0)
                             {
-                                List<CLNS.AttackBox> currentAttacks = attackBoxesHitInFrame[entity.GetCurrentAnimationState()];
-                                CLNS.AttackBox firstAttackBox = currentAttacks[0];
+                                CLNS.AttackBox firstAttackBox = attackBoxesHitInFrame[0];
 
                                 //Defaults to CLNS.AttackBox.SparkRenderType.ALL
-                                int sparkTargetCount = currentAttacks.Count;
+                                int sparkTargetCount = attackBoxesHitInFrame.Count;
 
-                                if (firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
-                                        || firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
+                                foreach (CLNS.AttackBox attack in attackBoxesHitInFrame)
                                 {
-                                    sparkTargetCount = 1;
-                                }
+                                    if (attack.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
+                                            || attack.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
+                                    {
+                                        sparkTargetCount = 1;
+                                    }
 
-                                foreach (CLNS.AttackBox attack in currentAttacks)
-                                {
-                                    if (firstAttackBox.GetSparkRenderType() != CLNS.AttackBox.SparkRenderType.ONCE
+                                    if (attack.GetSparkRenderType() != CLNS.AttackBox.SparkRenderType.ONCE
                                             && targetAttackInfo.hitByAttackFrameCount < sparkTargetCount 
-                                                    || firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE 
+                                                    || attack.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE 
                                                             && targetAttackInfo.hitByStaticAttackId != static_hit_id)
                                     {
                                         float y1 = Math.Abs(entity.GetPosY());
@@ -477,13 +481,13 @@ namespace Game1
                                         renderManager.AddEntity(hitSpark1);
                                         targetAttackInfo.hitByAttackFrameCount++;
 
-                                        if (firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
+                                        if (attack.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
                                         {
                                             targetAttackInfo.hitByStaticAttackId = static_hit_id;
                                         }
 
-                                        if (firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
-                                                || firstAttackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
+                                        if (attack.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
+                                                || attack.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
                                         {
                                             break;
                                         }
