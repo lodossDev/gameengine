@@ -1091,7 +1091,7 @@ namespace Game1
             UpdateFade(gameTime);
 
             //Update animation.
-            if(!isPauseHit)UpdateAnimation(gameTime);
+            if (!isPauseHit) UpdateAnimation(gameTime);
 
             UpdateDefaultAttackChain(gameTime);
 
