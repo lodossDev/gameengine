@@ -11,7 +11,7 @@ namespace Game1
     public class CLNS
     {
         public static float VISIBILITY = 0.4f;
-        public static int THICKNESS = 1;
+        public static int THICKNESS = 2;
         public enum BoxType { HIT_BOX, BODY_BOX, BOUNDS_BOX, HEIGHT_BOX }
         public enum DrawType { LINES, FILL }
 

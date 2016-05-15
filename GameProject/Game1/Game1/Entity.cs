@@ -381,6 +381,18 @@ namespace Game1
             this.height = height;
         }
 
+        public void SetDimension(int width, int height, int depth)
+        {
+            this.width = width;
+            this.height = height;
+            this.depth = depth;
+        }
+
+        public void SetDimension(int width, int height)
+        {
+            SetDimension(width, height, (int)this.depth);
+        }
+
         public void SetDepth(float depth)
         {
             this.depth = depth;

@@ -90,7 +90,9 @@ namespace Game1
         public void AddBox(int frame, CLNS.BoundingBox box)
         {
             if (!boxes.ContainsKey(frame - 1))
+            {
                 boxes.Add(frame - 1, new List<CLNS.BoundingBox>());
+            }
 
             boxes[frame - 1].Add(box);
             boxes[frame - 1][boxes[frame - 1].Count - 1].SetFrame(frame);

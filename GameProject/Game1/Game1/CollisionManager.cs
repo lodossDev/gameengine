@@ -360,22 +360,22 @@ namespace Game1
                 hitCount++;
                 hiteffect1.CreateInstance().Play();
 
-                target.Toss(-15 * attackBox.GetHitStrength());
+                target.Toss(-25 * attackBox.GetHitStrength(), 0.3f);
                 //target.MoveY(-125 * attackBox.GetHitStrength());
             }
         }
 
         private float TargetBodyX(Entity target, Entity entity, CLNS.AttackBox attack)
         {
-            float x1 = (target.GetPosX() + (target.GetWidth() / 2));
+            float x1 = (target.GetPosX() + (target.GetWidth() / 4));
 
-            if (entity.GetPosX() >= target.GetPosX() + (target.GetWidth() / 2))
+            if (entity.GetPosX() >= target.GetPosX() + (target.GetWidth() / 4))
             {
-                x1 = (target.GetPosX() + (target.GetWidth() / 2));
+                x1 = (target.GetPosX() + (target.GetWidth() / 4));
             }
-            else if (entity.GetPosX() <= target.GetPosX() + (target.GetWidth() / 2))
+            else if (entity.GetPosX() <= target.GetPosX() + (target.GetWidth() / 4))
             {
-                x1 = (target.GetPosX() - (target.GetWidth() / 2));
+                x1 = (target.GetPosX() - (target.GetWidth() / 4));
             }
 
             return x1 + (attack.GetOffset().X / 2);
@@ -404,14 +404,14 @@ namespace Game1
                         List<CLNS.AttackBox> attackBoxesHitInFrame = new List<CLNS.AttackBox>();
                         bool targetHit = false;
 
-                        if (entity.InRangeZ(target, target.GetDepth())
-                                && entity.IsInAnimationAction(Animation.Action.ATTACKING)
+                        if (entity.IsInAnimationAction(Animation.Action.ATTACKING)
                                 && entity.InAttackFrame())
                         {
                             //Get all attackboxes for this one frame, you can only hit once in each attack frame.
                             foreach (CLNS.AttackBox attack in attackBoxes)
                             {
-                                if (attack.GetRect().Intersects(targetBox))
+                                if (target.InRangeZ(entity, attack.GetZdepth())
+                                        && attack.GetRect().Intersects(targetBox))
                                 {
                                     attackBoxesHitInFrame.Add(attack);
                                     targetHit = true;

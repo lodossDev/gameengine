@@ -53,9 +53,9 @@ namespace Game1
             Setup.contentManager = Content;
             Setup.spriteBatch = spriteBatch;
 
-            camera = new Camera();
-            camera.Pos = new Vector2(Setup.graphicsDevice.Viewport.Width, Setup.graphicsDevice.Viewport.Height);
-
+            camera = new Camera(GraphicsDevice.Viewport);
+            //camera.Parallax = new Vector2(1.0f, 1.0f);
+           
             base.Initialize();
         }
 
@@ -194,9 +194,9 @@ namespace Game1
             leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
 
             leo.SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 6),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 6)/*,
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 7)/*,
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK4, 222000, 4),
@@ -276,6 +276,11 @@ namespace Game1
             drum4.SetDepth(20);
             drum4.SetHeight(170);
             drum4.SetWidth(125);
+
+            drum4.SetDimension(125, 170);
+            drum3.SetDimension(125, 170);
+            drum2.SetDimension(125, 170);
+            drum.SetDimension(125, 170);
 
             /*hitSpark1 = new Entity(Entity.EntityType.OTHER, "SPARK1");
             hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.REPEAT));
@@ -397,15 +402,17 @@ namespace Game1
             if (Keyboard.GetState().IsKeyDown(Keys.N))
             {
                 camera.Zoom += 0.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                Vector2 pos = new Vector2(-(camera.Zoom * 3f), 0);
-                camera.Move(pos);
+                //camera._origin = new Vector2(Setup.graphicsDevice.Viewport.Width / 2, Setup.graphicsDevice.Viewport.Height / 2);
+                //Vector2 pos = new Vector2(-(camera.Zoom * 3f), 0);
+                //camera.Move(pos);
             }
             
             if (Keyboard.GetState().IsKeyDown(Keys.M))
             {
                 camera.Zoom -= 0.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                Vector2 pos = new Vector2((camera.Zoom * 3f), 0);
-                camera.Move(pos);
+                //camera._origin = new Vector2(Setup.graphicsDevice.Viewport.Width/2, Setup.graphicsDevice.Viewport.Height/2);
+                //Vector2 pos = new Vector2((camera.Zoom * 3f), 0);
+                //camera.Move(pos);
             }
 
             bar.Percent((int)barHealth);
@@ -477,6 +484,7 @@ namespace Game1
 
             // TODO: Add your update logic here
             bar.Update(gameTime);
+            camera.LookAt(leo.GetConvertedPosition());
             base.Update(gameTime);
         }
 
@@ -496,7 +504,7 @@ namespace Game1
                         null,
                         null,
                         null,
-                        camera.get_transformation());
+                        camera.ViewMatrix);
 
 
             renderManager.Draw(gameTime);
@@ -538,7 +546,7 @@ namespace Game1
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
             spriteBatch.DrawString(font1, "leo: " + leo.GetAttackInfo().hitPauseTime, new Vector2(20, 140), Color.Black);
-            spriteBatch.DrawString(font1, "drum3: " + camera.Pos.X, new Vector2(20, 160), Color.Black);
+            spriteBatch.DrawString(font1, "drum3: " + camera.Position.X, new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
