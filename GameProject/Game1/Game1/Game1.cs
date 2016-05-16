@@ -226,7 +226,7 @@ namespace Game1
             drum = new Entity(Entity.EntityType.OBSTACLE, "DRUM1");
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
-            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum.SetScale(2.2f, 2.6f);
             drum.SetPostion(700, 0, 200);
@@ -239,7 +239,7 @@ namespace Game1
             drum2 = new Entity(Entity.EntityType.OBSTACLE, "DRUM2");
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum2.SetAnimationState(Animation.State.STANCE);
-            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum2.SetScale(2.2f, 2.6f);
             drum2.SetPostion(500, 0, 200);
@@ -252,7 +252,7 @@ namespace Game1
             drum3 = new Entity(Entity.EntityType.OBSTACLE, "DRUM3");
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum3.SetAnimationState(Animation.State.STANCE);
-            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum3.SetScale(2.2f, 2.6f);
             drum3.SetPostion(290, -180, 200);
@@ -266,7 +266,7 @@ namespace Game1
             drum4 = new Entity(Entity.EntityType.OBSTACLE, "DRUM4");
             drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum4.SetAnimationState(Animation.State.STANCE);
-            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
             drum4.SetScale(2.2f, 2.6f);
             drum4.SetPostion(900, -320, 200);
