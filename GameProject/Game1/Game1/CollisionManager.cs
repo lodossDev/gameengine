@@ -39,7 +39,7 @@ namespace Game1
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
                 {
                     Rectangle targetBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
-                    Rectangle heightBox = target.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
+                    Rectangle heightBox = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX)[0].GetRect();
                     float tPosY = Math.Abs(target.GetPosY());
 
                     if (entity.InBoundsZ(target, target.GetDepth())
@@ -347,7 +347,7 @@ namespace Game1
             {
                 ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
                 attackChain.IncrementMoveIndex(attackBox.GetComboStep());
-                entity.GetAttackInfo().hitPauseTime = 1000f;
+                entity.GetAttackInfo().hitPauseTime = 3000f;
             }
         }
 

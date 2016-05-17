@@ -12,7 +12,7 @@ namespace Game1
     {
         public static float VISIBILITY = 0.4f;
         public static int THICKNESS = 2;
-        public enum BoxType { HIT_BOX, BODY_BOX, BOUNDS_BOX, HEIGHT_BOX }
+        public enum BoxType { HIT_BOX, BODY_BOX, BOUNDS_BOX, OTHER }
         public enum DrawType { LINES, FILL }
 
 
@@ -24,6 +24,7 @@ namespace Game1
             protected Color color;
             protected BoxType type;
             protected int frame;
+            protected float zDepth;
 
 
             public BoundingBox(BoxType type, int w, int h, int x, int y, int frame = -1)
@@ -40,16 +41,16 @@ namespace Game1
                 switch (this.type)
                 {
                     case BoxType.BODY_BOX:
-                        color = Color.Green;
+                        color = Color.Blue;
                         break;
                     case BoxType.HIT_BOX:
                         color = Color.Red;
                         break;
-                    case BoxType.HEIGHT_BOX:
+                    case BoxType.BOUNDS_BOX:
                         color = Color.Yellow;
                         break;
                     default:
-                        color = Color.Blue;
+                        color = Color.ForestGreen;
                         break;
                 }
 
@@ -68,6 +69,11 @@ namespace Game1
             {
                 offset.X = x;
                 offset.Y = y;
+            }
+
+            public void SetZdepth(float depth)
+            {
+                zDepth = depth;
             }
 
             public void Update(GameTime gameTime, bool isLeft, Vector2 position)
@@ -114,14 +120,19 @@ namespace Game1
                 return frame;
             }
 
-            public void DrawRectangle(DrawType drawType)
+            public float GetZdepth()
+            {
+                return zDepth;
+            }
+
+            public virtual void DrawRectangle(DrawType drawType)
             {
                 if (drawType == DrawType.LINES || drawType == DrawType.FILL)
                 {
-                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y), sprite, color, THICKNESS); //top bar 
-                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y + rect.Height), new Vector2((int)rect.X + rect.Width + 1 * THICKNESS, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //bottom bar 
-                    drawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //left bar 
-                    drawStraightLine(new Vector2((int)rect.X + rect.Width, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //right bar 
+                    DrawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y), sprite, color, THICKNESS); //top bar 
+                    DrawStraightLine(new Vector2((int)rect.X, (int)rect.Y + rect.Height), new Vector2((int)rect.X + rect.Width + 1 * THICKNESS, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //bottom bar 
+                    DrawStraightLine(new Vector2((int)rect.X, (int)rect.Y), new Vector2((int)rect.X, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //left bar 
+                    DrawStraightLine(new Vector2((int)rect.X + rect.Width, (int)rect.Y), new Vector2((int)rect.X + rect.Width, (int)rect.Y + rect.Height), sprite, color, THICKNESS); //right bar 
                 }
                 
                 if (drawType == DrawType.FILL)
@@ -130,8 +141,8 @@ namespace Game1
                 }
             }
 
-            //draws a line (recttangle of thickness) from A to B.  A and B have make either horiz or vert line. 
-            public static void drawStraightLine(Vector2 A, Vector2 B, Texture2D tex, Color color, int thickness)
+            //draws a line (rectangle of thickness) from A to B.  A and B have make either horiz or vert line. 
+            public static void DrawStraightLine(Vector2 A, Vector2 B, Texture2D tex, Color color, int thickness)
             {
                 Rectangle rect;
 
@@ -148,13 +159,25 @@ namespace Game1
             }
         }
 
+        public class BoundsBox : BoundingBox
+        {
+            public BoundsBox(int w, int h, int x, int y, int depth) : base(BoxType.BOUNDS_BOX, w, h, x, y) {
+                SetZdepth(depth);
+            }
+
+            public float GetHeight()
+            {
+                return rect.Height - GetZdepth();
+            }
+        }
+
         public class AttackBox : BoundingBox
         {
             public enum AttackPosition { STANDING, LOW, AIR, NONE };
-            public enum BlockPosition { HI, LOW, NONE };
+            public enum BlockPosition { HI, LOW, AIR, NONE };
             public enum SparkRenderType { ALL, FRAME, ONCE }
 
-            private float zDepth;
+            
             private float hitPauseTime;
             private float painTime;
             private int hitDamage;
@@ -175,7 +198,7 @@ namespace Game1
                                         int hitPoints = 5, float hitStrength = 0.4f, int comboStep = 1,
                                         int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.NONE,
                                         BlockPosition blockPosition = BlockPosition.NONE,
-                                        SparkRenderType sparkRenderFrame = SparkRenderType.FRAME,
+                                        SparkRenderType sparkRenderFrame = SparkRenderType.ALL,
                                         Effect.EffectState sparkState = Effect.EffectState.NONE,
                                         float sparkX = 0, float sparkY = 0)
                                     : base(BoxType.HIT_BOX, w, h, x, y)
@@ -195,11 +218,6 @@ namespace Game1
                 SetSparkRenderType(sparkRenderFrame);
                 SetSparkState(sparkState);
                 SetSparkOffset(sparkX, sparkY);
-            }
-
-            public void SetZdepth(float depth)
-            {
-                zDepth = depth;
             }
 
             public void SetHitPauseTime(float pauseTime)
@@ -266,11 +284,6 @@ namespace Game1
             {
                 sparkOffset.X = x1;
                 sparkOffset.Y = y1;
-            }
-
-            public float GetZdepth()
-            {
-                return zDepth;
             }
 
             public float GetHitPauseTime()

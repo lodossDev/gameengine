@@ -104,7 +104,7 @@ namespace Game1
 
             leo.SetAnimationState(Animation.State.STANCE);
             leo.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
-            leo.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 105, 180, -20, 100));
+            leo.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
             leo.SetScale(1.6f, 2.2f);
             leo.SetPostion(400, 0, 400);
             leo.SetSpriteOffSet(Animation.State.WALK_TOWARDS, 40, -15);
@@ -227,7 +227,7 @@ namespace Game1
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
             drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
+            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
             drum.SetScale(2.2f, 2.6f);
             drum.SetPostion(700, 0, 200);
             drum.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -240,7 +240,7 @@ namespace Game1
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum2.SetAnimationState(Animation.State.STANCE);
             drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
+            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
             drum2.SetScale(2.2f, 2.6f);
             drum2.SetPostion(500, 0, 200);
             drum2.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -253,7 +253,7 @@ namespace Game1
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum3.SetAnimationState(Animation.State.STANCE);
             drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
+            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
             drum3.SetScale(2.2f, 2.6f);
             drum3.SetPostion(290, -180, 200);
             drum3.SetGroundBase(-180);
@@ -267,7 +267,7 @@ namespace Game1
             drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum4.SetAnimationState(Animation.State.STANCE);
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, 125, 170, -30, 125));
+            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
             drum4.SetScale(2.2f, 2.6f);
             drum4.SetPostion(900, -320, 200);
             drum4.SetGroundBase(-320);
@@ -386,7 +386,7 @@ namespace Game1
             {
                 //Setup.rotate += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //Setup.scaleY += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                barHealth -= (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                barHealth -= (50.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
                 //leo.SetColor(255, 0, 0);
                 //leo.Flash(2);
             }
@@ -396,7 +396,7 @@ namespace Game1
                 //Setup.rotate -= 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //Setup.scaleY += 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //Setup.scaleX -= 5.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                barHealth += (20.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                barHealth += (50.05f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.N))

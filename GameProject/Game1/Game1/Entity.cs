@@ -181,6 +181,13 @@ namespace Game1
             GetSprite(state).AddBox(frame, box);
         }
 
+        public void AddBoundsBox(CLNS.BoundsBox box)
+        {
+            AddBox(box);
+            //double 
+            AddBox(new CLNS.BoundingBox(CLNS.BoxType.OTHER, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)box.GetOffset().Y));
+        }
+
         public void AddAnimationSound(Animation.State state, String location)
         {
             animationSounds.Add(state, Setup.contentManager.Load<SoundEffect>(location));
