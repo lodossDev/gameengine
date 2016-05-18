@@ -13,12 +13,15 @@ namespace Game1
         private int currentFrame;
         private List<Texture2D> sprites;
         private List<float> frameDelays;
+        private float frameTimeElapsed;
+        private float totalTimeRemaining;
         private List<bool> isFrameComplete;
+
         private List<Vector2> offsets;
         private Vector2 spriteOffset;
         private Vector2 position;
         private Vector2 shadowPostion;
-        private float frameTimeElapsed;
+        
         private int resetFrame;
         private Dictionary<int, List<CLNS.BoundingBox>> boxes;
         private Animation.Type animationType;
@@ -33,6 +36,7 @@ namespace Game1
             frameDelays = new List<float>();
             offsets = new List<Vector2>();
             frameTimeElapsed = 0.0f;
+            totalTimeRemaining = 0.0f;
             resetFrame = 0;
             boxes = new Dictionary<int, List<CLNS.BoundingBox>>();
             spriteOffset = Vector2.Zero;
@@ -83,8 +87,8 @@ namespace Game1
             offsets.Add(Vector2.Zero);
 
             isFrameComplete.Add(false);
-            frameDelays.Add(1 / Animation.TICK_RATE);
-            frameTimeElapsed = 1 / Animation.TICK_RATE;
+            frameDelays.Add(Animation.DEFAULT_TICKS);
+            frameTimeElapsed = Animation.DEFAULT_TICKS;
         }
 
         public void AddBox(int frame, CLNS.BoundingBox box)
@@ -111,13 +115,15 @@ namespace Game1
             }
             else
             {
-                frameDelays[frame - 1] = 1 / frameDelay;
+                frameDelays[frame - 1] = Animation.TICK_RATE * frameDelay;
 
                 if ((frame - 1) == 0)
                 {
-                    frameTimeElapsed = frameDelays[frame - 1] = 1 / frameDelay;
+                    frameTimeElapsed = frameDelays[frame - 1] = Animation.TICK_RATE * frameDelay;
                 }
             }
+
+            totalTimeRemaining = GetTotalAnimationTime();
         }
 
         public void SetFrameTime(float frameDelay)
@@ -290,20 +296,28 @@ namespace Game1
             return frameDelays[currentFrame];
         }
 
+        public float GetTotalRemainingTime()
+        {
+            return totalTimeRemaining;
+        }
+
         public void ResetFrames()
         {
-            for(int i = 0; i < isFrameComplete.Count; i ++)
+            isAnimationComplete = false;
+
+            for (int i = 0; i < isFrameComplete.Count; i ++)
             {
                 isFrameComplete[i] = false;
             }
+
+            currentFrame = 0;
         }
 
         public void ResetAnimation()
         {
-            isAnimationComplete = false;
             ResetFrames();
-            currentFrame = 0;
             frameTimeElapsed = (float)frameDelays[currentFrame];
+            totalTimeRemaining = GetTotalAnimationTime();
         }
 
         private void OnFrameComplete()
@@ -353,6 +367,7 @@ namespace Game1
                     || animationType == Animation.Type.REPEAT))
             {
                 frameTimeElapsed -= (float)(gameTime.ElapsedGameTime.TotalSeconds);
+                totalTimeRemaining -= (float)(gameTime.ElapsedGameTime.TotalSeconds);
 
                 if (frameTimeElapsed <= 0.0)
                 {
@@ -366,6 +381,11 @@ namespace Game1
                     }
 
                     frameTimeElapsed = (float)frameDelays[currentFrame];
+                }
+
+                if (totalTimeRemaining <= 0.0)
+                {
+                    totalTimeRemaining = 0.0f;
                 }
             }
         }

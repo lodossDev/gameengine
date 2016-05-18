@@ -12,7 +12,7 @@ namespace Game1
     {
         public static float VISIBILITY = 0.4f;
         public static int THICKNESS = 2;
-        public enum BoxType { HIT_BOX, BODY_BOX, BOUNDS_BOX, OTHER }
+        public enum BoxType { HIT_BOX, BODY_BOX, BOUNDS_BOX, HEIGHT_BOX }
         public enum DrawType { LINES, FILL }
 
 
@@ -198,7 +198,7 @@ namespace Game1
                                         int hitPoints = 5, float hitStrength = 0.4f, int comboStep = 1,
                                         int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.NONE,
                                         BlockPosition blockPosition = BlockPosition.NONE,
-                                        SparkRenderType sparkRenderFrame = SparkRenderType.ALL,
+                                        SparkRenderType sparkRenderFrame = SparkRenderType.FRAME,
                                         Effect.EffectState sparkState = Effect.EffectState.NONE,
                                         float sparkX = 0, float sparkY = 0)
                                     : base(BoxType.HIT_BOX, w, h, x, y)

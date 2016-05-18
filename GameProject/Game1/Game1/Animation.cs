@@ -10,7 +10,8 @@ namespace Game1
         /**
         * 1 game-tick is 1/60 of a sec, so 60 ticks is 1 second
         */
-        public const float TICK_RATE = 10; //fix this
+        public const float TICK_RATE = (1.0f / 60.0f);
+        public const float DEFAULT_TICKS = TICK_RATE * 3.0f;
 
         public enum State {
             NONE = -1, STANCE, WALK_TOWARDS, JUMP_START, JUMP, JUMP_TOWARDS, LAND, FALL, ATTACK1,

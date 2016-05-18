@@ -481,7 +481,8 @@ namespace Game1
                                         Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
                                         hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
                                         hitSpark1.SetAnimationState(Animation.State.STANCE);
-                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 40);
+                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 2);
+                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
                                         hitSpark1.SetScale(1.2f, 1.2f);
                                         hitSpark1.SetPostion(x1, y1, target.GetPosZ() + 1);
                                         hitSpark1.SetFade(225);

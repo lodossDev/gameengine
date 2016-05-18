@@ -179,13 +179,25 @@ namespace Game1
         public void AddBox(Animation.State state, int frame, CLNS.BoundingBox box)
         {
             GetSprite(state).AddBox(frame, box);
+
+            if (box.GetBoxType() == CLNS.BoxType.BOUNDS_BOX)
+            {
+                CLNS.BoundsBox bbox = (CLNS.BoundsBox)box;
+                double y1 = ((int)(bbox.GetHeight() - (int)bbox.GetRect().Height) / (int)bbox.GetRect().Height) + 1;
+                double y2 = ((int)bbox.GetOffset().Y * y1) / 2;
+
+                AddBox(state, frame, new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, bbox.GetRect().Width, (int)bbox.GetHeight(), (int)bbox.GetOffset().X, (int)bbox.GetOffset().Y + (int)y2));
+            }
         }
 
         public void AddBoundsBox(CLNS.BoundsBox box)
         {
             AddBox(box);
-            //double 
-            AddBox(new CLNS.BoundingBox(CLNS.BoxType.OTHER, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)box.GetOffset().Y));
+
+            double y1 = ((int)(box.GetHeight() - (int)box.GetRect().Height) / (int)box.GetRect().Height) + 1;
+            double y2 = ((int)box.GetOffset().Y * y1) / 2;
+
+            AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)box.GetOffset().Y + (int)y2));
         }
 
         public void AddAnimationSound(Animation.State state, String location)
@@ -238,14 +250,14 @@ namespace Game1
             GetSprite(state).SetSpriteOffset(x, y);
         }
 
-        public void SetFrameDelay(Animation.State state, int frame, int milliseconds)
+        public void SetFrameDelay(Animation.State state, int frame, int ticks)
         {
-            GetSprite(state).SetFrameTime(frame, milliseconds);
+            GetSprite(state).SetFrameTime(frame, ticks);
         }
 
-        public void SetFrameDelay(Animation.State state, int milliseconds)
+        public void SetFrameDelay(Animation.State state, int ticks)
         {
-            GetSprite(state).SetFrameTime(milliseconds);
+            GetSprite(state).SetFrameTime(ticks);
         }
 
         public void SetResetFrame(Animation.State state, int frame)

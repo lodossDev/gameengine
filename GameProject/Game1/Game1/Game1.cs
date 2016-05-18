@@ -71,26 +71,26 @@ namespace Game1
             leo2 = new Entity(Entity.EntityType.ENEMY, "Leo2");
 
             leo.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Stance"));
-            leo.SetFrameDelay(Animation.State.STANCE, 13);
+            leo.SetFrameDelay(Animation.State.STANCE, 5);
 
 
             leo.AddSprite(Animation.State.WALK_TOWARDS, new Sprite("Sprites/Actors/Leo/Walk", Animation.Type.REPEAT));
 
             leo.AddSprite(Animation.State.JUMP_START, new Sprite("Sprites/Actors/Leo/JumpStart", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.JUMP_START, 20, 13);
-            leo.SetFrameDelay(Animation.State.JUMP_START, 13);
+            leo.SetFrameDelay(Animation.State.JUMP_START, 5);
 
             leo.AddSprite(Animation.State.LAND, new Sprite("Sprites/Actors/Leo/Land", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.LAND, 45, -24);
-            leo.SetFrameDelay(Animation.State.LAND, 13);
+            leo.SetFrameDelay(Animation.State.LAND, 4);
 
             leo.AddSprite(Animation.State.JUMP, new Sprite("Sprites/Actors/Leo/Jump", Animation.Type.REPEAT, 13));
-            leo.SetFrameDelay(Animation.State.JUMP, 15);
+            leo.SetFrameDelay(Animation.State.JUMP, 5);
 
             leo.AddSprite(Animation.State.JUMP_TOWARDS, new Sprite("Sprites/Actors/Leo/JumpTowards", Animation.Type.REPEAT, 13));
             
-            leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 17);
-            leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 1, 8);
+            leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 5);
+            leo.SetFrameDelay(Animation.State.JUMP_TOWARDS, 1, 6);
 
             leo.SetSpriteOffSet(Animation.State.JUMP, 30, -120);
             leo.SetSpriteOffSet(Animation.State.JUMP_TOWARDS, 30, -120);
@@ -112,16 +112,16 @@ namespace Game1
             leo.SetMoveFrame(Animation.State.WALK_TOWARDS, 3);
             leo.SetHeight(180);
 
-            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 10);
-            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 1, 12);
-            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 2, 12);
-            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 3, 25);
+            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 5);
+            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 1, 6);
+            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 2, 6);
+            leo.SetFrameDelay(Animation.State.WALK_TOWARDS, 3, 6);
 
             leo.AddSprite(Animation.State.ATTACK1, new Sprite("Sprites/Actors/Leo/Attack1", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK1, 65, -75);
-            leo.SetFrameDelay(Animation.State.ATTACK1, 12);
-            leo.SetFrameDelay(Animation.State.ATTACK1, 1, 11);
-            leo.SetFrameDelay(Animation.State.ATTACK1, 2, 11);
+            leo.SetFrameDelay(Animation.State.ATTACK1, 4);
+            leo.SetFrameDelay(Animation.State.ATTACK1, 1, 5);
+            leo.SetFrameDelay(Animation.State.ATTACK1, 2, 5);
 
             leo.AddBox(Animation.State.ATTACK1, 6, new CLNS.AttackBox(100, 80, 132, 45));
             //leo.GetAttackBox(Animation.State.ATTACK1, 6).SetComboStep(0);
@@ -137,33 +137,33 @@ namespace Game1
 
             leo.AddSprite(Animation.State.ATTACK2, new Sprite("Sprites/Actors/Leo/Attack2", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK2, 50, -75);
-            leo.SetFrameDelay(Animation.State.ATTACK2, 20);
+            leo.SetFrameDelay(Animation.State.ATTACK2, 5);
             leo.AddBox(Animation.State.ATTACK2, 6, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK2, 7, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK2, 8, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK3, new Sprite("Sprites/Actors/Leo/Attack3", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK3, 90, -25);
-            leo.SetFrameDelay(Animation.State.ATTACK3, 20);
+            leo.SetFrameDelay(Animation.State.ATTACK3, 5);
             leo.AddBox(Animation.State.ATTACK3, 6, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK3, 7, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK3, 8, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK4, new Sprite("Sprites/Actors/Leo/Attack4", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK4, 50, 10);
-            leo.SetFrameDelay(Animation.State.ATTACK4, 15);
+            leo.SetFrameDelay(Animation.State.ATTACK4, 5);
             leo.AddBox(Animation.State.ATTACK4, 3, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK4, 4, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK5, new Sprite("Sprites/Actors/Leo/Attack5", Animation.Type.ONCE));
             leo.SetSpriteOffSet(Animation.State.ATTACK5, 75, -52);
-            leo.SetFrameDelay(Animation.State.ATTACK5, 18);
+            leo.SetFrameDelay(Animation.State.ATTACK5, 5);
             leo.AddBox(Animation.State.ATTACK5, 5, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK5, 6, new CLNS.AttackBox(220, 230, 20, 30));
 
             leo.AddSprite(Animation.State.ATTACK6, new Sprite("Sprites/Actors/Leo/Attack6", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.ATTACK6, 45, -90);
-            leo.SetFrameDelay(Animation.State.ATTACK6, 1);
+            leo.SetFrameDelay(Animation.State.ATTACK6, 5);
             leo.AddBox(Animation.State.ATTACK6, 5, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK6, 6, new CLNS.AttackBox(220, 230, 20, 30));
             leo.AddBox(Animation.State.ATTACK6, 7, new CLNS.AttackBox(220, 230, 20, 30));
@@ -171,24 +171,24 @@ namespace Game1
 
             leo.AddSprite(Animation.State.JUMP_ATTACK1, new Sprite("Sprites/Actors/Leo/JumpAttack1", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.JUMP_ATTACK1, 80, -90);
-            leo.SetFrameDelay(Animation.State.JUMP_ATTACK1, 19);
-            leo.SetFrameDelay(Animation.State.JUMP_ATTACK1, 1, 15);
-            leo.SetFrameDelay(Animation.State.JUMP_ATTACK1, 2, 15);
+            leo.SetFrameDelay(Animation.State.JUMP_ATTACK1, 5);
+            leo.SetFrameDelay(Animation.State.JUMP_ATTACK1, 1, 4);
+            leo.SetFrameDelay(Animation.State.JUMP_ATTACK1, 2, 4);
 
             leo.AddSprite(Animation.State.JUMP_TOWARD_ATTACK1, new Sprite("Sprites/Actors/Leo/JumpAttack2", Animation.Type.ONCE), true);
             leo.SetSpriteOffSet(Animation.State.JUMP_TOWARD_ATTACK1, 80, -90);
-            leo.SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 19);
-            leo.SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 1, 15);
-            leo.SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 2, 15);
+            leo.SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 5);
+            leo.SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 1, 4);
+            leo.SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 2, 4);
 
             leo.SetTossFrame(Animation.State.JUMP_ATTACK1, 1);
             leo.SetTossFrame(Animation.State.JUMP_TOWARD_ATTACK1, 1);
 
             leo.AddSprite(Animation.State.JUMP_RECOVER1, new Sprite("Sprites/Actors/Leo/JumpRecover1", Animation.Type.REPEAT, 3));
             leo.SetSpriteOffSet(Animation.State.JUMP_RECOVER1, 35, -110);
-            leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 19);
-            leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 1, 10);
-            leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 2, 10);
+            leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 5);
+            leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 1, 6);
+            leo.SetFrameDelay(Animation.State.JUMP_RECOVER1, 2, 6);
 
             leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, 8));
             leo.AddAnimationLink(new Animation.Link(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, 9));
@@ -216,6 +216,8 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.ATTACK6, 1);*/
 
             leo2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Stance"));
+            //leo2.SetFrameDelay(Animation.State.STANCE, 5);
+
             leo2.AddSprite(Animation.State.WALK_TOWARDS, new Sprite("Sprites/Actors/Leo/Walk", Animation.Type.ONCE));
 
             leo2.SetAnimationState(Animation.State.STANCE);
@@ -227,7 +229,7 @@ namespace Game1
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
             drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
+            drum.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
             drum.SetScale(2.2f, 2.6f);
             drum.SetPostion(700, 0, 200);
             drum.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -240,8 +242,9 @@ namespace Game1
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum2.SetAnimationState(Animation.State.STANCE);
             drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
+            drum2.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
             drum2.SetScale(2.2f, 2.6f);
+
             drum2.SetPostion(500, 0, 200);
             drum2.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum2.SetDepthOffset(-5);
@@ -253,7 +256,7 @@ namespace Game1
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum3.SetAnimationState(Animation.State.STANCE);
             drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
+            drum3.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
             drum3.SetScale(2.2f, 2.6f);
             drum3.SetPostion(290, -180, 200);
             drum3.SetGroundBase(-180);
@@ -266,8 +269,10 @@ namespace Game1
             drum4 = new Entity(Entity.EntityType.OBSTACLE, "DRUM4");
             drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum4.SetAnimationState(Animation.State.STANCE);
+
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 170, -30, 125));
+            drum4.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
+
             drum4.SetScale(2.2f, 2.6f);
             drum4.SetPostion(900, -320, 200);
             drum4.SetGroundBase(-320);
@@ -332,6 +337,7 @@ namespace Game1
             });
 
             leo.AddCommandMove(command);
+            leo.SetAnimationState(Animation.State.STANCE);
             //control = new InputControl(leo, PlayerIndex.One);
 
             inputManager = new InputManager();
@@ -545,8 +551,8 @@ namespace Game1
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
-            spriteBatch.DrawString(font1, "leo: " + leo.GetAttackInfo().hitPauseTime, new Vector2(20, 140), Color.Black);
-            spriteBatch.DrawString(font1, "drum3: " + camera.Position.X, new Vector2(20, 160), Color.Black);
+            spriteBatch.DrawString(font1, "leo: " + (float)leo.GetSprite( Animation.State.STANCE).GetTotalRemainingTime(), new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "drum3: " + (float)Animation.TICK_RATE, new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
