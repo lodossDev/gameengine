@@ -103,7 +103,7 @@ namespace Game1
             leo.SetSpriteOffSet(Animation.State.FALL, 30, -120);
 
             leo.SetAnimationState(Animation.State.STANCE);
-            leo.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 125, 210, -30, 80));
+            
             leo.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
             leo.SetScale(1.6f, 2.2f);
             leo.SetPostion(400, 0, 400);
@@ -228,8 +228,8 @@ namespace Game1
             drum = new Entity(Entity.EntityType.OBSTACLE, "DRUM1");
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
-            drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
+            //drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
+            drum.AddBoundsBox(new CLNS.BoundsBox(125, 190, -30, 90, 20));
             drum.SetScale(2.2f, 2.6f);
             drum.SetPostion(700, 0, 200);
             drum.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
