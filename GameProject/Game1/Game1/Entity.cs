@@ -194,10 +194,8 @@ namespace Game1
         {
             AddBox(box);
 
-            double y1 = ((int)(box.GetHeight() - (int)box.GetRect().Height) / (int)box.GetRect().Height) + 1;
-            double y2 = ((int)box.GetOffset().Y * y1) / 2;
-
-            AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)box.GetOffset().Y + (int)y2));
+            double y1 = (box.GetRect().Height - box.GetHeight());
+            AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)(box.GetOffset().Y + y1)));
         }
 
         public void AddAnimationSound(Animation.State state, String location)

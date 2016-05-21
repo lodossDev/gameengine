@@ -208,15 +208,15 @@ namespace Game1
                 {
                     if (LEFT)
                     {
-                        player.SetJump(-25f, -5f);
+                        player.SetJump(-29f, -5f);
                     }
                     else if (RIGHT)
                     {
-                        player.SetJump(-25f, 5f);
+                        player.SetJump(-29f, 5f);
                     }
                     else
                     {
-                        player.SetJump();
+                        player.SetJump(-29f);
                     }
                 }
             }

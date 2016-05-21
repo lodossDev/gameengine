@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game1
 {
@@ -229,7 +230,7 @@ namespace Game1
             drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum.SetAnimationState(Animation.State.STANCE);
             //drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum.AddBoundsBox(new CLNS.BoundsBox(125, 190, -30, 90, 20));
+            drum.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 20));
             drum.SetScale(2.2f, 2.6f);
             drum.SetPostion(700, 0, 200);
             drum.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
@@ -242,7 +243,7 @@ namespace Game1
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum2.SetAnimationState(Animation.State.STANCE);
             drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum2.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
+            drum2.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 20));
             drum2.SetScale(2.2f, 2.6f);
 
             drum2.SetPostion(500, 0, 200);
@@ -256,7 +257,7 @@ namespace Game1
             drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
             drum3.SetAnimationState(Animation.State.STANCE);
             drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum3.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
+            drum3.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 20));
             drum3.SetScale(2.2f, 2.6f);
             drum3.SetPostion(290, -180, 200);
             drum3.SetGroundBase(-180);
@@ -271,10 +272,10 @@ namespace Game1
             drum4.SetAnimationState(Animation.State.STANCE);
 
             drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -30, 80));
-            drum4.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 40));
+            drum4.AddBoundsBox(new CLNS.BoundsBox(125, 210, -30, 80, 20));
 
             drum4.SetScale(2.2f, 2.6f);
-            drum4.SetPostion(900, -320, 200);
+            drum4.SetPostion(1200, -320, 200);
             drum4.SetGroundBase(-320);
             drum4.SetSpriteOffSet(Animation.State.STANCE, 32, 90);
             drum4.SetDepthOffset(-5);
@@ -548,11 +549,13 @@ namespace Game1
                 x3 = (drum.GetPosX() - leo.GetPosX());
             }
 
+            CLNS.BoundsBox bb1 = drum.GetBoxes(CLNS.BoxType.BOUNDS_BOX).Cast<CLNS.BoundsBox>().ToList()[0];
+
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
-            spriteBatch.DrawString(font1, "leo: " + (float)leo.GetSprite( Animation.State.STANCE).GetTotalRemainingTime(), new Vector2(20, 140), Color.Black);
-            spriteBatch.DrawString(font1, "drum3: " + (float)Animation.TICK_RATE, new Vector2(20, 160), Color.Black);
+            spriteBatch.DrawString(font1, "leo: " + (int)leo.GetPosY(), new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "drum3: " + (int)bb1.GetHeight(), new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

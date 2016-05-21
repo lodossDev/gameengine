@@ -101,17 +101,17 @@ namespace Game1
         public static bool TouchLeft(this Rectangle r1, Rectangle r2, int offset = 20)
         {
             return (r1.Right <= r2.Right
-                        && r1.Right >= r2.Left - 5
-                        && r1.Top <= r2.Bottom - (r2.Width / 4)
-                        && r1.Bottom >= r2.Top + (r2.Width / 4));
+                        && r1.Right >= r2.Left - offset
+                        && r1.Top <= r2.Bottom - (r2.Width / offset)
+                        && r1.Bottom >= r2.Top + (r2.Width / offset));
         }
 
         public static bool TouchRight(this Rectangle r1, Rectangle r2, int offset = 20)
         {
             return (r1.Left >= r2.Left
-                        && r1.Left <= r2.Right + 5
-                        && r1.Top <= r2.Bottom - (r2.Width / 4)
-                        && r1.Bottom >= r2.Top + (r2.Width / 4));
+                        && r1.Left <= r2.Right + offset
+                        && r1.Top <= r2.Bottom - (r2.Width / offset)
+                        && r1.Bottom >= r2.Top + (r2.Width / offset));
         }
 
         public static bool TouchTop(this Rectangle r1, Rectangle r2, int offset = 40)

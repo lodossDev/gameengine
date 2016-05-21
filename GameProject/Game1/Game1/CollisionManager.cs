@@ -258,8 +258,7 @@ namespace Game1
            
             int ePosY = (int)Math.Abs(entity.GetPosY());
             int eGround = (int)Math.Abs(entity.GetGround());
-            bool hasCollided = false;
-
+            
             foreach (Entity target in entities)
             {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE))
@@ -267,10 +266,12 @@ namespace Game1
                     List<CLNS.BoundsBox> tboxes = target.GetBoxes(CLNS.BoxType.BOUNDS_BOX).Cast<CLNS.BoundsBox>().ToList();
                     tboxes.AddRange(target.GetCurrentBoxes(CLNS.BoxType.BOUNDS_BOX).Cast<CLNS.BoundsBox>().ToList());
                     CLNS.BoundsBox targetBox = null;
+                    bool hasCollided = false;
+                    bool onTop = false;
 
                     int tPosY = (int)Math.Abs(target.GetPosY());
                     int tGround = (int)Math.Abs(target.GetGround());
-
+                    
                     foreach (CLNS.BoundsBox bb1 in bboxes)
                     {
                         foreach (CLNS.BoundsBox bb2 in tboxes)
@@ -294,36 +295,52 @@ namespace Game1
                         //Problem with tposy not updating in time for comparison
                         if (entityBox.GetRect().Intersects(targetBox.GetRect()))
                         {
-                            if (entity.InBoundsZ(target, targetBox.GetZdepth()-5) && ePosY < targetBox.GetHeight()-5)
-                            {
-                                float depth = entityBox.GetRect().GetHorizontalIntersectionDepth(targetBox.GetRect());
+                            int eHeight = (int)(entityBox.GetHeight() + ePosY);
+                            int tHeight = (int)(targetBox.GetHeight() + tPosY);
+                            Debug.WriteLine("tHeight: " + tHeight);
 
-                                if (depth != 0)
+                            if (entityBox.GetRect().InBoundsX(targetBox.GetRect(), 10) 
+                                    && entity.InBoundsZ(target, targetBox.GetZdepth() - 5) 
+                                    && (ePosY >= tHeight - 5)
+                                    && entity.GetVelocity().Y > 1)
+                            {
+                                entity.SetGround(-(tHeight));
+                                onTop = true;
+                            }
+
+                            if ((ePosY < tHeight) && !(ePosY >= tHeight - 10))
+                            {
+                                if (entity.InBoundsZ(target, targetBox.GetZdepth() - 5))
                                 {
-                                    if (entity.GetDirX() > 0 && entityBox.GetRect().TouchLeft(targetBox.GetRect()))
+                                    float depth = entityBox.GetRect().GetHorizontalIntersectionDepth(targetBox.GetRect());
+
+                                    if (depth != 0)
                                     {
-                                        entity.VelX(0f);
-                                        entity.MoveX(depth + 5);
-                                        entity.GetCollisionInfo().Right();
-                                    }
-                                    else if (entity.GetDirX() < 0 && entityBox.GetRect().TouchRight(targetBox.GetRect()))
-                                    {
-                                        entity.VelX(0f);
-                                        entity.MoveX(depth - 5);
-                                        entity.GetCollisionInfo().Left();
+                                        if (entityBox.GetRect().TouchLeft(targetBox.GetRect()))
+                                        {
+                                            entity.VelX(0f);
+                                            entity.MoveX(depth + 5);
+                                            entity.GetCollisionInfo().Right();
+                                        }
+                                        else if (entityBox.GetRect().TouchRight(targetBox.GetRect()))
+                                        {
+                                            entity.VelX(0f);
+                                            entity.MoveX(depth - 5);
+                                            entity.GetCollisionInfo().Left();
+                                        }
                                     }
                                 }
-                            }
 
-                            if (entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ() )
-                            {
-                                entity.VelZ(0f);
-                                entity.GetCollisionInfo().Top();
-                            }
-                            else if (entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ() )
-                            {
-                                entity.VelZ(0f);
-                                entity.GetCollisionInfo().Bottom();
+                                if (entity.GetDirZ() > 0 && entity.GetPosZ() <= target.GetPosZ())
+                                {
+                                    entity.VelZ(0f);
+                                    entity.GetCollisionInfo().Top();
+                                }
+                                else if (entity.GetDirZ() < 0 && entity.GetPosZ() >= target.GetPosZ())
+                                {
+                                    entity.VelZ(0f);
+                                    entity.GetCollisionInfo().Bottom();
+                                }
                             }
                         }
                     }
@@ -472,7 +489,7 @@ namespace Game1
                                         hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
                                         hitSpark1.SetAnimationState(Animation.State.STANCE);
                                         hitSpark1.SetFrameDelay(Animation.State.STANCE, 2);
-                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
+                                        //hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
                                         hitSpark1.SetScale(1.2f, 1.2f);
                                         hitSpark1.SetPostion(x1, y1, target.GetPosZ() + 1);
                                         hitSpark1.SetFade(225);
