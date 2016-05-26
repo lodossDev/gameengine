@@ -122,10 +122,10 @@ namespace Game1
                         && r1.Left <= r2.Right - (r2.Width / offset);
         }
 
-        public static bool TouchBottom(this Rectangle r1, Rectangle r2, int offset = 40)
+        public static bool TouchBottom(this Rectangle r1, Rectangle r2, int offset = 10)
         {
-            return r1.Top <= r2.Bottom + (r2.Height / 4)
-                        && r1.Top >= r2.Bottom - (r2.Height / 4)
+            return r1.Top <= r2.Bottom + 1
+                        && r1.Top >= r2.Bottom - (r2.Height / 2)
                         && r1.Right >= r2.Left + (r2.Width / offset)
                         && r1.Left <= r2.Right - (r2.Width / offset);
         }
