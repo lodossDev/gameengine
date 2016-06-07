@@ -295,27 +295,26 @@ namespace Game1
                         //Problem with tposy not updating in time for comparison
                         if (entityBox.GetRect().Intersects(targetBox.GetRect()))
                         {
-                            int eHeight = (int)(entityBox.GetHeight() + ePosY);
-                            int tHeight = (int)(targetBox.GetHeight() + tPosY);
+                            int eHeight = (int)(entityBox.GetHeight() + eGround);
+                            int tHeight = (int)(targetBox.GetHeight() + tGround);
                             Debug.WriteLine("tHeight: " + tHeight);
 
-                            if (entityBox.GetRect().InBoundsX(targetBox.GetRect(), 10)
+                            if (entityBox.GetRect().InBoundsX(targetBox.GetRect(), 60)
                                    && entity.InBoundsZ(target, targetBox.GetZdepth() - 5)
-                                   && entityBox.GetRect().TouchTop(targetBox.GetRect()))
+                                   && entityBox.GetRect().TouchTop(targetBox.GetRect(), 10))
                             {
                                 onTop = true;
                             }
 
-                            if (entityBox.GetRect().InBoundsX(targetBox.GetRect(), 10) 
+                            if (entityBox.GetRect().InBoundsX(targetBox.GetRect(), 60) 
                                     && entity.InBoundsZ(target, targetBox.GetZdepth() - 5) 
-                                    && entityBox.GetRect().TouchTop(targetBox.GetRect())//(ePosY >= tHeight - 5)
+                                    && entityBox.GetRect().TouchTop(targetBox.GetRect(), 10)
                                     && entity.GetVelocity().Y > 1)
                             {
-                                entity.SetGround(-(tHeight));
+                                entity.SetGround(-(tHeight + 1));
                             }
 
-                            if ((!entity.IsOnGround() && (ePosY < tHeight - 10) && !(ePosY >= tHeight - 10))
-                                    || (entity.IsOnGround() && (eHeight < tHeight - 10) && !(ePosY >= tHeight - 10)))
+                            if (ePosY < tHeight - 10 && ePosY >= tPosY)
                             {
                                 if (entity.InBoundsZ(target, targetBox.GetZdepth() - 5))
                                 {
@@ -323,17 +322,17 @@ namespace Game1
 
                                     if (depth != 0)
                                     {
-                                        if (entityBox.GetRect().TouchLeft(targetBox.GetRect()))
+                                        if (!entity.IsLeft() && entityBox.GetRect().TouchLeft(targetBox.GetRect()))
                                         {
-                                            entity.VelX(0f);
                                             entity.MoveX(depth + 5);
                                             entity.GetCollisionInfo().Right();
-                                        }
-                                        else if (entityBox.GetRect().TouchRight(targetBox.GetRect()))
-                                        {
                                             entity.VelX(0f);
+                                        }
+                                        else if (entity.IsLeft() && entityBox.GetRect().TouchRight(targetBox.GetRect()))
+                                        {
                                             entity.MoveX(depth - 5);
                                             entity.GetCollisionInfo().Left();
+                                            entity.VelX(0f);
                                         }
                                     }
                                 }
@@ -358,10 +357,9 @@ namespace Game1
                     || (onTop == false && Math.Abs(entity.GetPosY()) != entity.GetGround()
                             && !entity.IsToss()))
             {
-                entity.SetGround(entity.GetGroundBase());
-
                 if (!entity.IsToss())
                 {
+                    entity.SetGround(entity.GetGroundBase());
                     entity.SetAnimationState(Animation.State.FALL);
                     entity.Toss(5);
                 }

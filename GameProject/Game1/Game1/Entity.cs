@@ -33,6 +33,7 @@ namespace Game1
         private EntityType type;
         private Vector3 position;
         private Vector3 velocity;
+        private Vector3 absoluteDir;
         private Vector3 direction;
         private Vector2 convertedPosition;
         private Vector2 origin;
@@ -82,6 +83,7 @@ namespace Game1
 
             direction = Vector3.Zero;
             direction.X = 1;
+            absoluteDir = direction;
 
             origin = Vector2.Zero;
             velocity = Vector3.Zero;
@@ -302,6 +304,11 @@ namespace Game1
 
         public void MoveX(float velX)
         {
+            if (velX != 0.0)
+            {
+                absoluteDir.X = (velX < 0 ? -1 : 1);
+            }
+
             if (IsInMoveFrame() && collisionInfo.collide_x == Attributes.CollisionState.NO_COLLISION)
             {
                 position.X += velX;
@@ -310,6 +317,11 @@ namespace Game1
 
         public void MoveY(float velY)
         {
+            if (velY != 0.0)
+            {
+                absoluteDir.Y = (velY < 0 ? -1 : 1);
+            }
+
             if (collisionInfo.collide_y == Attributes.CollisionState.NO_COLLISION)
             {
                 position.Y += velY;
@@ -318,6 +330,11 @@ namespace Game1
 
         public void MoveZ(float velZ)
         {
+            if (velZ != 0.0)
+            {
+                absoluteDir.Z = (velZ < 0 ? -1 : 1);
+            }
+
             if (IsInMoveFrame() && collisionInfo.collide_z == Attributes.CollisionState.NO_COLLISION)
             {
                 position.Z += velZ;
@@ -493,6 +510,21 @@ namespace Game1
         public int GetDirZ()
         {
             return (int)direction.Z;
+        }
+
+        public int GetAbsoluteDirX()
+        {
+            return (int)absoluteDir.X;
+        }
+
+        public int GetAbsoluteDirY()
+        {
+            return (int)absoluteDir.Y;
+        }
+
+        public int GetAbsoluteDirZ()
+        {
+            return (int)absoluteDir.Z;
         }
 
         public int GetWidth()

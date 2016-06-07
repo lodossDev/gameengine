@@ -469,7 +469,7 @@ namespace Game1
             {
                 //control.Update(gameTime);
                 inputManager.Update(gameTime);
-                collisionManager.Update(gameTime);
+               
 
                 //Toss needs to be updated before collision
                 /*leo.Update(gameTime);
@@ -480,8 +480,9 @@ namespace Game1
                 drum4.Update(gameTime);
                 */
                 renderManager.Update(gameTime);
+                collisionManager.Update(gameTime);
 
-                
+
                 /*level1.ScrollX(-leo.GetVelocity().X);
                 drum.MoveX(-leo.GetVelocity().X);
                 drum2.MoveX(-leo.GetVelocity().X);
@@ -554,7 +555,7 @@ namespace Game1
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
-            spriteBatch.DrawString(font1, "leo: " + (int)leo.GetPosY(), new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "leo: " + (int)leo.GetAbsoluteDirX(), new Vector2(20, 140), Color.Black);
             spriteBatch.DrawString(font1, "drum3: " + (int)bb1.GetHeight(), new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

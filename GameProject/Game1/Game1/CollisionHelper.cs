@@ -117,7 +117,7 @@ namespace Game1
         public static bool TouchTop(this Rectangle r1, Rectangle r2, int offset = 40)
         {
             return r1.Bottom >= r2.Top - 1
-                        && r1.Bottom <= r2.Top + (r2.Height / 4)
+                        && r1.Bottom <= r2.Top + (r2.Height / 2)
                         && r1.Right >= r2.Left + (r2.Width / offset)
                         && r1.Left <= r2.Right - (r2.Width / offset);
         }
