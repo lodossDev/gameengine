@@ -314,9 +314,17 @@ namespace Game1
                                 entity.SetGround(-(tHeight + 1));
                             }
 
-                            if (ePosY < tHeight - 10 && ePosY >= tPosY)
+                            bool over = false;
+
+                            if (targetBox.GetRect().TouchTop(entityBox.GetRect(), 60)
+                                    && tGround >= eGround)
                             {
-                                if (entity.InBoundsZ(target, targetBox.GetZdepth() - 5))
+                                over = true;
+                            }
+
+                            if (ePosY < tHeight - 10)
+                            {
+                                if (entity.InBoundsZ(target, targetBox.GetZdepth() - 5) && over == false)
                                 {
                                     float depth = entityBox.GetRect().GetHorizontalIntersectionDepth(targetBox.GetRect());
 
