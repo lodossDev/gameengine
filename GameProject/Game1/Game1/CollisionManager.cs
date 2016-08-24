@@ -316,7 +316,7 @@ namespace Game1
 
                             bool over = false;
 
-                            if (targetBox.GetRect().TouchTop(entityBox.GetRect(), 60)
+                            if (targetBox.GetRect().TouchTop(entityBox.GetRect(), 10)
                                     && tGround >= eGround)
                             {
                                 over = true;

@@ -134,7 +134,7 @@ namespace Game1
                     
 
                     RenderBoxes(currentSprite.GetCurrentBoxes(), entity.GetBoxes());
-                    Setup.spriteBatch.Draw(entity.GetBaseSprite().GetCurrentTexture(), entity.GetBasePosition(), Color.White * 1f);
+                    Setup.spriteBatch.Draw(entity.GetBaseSprite().GetCurrentTexture(), entity.GetBasePosition(), null, Color.White * 1f, 0f, Vector2.Zero, new Vector2(2.5f, 2.5f), SpriteEffects.None, 0f);
                 }
             }
         }

@@ -40,12 +40,16 @@
   <ItemGroup>
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes.cs" />
+    <Compile Include="Boss.cs" />
+    <Compile Include="Boss_TaskMaster.cs" />
+    <Compile Include="Character.cs" />
     <Compile Include="CLNS.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CollisionHelper.cs" />
     <Compile Include="CollisionManager.cs" />
     <Compile Include="ComboAttack.cs" />
     <Compile Include="Effect.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="InputBuffer.cs" />

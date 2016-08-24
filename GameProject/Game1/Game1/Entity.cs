@@ -575,8 +575,9 @@ namespace Game1
             origin.X = sprite.GetCurrentTexture().Width / 2;
             origin.Y = 0;
 
-            baseOffset.X = baseSprite.GetCurrentTexture().Width * 2;
-            baseOffset.Y = sprite.GetCurrentTexture().Height * 2;
+            Sprite stance = GetSprite(Animation.State.STANCE);
+            baseOffset.X = stance.GetCurrentTexture().Height / 4;
+            baseOffset.Y = stance.GetCurrentTexture().Height * 2;
             return origin;
         }
 
@@ -667,7 +668,7 @@ namespace Game1
 
             if (IsLeft())
             {
-                basePosition.X = GetConvertedPosition().X - (baseSprite.GetCurrentTexture().Width + baseOffset.X) + 5;
+                basePosition.X = GetConvertedPosition().X - baseOffset.X - 5;
             }
             else
             {
