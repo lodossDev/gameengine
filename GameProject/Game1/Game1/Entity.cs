@@ -38,6 +38,7 @@ namespace Game1
         private Vector2 convertedPosition;
         private Vector2 origin;
         private Vector2 scale;
+        private Vector2 stanceOrigin;
 
         private int width;
         private int height;
@@ -73,6 +74,7 @@ namespace Game1
 
             boxes = new List<CLNS.BoundingBox>();
             scale = new Vector2(1f, 1f);
+            stanceOrigin = Vector2.Zero;
 
             currentAnimationState = Animation.State.NONE;
 
@@ -95,7 +97,7 @@ namespace Game1
 
             ground = groundBase = 0;
             baseSprite = new Sprite("Sprites/Misc/Marker");
-            baseOffset = Vector2.Zero;
+            baseOffset = new Vector2(1f, 1f);
             basePosition = Vector2.Zero;
 
             collisionInfo = new Attributes.CollisionInfo();
@@ -572,22 +574,19 @@ namespace Game1
         public virtual Vector2 GetOrigin()
         {
             Sprite sprite = GetCurrentSprite();
-            origin.X = sprite.GetCurrentTexture().Width / 2;
+            origin.X = (sprite.GetCurrentTexture().Width / 2);
             origin.Y = 0;
 
-            Sprite stance = GetSprite(Animation.State.STANCE);
-            baseOffset.X = stance.GetCurrentTexture().Height / 4;
-            baseOffset.Y = stance.GetCurrentTexture().Height * 2;
             return origin;
         }
 
         public Vector2 GetStanceOrigin()
         {
             Sprite sprite = GetSprite(Animation.State.STANCE);
-            Vector2 origin = new Vector2();
-            origin.X = sprite.GetCurrentTexture().Width / 2;
-            origin.Y = 0;
-            return origin;
+            stanceOrigin.X = sprite.GetCurrentTexture().Width / 2;
+            stanceOrigin.Y = 0;
+
+            return stanceOrigin;
         }
 
         public Vector3 GetVelocity()
@@ -665,6 +664,8 @@ namespace Game1
         public Vector2 GetBasePosition()
         {
             Sprite stance = GetSprite(Animation.State.STANCE);
+            baseOffset.X = (stance.GetCurrentTexture().Width / 2);
+            baseOffset.Y = (stance.GetCurrentTexture().Height * 2);
 
             if (IsLeft())
             {

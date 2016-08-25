@@ -12,10 +12,14 @@ namespace Game1
     public class RenderManager : Manager
     {
         private bool renderBoxes;
+        private Vector2 baseSpriteScale;
+        private Vector2 baseSpriteOrigin;
 
         public RenderManager()
         {
             renderBoxes = false;
+            baseSpriteScale = new Vector2(0.5f, 0.5f);
+            baseSpriteOrigin = Vector2.Zero;
         }
 
         public void ShowBoxes()
@@ -134,7 +138,11 @@ namespace Game1
                     
 
                     RenderBoxes(currentSprite.GetCurrentBoxes(), entity.GetBoxes());
-                    Setup.spriteBatch.Draw(entity.GetBaseSprite().GetCurrentTexture(), entity.GetBasePosition(), null, Color.White * 1f, 0f, Vector2.Zero, new Vector2(2.5f, 2.5f), SpriteEffects.None, 0f);
+
+                    baseSpriteOrigin.X = (entity.GetBaseSprite().GetCurrentTexture().Width / 2);
+                    baseSpriteOrigin.Y = 0;
+
+                    Setup.spriteBatch.Draw(entity.GetBaseSprite().GetCurrentTexture(), entity.GetBasePosition(), null, Color.White * 1f, 0f, baseSpriteOrigin, baseSpriteScale, SpriteEffects.None, 0f);
                 }
             }
         }
