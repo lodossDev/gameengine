@@ -339,6 +339,7 @@ namespace Game1
 
             leo.AddCommandMove(command);
             leo.SetAnimationState(Animation.State.STANCE);
+            leo.SetBaseOffset(-60, -30f);
             //control = new InputControl(leo, PlayerIndex.One);
 
             inputManager = new InputManager();

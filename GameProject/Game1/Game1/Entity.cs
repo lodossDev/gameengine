@@ -49,6 +49,7 @@ namespace Game1
         private float groundBase;
 
         private Sprite baseSprite;
+        private Vector2 baseCenter;
         private Vector2 baseOffset;
         private Vector2 basePosition;
 
@@ -97,7 +98,8 @@ namespace Game1
 
             ground = groundBase = 0;
             baseSprite = new Sprite("Sprites/Misc/Marker");
-            baseOffset = new Vector2(1f, 1f);
+            baseCenter = new Vector2(0f, 0f);
+            baseOffset = new Vector2(0f, 0f);
             basePosition = Vector2.Zero;
 
             collisionInfo = new Attributes.CollisionInfo();
@@ -448,6 +450,12 @@ namespace Game1
         {
             this.groundBase = groundBase;
         }
+        
+        public void SetBaseOffset(float x, float y)
+        {
+            baseOffset.X = x;
+            baseOffset.Y = y;
+        }
 
         public string GetName()
         {
@@ -664,19 +672,19 @@ namespace Game1
         public Vector2 GetBasePosition()
         {
             Sprite stance = GetSprite(Animation.State.STANCE);
-            baseOffset.X = (stance.GetCurrentTexture().Width / 2);
-            baseOffset.Y = (stance.GetCurrentTexture().Height * 2);
+            baseCenter.X = baseOffset.X + (stance.GetCurrentTexture().Width / 2);
+            baseCenter.Y = baseOffset.Y + (stance.GetCurrentTexture().Height * 2);
 
             if (IsLeft())
             {
-                basePosition.X = GetConvertedPosition().X - baseOffset.X - 5;
+                basePosition.X = GetConvertedPosition().X - baseCenter.X - 1;
             }
             else
             {
-                basePosition.X = GetConvertedPosition().X + baseOffset.X + 5;
+                basePosition.X = GetConvertedPosition().X + baseCenter.X + 8;
             }
 
-            basePosition.Y = GetConvertedPosition().Y + stance.GetSpriteOffSet().Y + stance.GetCurrentFrameOffSet().Y + baseOffset.Y;
+            basePosition.Y = GetConvertedPosition().Y + stance.GetSpriteOffSet().Y + stance.GetCurrentFrameOffSet().Y + baseCenter.Y;
             return basePosition;
         }
 

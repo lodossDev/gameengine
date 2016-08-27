@@ -1142,3 +1142,17 @@ C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Ga
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Leo\Spark1\Spark13.xnb
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Leo\Spark1\Spark14.xnb
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Leo\Spark1\Spark15.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame000.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame010.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame0100.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame0110.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame0120.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame0130.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame020.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame030.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame040.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame050.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame060.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame070.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame080.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame090.xnb
