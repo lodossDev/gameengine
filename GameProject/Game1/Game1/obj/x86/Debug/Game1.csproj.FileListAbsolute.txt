@@ -1156,3 +1156,43 @@ C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Ga
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame070.xnb
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame080.xnb
 C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Stance\Frame090.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack1\Frame0.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack1\Frame1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack1\Frame2.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack1\Frame3.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack1\Frame4.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack2\Frame0.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack2\Frame1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack2\Frame2.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack2\Frame3.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack2\Frame4.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack3\Frame0.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack3\Frame1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack3\Frame2.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack3\Frame3.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack3\Frame4.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame0.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame10.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame11.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame12.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame2.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame3.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame4.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame5.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame6.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame7.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame8.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Attack4\Frame9.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Backwards\Frame0.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Backwards\Frame1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Backwards\Frame2.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Backwards\Frame3.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Backwards\Frame4.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Backwards\Frame5.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame0.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame1.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame2.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame3.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame4.xnb
+C:\Users\Amir Hafeez\Desktop\LATEST GAME ATTEMPT\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame5.xnb

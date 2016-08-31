@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/Amir Hafeez/Desktop/LATEST GAME ATTEMPT/gameengine/GameProject/Game1/Game1/Content/Sounds/test.wav</SourceFile>
   <SourceTime>2016-04-23T20:32:37.9377171+01:00</SourceTime>
   <DestFile>C:/Users/Amir Hafeez/Desktop/LATEST GAME ATTEMPT/gameengine/GameProject/Game1/Game1/Content/bin/Windows/Sounds/test.xnb</DestFile>
-  <DestTime>2016-08-27T22:10:43.5196402+01:00</DestTime>
+  <DestTime>2016-08-31T22:28:10.1339313+01:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2015-04-29T18:14:44+01:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

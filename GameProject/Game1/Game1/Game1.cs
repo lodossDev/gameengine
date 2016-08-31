@@ -216,7 +216,7 @@ namespace Game1
             leo.SetFrameDelay(Animation.State.ATTACK5, 1);
             leo.SetFrameDelay(Animation.State.ATTACK6, 1);*/
 
-            leo2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Stance"));
+            leo2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Taskmaster/Attack4"));
             //leo2.SetFrameDelay(Animation.State.STANCE, 5);
 
             leo2.AddSprite(Animation.State.WALK_TOWARDS, new Sprite("Sprites/Actors/Leo/Walk", Animation.Type.ONCE));
@@ -297,7 +297,7 @@ namespace Game1
             hitSpark1.SetFade(225);*/
 
             leo2.SetScale(1.6f, 2.2f);
-            leo2.SetPostion(650, 0, 100);
+            leo2.SetPostion(650, 0, -120);
 
             float x1 = -340+(339/2);
             float x2 = -340;
