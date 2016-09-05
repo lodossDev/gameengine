@@ -58,7 +58,7 @@ namespace Game1
 
         public virtual void FollowTarget(Entity target)
         {
-            float maxDistance = 280f;
+            float maxDistance = 240f;
             float distance = Vector2.Distance(GetConvertedPosition(), target.GetConvertedPosition());
 
             followPosition.X = target.GetPosX() - GetPosX();
@@ -69,7 +69,15 @@ namespace Game1
             {
                 followPosition.X = 0;
                 followPosition.Y = 0;
-                SetAnimationState(Animation.State.STANCE);
+
+                if (this.InRangeZ(target, 130))
+                {
+                    SetAnimationState(Animation.State.ATTACK1);
+                }
+                else
+                {
+                    SetAnimationState(Animation.State.STANCE);
+                }
             }
             else
             {
@@ -77,7 +85,7 @@ namespace Game1
             }
 
             VelX(followPosition.X * 1.6f);
-            VelZ(followPosition.Y * 1.6f);
+            VelZ(followPosition.Y * 2.1f);
         }
 
         public virtual void UpdateAI(GameTime gameTime, List<Player> players)

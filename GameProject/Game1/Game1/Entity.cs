@@ -1213,10 +1213,10 @@ namespace Game1
             int h2 = other.GetSprite(Animation.State.STANCE).GetCurrentTexture().Height;
             int offset = (h1 - h2) / 2;
 
-            float z1 = h1 + (GetPosZ() / 2) - offset;
+            float z1 = h1 + (GetPosZ() / 2);
             float z2 = h2 + (other.GetPosZ() / 2) - offset;
 
-            if (z1.Equals(z2))
+            if ((z1 - offset).Equals(z2))
             {
                 return GetEntityId().CompareTo(other.GetEntityId());
             }

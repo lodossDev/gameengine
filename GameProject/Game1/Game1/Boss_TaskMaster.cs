@@ -19,7 +19,7 @@ namespace Game1
             SetFrameDelay(Animation.State.WALK_BACKWARDS, 7);
             SetSpriteOffSet(Animation.State.WALK_BACKWARDS, 5, -20);
 
-            /*AddSprite(Animation.State.ATTACK1, new Sprite("Sprites/Actors/Taskmaster/Attack1", Animation.Type.ONCE));
+            AddSprite(Animation.State.ATTACK1, new Sprite("Sprites/Actors/Taskmaster/Attack1", Animation.Type.ONCE));
             SetFrameDelay(Animation.State.ATTACK1, 5);
             SetSpriteOffSet(Animation.State.ATTACK1, -5, -28);
 
@@ -33,7 +33,7 @@ namespace Game1
 
             AddSprite(Animation.State.ATTACK4, new Sprite("Sprites/Actors/Taskmaster/Attack4", Animation.Type.ONCE));
             SetFrameDelay(Animation.State.ATTACK4, 5);
-            SetSpriteOffSet(Animation.State.ATTACK4, 25, -88);*/
+            SetSpriteOffSet(Animation.State.ATTACK4, 25, -88);
 
             SetAnimationState(Animation.State.STANCE);
             AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 120, 283, -60, -20));
