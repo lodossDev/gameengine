@@ -58,9 +58,23 @@ namespace Game1
 
         public virtual void FollowTarget(Entity target)
         {
+            float maxDistance = 280f;
+            float distance = Vector2.Distance(GetConvertedPosition(), target.GetConvertedPosition());
+
             followPosition.X = target.GetPosX() - GetPosX();
             followPosition.Y = (target.GetPosZ() - GetPosZ()) + 90;
             followPosition.Normalize();
+
+            if (distance < maxDistance)
+            {
+                followPosition.X = 0;
+                followPosition.Y = 0;
+                SetAnimationState(Animation.State.STANCE);
+            }
+            else
+            {
+                SetAnimationState(Animation.State.WALK_TOWARDS);
+            }
 
             VelX(followPosition.X * 1.6f);
             VelZ(followPosition.Y * 1.6f);

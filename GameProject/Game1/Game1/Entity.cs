@@ -1046,14 +1046,12 @@ namespace Game1
         {
             if (InResetState())
             {
-                int frame = GetCurrentSprite().GetFrames(); 
+                int frame = (IsEntity(EntityType.PLAYER) ? GetCurrentSprite().GetCurrentFrame() : GetCurrentSprite().GetFrames());
 
-                if (IsEntity(EntityType.PLAYER))
-                {
-                    frame = GetCurrentSprite().GetCurrentFrame();
-                }
-               
-                if (IsFrameComplete(GetCurrentAnimationState(), frame))
+                bool isFrameComplete = (IsEntity(EntityType.PLAYER) ? IsFrameComplete(GetCurrentAnimationState(), frame) 
+                                            : IsFrameComplete(GetCurrentAnimationState(), frame) && !IsInAnimationAction(Animation.Action.WALKING));
+
+                if (isFrameComplete)
                 {
                     SetAnimationState(Animation.State.STANCE);
                 }
@@ -1215,7 +1213,7 @@ namespace Game1
             int h2 = other.GetSprite(Animation.State.STANCE).GetCurrentTexture().Height;
             int offset = (h1 - h2) / 2;
 
-            float z1 = h1 + (GetPosZ() / 2);
+            float z1 = h1 + (GetPosZ() / 2) - offset;
             float z2 = h2 + (other.GetPosZ() / 2) - offset;
 
             if (z1.Equals(z2))
