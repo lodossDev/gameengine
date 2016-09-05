@@ -18,7 +18,7 @@ namespace Game1
         public RenderManager()
         {
             renderBoxes = false;
-            baseSpriteScale = new Vector2(0.2f, 0.2f);
+            baseSpriteScale = new Vector2(0.8f, 0.8f);
             baseSpriteOrigin = Vector2.Zero;
         }
 

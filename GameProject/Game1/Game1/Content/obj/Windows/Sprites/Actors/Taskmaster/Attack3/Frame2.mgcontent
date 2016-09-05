@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/Amir Hafeez/Desktop/LATEST GAME ATTEMPT/gameengine/GameProject/Game1/Game1/Content/Sprites/Actors/Taskmaster/Attack3/Frame2.png</SourceFile>
-  <SourceTime>2016-08-31T22:24:50.9831447+01:00</SourceTime>
+  <SourceTime>2016-09-03T22:55:33.3701654+01:00</SourceTime>
   <DestFile>C:/Users/Amir Hafeez/Desktop/LATEST GAME ATTEMPT/gameengine/GameProject/Game1/Game1/Content/bin/Windows/Sprites/Actors/Taskmaster/Attack3/Frame2.xnb</DestFile>
-  <DestTime>2016-08-31T22:28:11.2615583+01:00</DestTime>
+  <DestTime>2016-09-03T23:11:40.7842147+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T18:14:44+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

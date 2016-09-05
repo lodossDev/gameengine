@@ -390,21 +390,21 @@ namespace Game1
             }
         }
 
-        public void Update(GameTime gameTime, Vector3 position)
+        public void Update(GameTime gameTime, Vector3 position, Vector2 scale)
         {
             if (IsLeft())
             {
-                this.position.X = position.X - spriteOffset.X - offsets[currentFrame].X + 5;
+                this.position.X = position.X - (spriteOffset.X * scale.X) - (offsets[currentFrame].X * scale.X);
             }
             else
             {
-                this.position.X = position.X + spriteOffset.X + offsets[currentFrame].X;
+                this.position.X = position.X + (spriteOffset.X * scale.X) + (offsets[currentFrame].X * scale.X);
             }
 
-            this.position.Y = (position.Y + spriteOffset.Y + offsets[currentFrame].Y) + position.Z;
+            this.position.Y = (position.Y + (spriteOffset.Y * scale.Y) + (offsets[currentFrame].Y * scale.Y)) + position.Z;
 
             shadowPostion.X = this.position.X;
-            shadowPostion.Y = (spriteOffset.Y + offsets[currentFrame].Y) + position.Z;
+            shadowPostion.Y = ((spriteOffset.Y * scale.Y) + (offsets[currentFrame].Y * scale.Y)) + position.Z;
         }
     }
 }

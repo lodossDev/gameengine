@@ -8,18 +8,25 @@ namespace Game1
     public class Manager
     {
         public List<Entity> entities;
+        public List<Player> players;
         protected List<Level> levels;
 
 
         public Manager()
         {
             entities = new List<Entity>();
+            players = new List<Player>();
             levels = new List<Level>();
         }
 
         public virtual void AddEntity(Entity entity)
         {
             entities.Add(entity);
+
+            if (entity is Player)
+            {
+                players.Add((Player)entity);
+            }
         }
 
         public virtual void AddLevel(Level level)
@@ -29,7 +36,17 @@ namespace Game1
 
         public virtual void AddEntity(List<Entity> entities)
         {
-            this.entities.AddRange(entities);
+            entities.AddRange(entities);
+        }
+
+        public List<Player> GetPlayers()
+        {
+            return players;
+        }
+
+        public List<Entity> GetEntities()
+        {
+            return entities;
         }
     }
 }

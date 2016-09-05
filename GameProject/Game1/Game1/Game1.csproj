@@ -58,6 +58,8 @@
     <Compile Include="InputManager.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LifeBar.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Player_Leo.cs" />
     <Compile Include="Stage1.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Program.cs" />

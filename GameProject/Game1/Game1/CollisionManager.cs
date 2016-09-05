@@ -181,7 +181,7 @@ namespace Game1
 
                 if (!entity.IsToss())
                 {
-                    entity.SetAnimationState(Animation.State.FALL);
+                    entity.SetAnimationState(Animation.State.FALL1);
                     entity.Toss(5);
                 }
             }
@@ -368,7 +368,7 @@ namespace Game1
                 if (!entity.IsToss())
                 {
                     entity.SetGround(entity.GetGroundBase());
-                    entity.SetAnimationState(Animation.State.FALL);
+                    entity.SetAnimationState(Animation.State.FALL1);
                     entity.Toss(5);
                 }
             }

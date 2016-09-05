@@ -30,8 +30,6 @@ namespace Game1
         {
             List<Texture2D> result = new List<Texture2D>();
 
-            //FileInfo[] files = dir.GetFiles("*.*"); Directory.EnumerateFiles
-
             foreach (string file in Directory.EnumerateFiles(Setup.contentManager.RootDirectory + "/" + contentFolder).CustomSort().ToList())
             {
                 Debug.WriteLine(file);

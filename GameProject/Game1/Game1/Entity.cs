@@ -38,6 +38,7 @@ namespace Game1
         private Vector2 convertedPosition;
         private Vector2 origin;
         private Vector2 scale;
+        private Vector2 nScale;
         private Vector2 stanceOrigin;
 
         private int width;
@@ -74,7 +75,7 @@ namespace Game1
             animationSounds = new Dictionary<Animation.State, SoundEffect>();
 
             boxes = new List<CLNS.BoundingBox>();
-            scale = new Vector2(1f, 1f);
+            scale = nScale = new Vector2(1f, 1f);
             stanceOrigin = Vector2.Zero;
 
             currentAnimationState = Animation.State.NONE;
@@ -201,7 +202,7 @@ namespace Game1
             AddBox(box);
 
             double y1 = (box.GetRect().Height - box.GetHeight());
-            AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)(box.GetOffset().Y + y1)));
+            //AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)(box.GetOffset().Y + y1)));
         }
 
         public void AddAnimationSound(Animation.State state, String location)
@@ -672,19 +673,19 @@ namespace Game1
         public Vector2 GetBasePosition()
         {
             Sprite stance = GetSprite(Animation.State.STANCE);
-            baseCenter.X = baseOffset.X + (stance.GetCurrentTexture().Width / 2);
-            baseCenter.Y = baseOffset.Y + (stance.GetCurrentTexture().Height * 2);
+            baseCenter.X = (baseOffset.X * scale.X) + ((stance.GetCurrentTexture().Width * scale.X) / 2);
+            baseCenter.Y = (baseOffset.Y * scale.Y) + ((stance.GetCurrentTexture().Height * scale.Y));
 
             if (IsLeft())
             {
-                basePosition.X = GetConvertedPosition().X - baseCenter.X - 1;
+                basePosition.X = GetConvertedPosition().X - baseCenter.X - 3;
             }
             else
             {
                 basePosition.X = GetConvertedPosition().X + baseCenter.X + 8;
             }
 
-            basePosition.Y = GetConvertedPosition().Y + stance.GetSpriteOffSet().Y + stance.GetCurrentFrameOffSet().Y + baseCenter.Y;
+            basePosition.Y = GetConvertedPosition().Y + (stance.GetSpriteOffSet().Y * scale.Y) + (stance.GetCurrentFrameOffSet().Y * scale.Y) + baseCenter.Y;
             return basePosition;
         }
 
@@ -768,6 +769,10 @@ namespace Game1
                 {
                     return Animation.Action.JUMPING;
                 }
+                else if (currentState.ToString().Contains("FALL"))
+                {
+                    return Animation.Action.FALLING;
+                }
             }
 
             switch (currentState)
@@ -777,9 +782,6 @@ namespace Game1
                     break;
                 case Animation.State.STANCE:
                     currentAction = Animation.Action.IDLE;
-                    break;
-                case Animation.State.FALL:
-                    currentAction = Animation.Action.FALLING;
                     break;
                 case Animation.State.WALK_TOWARDS:
                     currentAction = Animation.Action.WALKING;
@@ -1040,11 +1042,18 @@ namespace Game1
                                         && GetCurrentSprite().IsAnimationComplete());
         }
 
-        public void ResetToIdle(GameTime gameTime)
+        public virtual void ResetToIdle(GameTime gameTime)
         {
             if (InResetState())
             {
-                if (IsFrameComplete(GetCurrentAnimationState(), GetCurrentSprite().GetCurrentFrame() - 1))
+                int frame = GetCurrentSprite().GetFrames(); 
+
+                if (IsEntity(EntityType.PLAYER))
+                {
+                    frame = GetCurrentSprite().GetCurrentFrame();
+                }
+               
+                if (IsFrameComplete(GetCurrentAnimationState(), frame))
                 {
                     SetAnimationState(Animation.State.STANCE);
                 }
@@ -1153,16 +1162,25 @@ namespace Game1
         public void Update(GameTime gameTime)
         {
             bool isPauseHit = IsPauseHit(gameTime);
+            Vector2 drawScale = scale;
+            
+            if (IsEntity(EntityType.LIFE_BAR))
+            {
+                drawScale = nScale;
+            }
 
             foreach (Sprite sprite in spriteMap.Values)
             {
-                sprite.Update(gameTime, position);
+                sprite.Update(gameTime, position, drawScale);
             }
 
             UpdateFade(gameTime);
 
             //Update animation.
-            if (!isPauseHit) UpdateAnimation(gameTime);
+            if (!isPauseHit)
+            {
+                UpdateAnimation(gameTime);
+            }
 
             UpdateDefaultAttackChain(gameTime);
 
@@ -1193,8 +1211,12 @@ namespace Game1
                 return 0;
             }
 
-            float z1 = GetPosZ() + GetDepth();
-            float z2 = other.GetPosZ() + other.GetDepth();
+            int h1 = GetSprite(Animation.State.STANCE).GetCurrentTexture().Height;
+            int h2 = other.GetSprite(Animation.State.STANCE).GetCurrentTexture().Height;
+            int offset = (h1 - h2) / 2;
+
+            float z1 = h1 + (GetPosZ() / 2);
+            float z2 = h2 + (other.GetPosZ() / 2) - offset;
 
             if (z1.Equals(z2))
             {

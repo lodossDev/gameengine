@@ -2550,6 +2550,61 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Actors/Taskmaster/Attack2/Frame4.png
 
+#begin Sprites/Actors/Taskmaster/Attack2/Frame5.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack2/Frame5.png
+
+#begin Sprites/Actors/Taskmaster/Attack2/Frame6.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack2/Frame6.png
+
+#begin Sprites/Actors/Taskmaster/Attack2/Frame7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack2/Frame7.png
+
+#begin Sprites/Actors/Taskmaster/Attack2/Frame8.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack2/Frame8.png
+
+#begin Sprites/Actors/Taskmaster/Attack2/Frame9.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack2/Frame9.png
+
 #begin Sprites/Actors/Taskmaster/Attack3/Frame0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2571,6 +2626,17 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
 /build:Sprites/Actors/Taskmaster/Attack3/Frame1.png
+
+#begin Sprites/Actors/Taskmaster/Attack3/Frame10.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack3/Frame10.png
 
 #begin Sprites/Actors/Taskmaster/Attack3/Frame2.png
 /importer:TextureImporter
@@ -2604,6 +2670,61 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
 /build:Sprites/Actors/Taskmaster/Attack3/Frame4.png
+
+#begin Sprites/Actors/Taskmaster/Attack3/Frame5.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack3/Frame5.png
+
+#begin Sprites/Actors/Taskmaster/Attack3/Frame6.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack3/Frame6.png
+
+#begin Sprites/Actors/Taskmaster/Attack3/Frame7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack3/Frame7.png
+
+#begin Sprites/Actors/Taskmaster/Attack3/Frame8.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack3/Frame8.png
+
+#begin Sprites/Actors/Taskmaster/Attack3/Frame9.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Actors/Taskmaster/Attack3/Frame9.png
 
 #begin Sprites/Actors/Taskmaster/Attack4/Frame0.png
 /importer:TextureImporter
