@@ -360,8 +360,8 @@ namespace Game1
             //collisionManager.Update(gameTime);
             if (Keyboard.GetState().IsKeyDown(Keys.O))
             {
-                //Setup.isPause = false;
-                taskMaster.SetAnimationState(Animation.State.ATTACK4);
+                Setup.isPause = false;
+                //taskMaster.SetAnimationState(Animation.State.ATTACK4);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
@@ -549,8 +549,8 @@ namespace Game1
             //InputHelper.KeyPress bb = InputHelper.KeyPress.B | InputHelper.KeyPress.X;
             //spriteBatch.DrawString(font1, "TIME: " + control.pressedBuffer[control.currentBufferStep], new Vector2(20, 100), Color.Black);
             //spriteBatch.DrawString(font1, "STEP: " + hitSpark1.GetCurrentSprite().IsAnimationComplete(), new Vector2(20, 120), Color.Black);
-            spriteBatch.DrawString(font1, "leo: " + distance, new Vector2(20, 140), Color.Black);
-            spriteBatch.DrawString(font1, "drum3: " + (int)bb1.GetHeight(), new Vector2(20, 160), Color.Black);
+            spriteBatch.DrawString(font1, "leo z: " + leo.GetPosZ(), new Vector2(20, 140), Color.Black);
+            spriteBatch.DrawString(font1, "task z: " + taskMaster.GetPosZ(), new Vector2(20, 160), Color.Black);
 
             /*Rectangle targetBox1 = drum3.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();
             Rectangle targetBox2 = drum2.GetBoxes(CLNS.BoxType.HEIGHT_BOX)[0].GetRect();

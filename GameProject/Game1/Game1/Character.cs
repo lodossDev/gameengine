@@ -9,10 +9,15 @@ namespace Game1
     public class Character : Entity
     {
         private Vector2 followPosition;
+        private System.StateMachine aiStateMachine;
 
         public Character(Entity.EntityType entityType, String name) : base(entityType, name)
         {
             followPosition = Vector2.Zero;
+            aiStateMachine = GetAiStateMachine();
+
+            aiStateMachine.Add("FOLLOW_XPATH", new AiState_FollowXPath(this));
+            aiStateMachine.Change("FOLLOW_XPATH");
         }
 
         public virtual Entity GetNearestEntity(List<Entity> entities)
@@ -62,7 +67,7 @@ namespace Game1
             float distance = Vector2.Distance(GetConvertedPosition(), target.GetConvertedPosition());
 
             followPosition.X = target.GetPosX() - GetPosX();
-            followPosition.Y = (target.GetPosZ() - GetPosZ()) + 90;
+            followPosition.Y = (target.GetPosZ() - GetPosZ()) + 91;
             followPosition.Normalize();
 
             if (distance < maxDistance)
@@ -91,11 +96,13 @@ namespace Game1
         public virtual void UpdateAI(GameTime gameTime, List<Player> players)
         {
             Entity target = GetNearestEntity(players.ToList<Entity>());
+            SetCurrentTarget(target);
 
             if (target != null)
             {
                 LookAtTarget(target);
-                FollowTarget(target);
+                aiStateMachine.Update(gameTime);
+                //FollowTarget(target);
             }
         }
     }

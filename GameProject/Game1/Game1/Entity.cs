@@ -58,6 +58,9 @@ namespace Game1
         private Attributes.AttackInfo attackInfo;
         private Attributes.TossInfo tossInfo;
 
+        private System.StateMachine aiStateMachine;
+        private Entity currentTarget;
+
         private int entityId;
         private int health;
         private bool alive;
@@ -106,6 +109,8 @@ namespace Game1
             collisionInfo = new Attributes.CollisionInfo();
             attackInfo = new Attributes.AttackInfo();
             tossInfo = new Attributes.TossInfo();
+
+            aiStateMachine = new System.StateMachine();
             commandMoves = new List<InputHelper.CommandMove>();
 
             id++;
@@ -305,6 +310,11 @@ namespace Game1
         public void SetPosZ(float z)
         {
             position.Z = z;
+        }
+
+        public void SetCurrentTarget(Entity target)
+        {
+            currentTarget = target;
         }
 
         public void MoveX(float velX)
@@ -635,6 +645,11 @@ namespace Game1
             return GetCurrentSprite().GetCurrentFrame();
         }
 
+        public Entity GetCurrentTarget()
+        {
+            return currentTarget;
+        }
+
         public float GetSpriteWidth(Animation.State state)
         {
             return GetSprite(state).GetCurrentTexture().Width * GetScale().X;
@@ -724,6 +739,11 @@ namespace Game1
         public SpriteEffects GetEffects()
         {
             return currentSprite.GetEffects();
+        }
+
+        public System.StateMachine GetAiStateMachine()
+        {
+            return aiStateMachine;
         }
 
         public bool IsInAnimationState(Animation.State state)
@@ -1216,7 +1236,7 @@ namespace Game1
             float z1 = h1 + (GetPosZ() / 2);
             float z2 = h2 + (other.GetPosZ() / 2) - offset;
 
-            if ((z1 - offset).Equals(z2))
+            if (z1.Equals(z2))
             {
                 return GetEntityId().CompareTo(other.GetEntityId());
             }

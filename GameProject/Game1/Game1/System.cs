@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Game1
 {
-    public class StateSystem
+    public class System
     {
         public interface IState
         {
@@ -42,17 +42,19 @@ namespace Game1
 
             public void Change(string id)
             {
-                currentState.OnExit();
+                if(currentState != null)currentState.OnExit();
 
-                IState next = states[id];
-                next.OnEnter();
-
-                currentState = next;
+                if(states.ContainsKey(id))
+                {
+                    IState next = states[id];
+                    next.OnEnter();
+                    currentState = next;
+                }
             }
 
             public void Update(GameTime gameTime)
             {
-                currentState.Update(gameTime);
+                if (currentState != null)currentState.Update(gameTime);
             }
         }
     }
