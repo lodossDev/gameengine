@@ -11,6 +11,8 @@ namespace Game1
         private System.StateMachine stateMachine;
         private Entity entity;
         private float closeDistance;
+        private float idleTime = 0;
+        private float maxIdleTime = 2; 
         private Vector2 velocity;
 
         public AiState_FollowXPath(Entity entity)
@@ -18,7 +20,7 @@ namespace Game1
             this.entity = entity;
             stateMachine = this.entity.GetAiStateMachine();
 
-            closeDistance = 140f;
+            closeDistance = 540f;
             velocity = new Vector2(1.8f, 0f);
         }
 
@@ -34,27 +36,47 @@ namespace Game1
 
             if (target != null)
             {
-                if (distance < closeDistance)
+                if (!entity.IsInAnimationState(Animation.State.STANCE))
                 {
-                    //velocity.X = 0f;
-                    velocity.X = 3.6f;
-                    entity.SetAnimationState(Animation.State.WALK_BACKWARDS);
-                }
-                else
-                {
-                    /*if (entity.IsLeft() != target.IsLeft())
+                    if (entity.GetPosX() - (entity.GetCurrentSpriteWidth()) - 200 > target.GetPosX())
                     {
-                        velocity.X = 1.6f;
+                        velocity.X = -1.0f;
+                    }
+                    else if (entity.GetPosX() + (entity.GetCurrentSpriteWidth() + 200) < target.GetPosX())
+                    {
+                        velocity.X = 2.0f;
+                    }
+                }
+
+                if (entity.IsInAnimationState(Animation.State.STANCE))
+                {
+                    velocity.X = 0f;
+                    idleTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (idleTime > maxIdleTime)
+                    {
                         entity.SetAnimationState(Animation.State.WALK_BACKWARDS);
+                        idleTime = 0f;
+                    }
+
+                    if ((entity.IsLeft() && velocity.X > 0 || !entity.IsLeft() && velocity.X < 0) && distance > 300)
+                    {
+                        entity.SetAnimationState(Animation.State.WALK_BACKWARDS);
+                    }
+                }
+
+                if (!entity.IsInAnimationState(Animation.State.STANCE))
+                {
+                    if ((entity.IsLeft() && velocity.X > 0 || !entity.IsLeft() && velocity.X < 0) && distance > 300)
+                    {
+                        entity.SetAnimationState(Animation.State.STANCE);
                     }
                     else
                     {
-                        velocity.X = -1.6f;
                         entity.SetAnimationState(Animation.State.WALK_TOWARDS);
-                    }*/
-                    velocity.X = 0f;
+                    }
                 }
-
+                
                 entity.VelX(velocity.X);
                 entity.VelZ(velocity.Y);
             }

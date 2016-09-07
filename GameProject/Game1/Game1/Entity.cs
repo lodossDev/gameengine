@@ -804,6 +804,7 @@ namespace Game1
                     currentAction = Animation.Action.IDLE;
                     break;
                 case Animation.State.WALK_TOWARDS:
+                case Animation.State.WALK_BACKWARDS:
                     currentAction = Animation.Action.WALKING;
                     break;
                 case Animation.State.LAND:
