@@ -458,9 +458,6 @@ namespace Game1
                 ((Character)taskMaster).UpdateAI(gameTime, collisionManager.GetPlayers());
                 ((Character)taskMaster).ResetToIdle(gameTime);
 
-                
-
-                
 
                 /*level1.ScrollX(-leo.GetVelocity().X);
                 drum.MoveX(-leo.GetVelocity().X);
@@ -496,7 +493,7 @@ namespace Game1
 
             renderManager.Draw(gameTime);
 
-            spriteBatch.DrawString(font1, "HIT COUNT: " + (CollisionManager.hitCount), new Vector2(20, 100), Color.Black);
+            spriteBatch.DrawString(font1, "HIT COUNT: " + (CollisionManager.hitCount), new Vector2(20, 20), Color.Black);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())
