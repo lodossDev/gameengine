@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Game1
 {
-    public static class CollisionHelper
-    {
+    public static class CollisionHelper {
         /// <summary>
         /// Calculates the signed depth of intersection between two rectangles.
         /// </summary>
@@ -18,8 +17,7 @@ namespace Game1
         /// to push objects in order to resolve collisions.
         /// If the rectangles are not intersecting, Vector2.Zero is returned.
         /// </returns>
-        public static Vector2 GetIntersectionDepth(this Rectangle rectA, Rectangle rectB)
-        {
+        public static Vector2 GetIntersectionDepth(this Rectangle rectA, Rectangle rectB) {
             // Calculate half sizes.
             float halfWidthA = rectA.Width / 2.0f;
             float halfHeightA = rectA.Height / 2.0f;
@@ -49,13 +47,11 @@ namespace Game1
         /// <summary>
         /// Gets the position of the center of the bottom edge of the rectangle.
         /// </summary>
-        public static Vector2 GetBottomCenter(this Rectangle rect)
-        {
+        public static Vector2 GetBottomCenter(this Rectangle rect) {
             return new Vector2(rect.X + rect.Width / 2.0f, rect.Bottom);
         }
 
-        public static float GetHorizontalIntersectionDepth(this Rectangle rectA, Rectangle rectB)
-        {
+        public static float GetHorizontalIntersectionDepth(this Rectangle rectA, Rectangle rectB) {
             // Calculate half sizes.
             float halfWidthA = rectA.Width / 2.0f;
             float halfWidthB = rectB.Width / 2.0f;
@@ -76,8 +72,7 @@ namespace Game1
             return distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
         }
 
-        public static float GetVerticalIntersectionDepth(this Rectangle rectA, Rectangle rectB)
-        {
+        public static float GetVerticalIntersectionDepth(this Rectangle rectA, Rectangle rectB) {
             // Calculate half sizes.
             float halfHeightA = rectA.Height / 2.0f;
             float halfHeightB = rectB.Height / 2.0f;
@@ -98,74 +93,90 @@ namespace Game1
             return distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
         }
 
-        public static bool TouchLeft(this Rectangle r1, Rectangle r2, int offset = 20)
-        {
-            return (r1.Right <= r2.Right
-                        && r1.Right >= r2.Left - offset
-                        && r1.Top <= r2.Bottom - (r2.Width / offset)
-                        && r1.Bottom >= r2.Top + (r2.Width / offset));
-        }
-
-        public static bool TouchRight(this Rectangle r1, Rectangle r2, int offset = 20)
-        {
-            return (r1.Left >= r2.Left
-                        && r1.Left <= r2.Right + offset
-                        && r1.Top <= r2.Bottom - (r2.Width / offset)
-                        && r1.Bottom >= r2.Top + (r2.Width / offset));
-        }
-
-        public static bool TouchTop(this Rectangle r1, Rectangle r2, int offset = 40)
-        {
-            return r1.Bottom >= r2.Top - 1
-                        && r1.Bottom <= r2.Top + (r2.Height / 2)
-                        && r1.Right >= r2.Left + (r2.Width / offset)
-                        && r1.Left <= r2.Right - (r2.Width / offset);
-        }
-
-        public static bool TouchBottom(this Rectangle r1, Rectangle r2, int offset = 10)
-        {
-            return r1.Top <= r2.Bottom + 1
-                        && r1.Top >= r2.Bottom - (r2.Height / 2)
-                        && r1.Right >= r2.Left + (r2.Width / offset)
-                        && r1.Left <= r2.Right - (r2.Width / offset);
-        }
-
-        public static float GetDiff(float e1, float e2)
-        {
+        public static float GetDiff(float e1, float e2) {
             return Math.Abs(e1 - e2);
         }
 
-        public static bool InRangeX(this Entity e1, Entity e2, float range)
-        {
-            return (GetDiff(e1.GetPosX(), e2.GetPosX()) <= range); 
+        public static bool DepthCollision(this Entity e1, Entity e2) {
+            int y1 = e1.GetDepthBox().GetRect().Top;
+            int y2 = e1.GetDepthBox().GetRect().Bottom;
+
+            int h1 = e2.GetDepthBox().GetRect().Top;
+            int h2 = e2.GetDepthBox().GetRect().Bottom;
+
+            // check if the first y value of the hero is in between both
+            // of the villain's y values
+            if( y1 >= h1 && y1 <= h2) { 
+                return true;
+            }
+
+            // check if the second y value of the hero is in between both
+            // of the villain's y values
+            if(y2 >= h1 && y2 <= h2) { 
+                return true;
+            }
+
+            return false;
         }
 
-        public static bool InRangeZ(this Entity e1, Entity e2, float range)
-        {
-            return (GetDiff(e1.GetPosZ(), e2.GetPosZ()) <= range);
+        public static bool DepthCollisionBottom(this Entity e1, Entity e2) {
+            int y1 = e1.GetDepthBox().GetRect().Top;
+            int y2 = e1.GetDepthBox().GetRect().Bottom;
+
+            int h1 = e2.GetDepthBox().GetRect().Top;
+            int h2 = e2.GetDepthBox().GetRect().Bottom;
+
+            // check if the first y value of the hero is in between both
+            // of the villain's y values
+            if( y1 >= h1 && y1 <= h2) { 
+                return true;
+            }
+            
+            return false;
         }
 
-        public static bool InRangeZ(this Entity e1, Entity e2)
-        {
-            return (GetDiff(e1.GetPosZ(), e2.GetPosZ()) <= e2.GetDepth());
+        public static bool DepthCollisionTop(this Entity e1, Entity e2) {
+            int y1 = e1.GetDepthBox().GetRect().Top;
+            int y2 = e1.GetDepthBox().GetRect().Bottom;
+
+            int h1 = e2.GetDepthBox().GetRect().Top;
+            int h2 = e2.GetDepthBox().GetRect().Bottom;
+
+            // check if the second y value of the hero is in between both
+            // of the villain's y values
+            if(y2 >= h1 && y2 <= h2) { 
+                return true;
+            }
+
+            return false;
         }
 
-        public static bool InBoundsZ(this Entity e1, Entity e2, float range)
-        {
-            return InRangeZ(e1, e2, range)
-                        && !(e1.GetPosZ() <= e2.GetPosZ() - range)
-                        && !(e1.GetPosZ() >= e2.GetPosZ() + range);
+        public static bool HorizontalCollisionLeft(this Entity e1, Entity e2, int offset = 0) {
+            int x1 = e1.GetDepthBox().GetRect().Left;
+            int x2 = e2.GetDepthBox().GetRect().Right;
+
+            return (x1 + offset < x2);
         }
 
-        public static bool InBoundsZ(this Entity e1, Entity e2)
-        {
-            return InBoundsZ(e1, e2, e2.GetDepth());
+        public static bool HorizontalCollisionRight(this Entity e1, Entity e2, int offset = 0) {
+            int x1 = e1.GetDepthBox().GetRect().Right;
+            int x2 = e2.GetDepthBox().GetRect().Left;
+
+            return (x1 - offset > x2);
         }
 
-        public static bool InBoundsX(this Rectangle r1, Rectangle r2, int offset = 40)
-        {
-            return (r1.Right >= r2.Left + (r2.Width / offset)
-                        && r1.Left <= r2.Right - (r2.Width / offset));
+        public static bool VerticleCollisionTop(this Entity e1, Entity e2, int offset = 0) {
+            int z1 = e1.GetDepthBox().GetRect().Bottom;
+            int z2 = e2.GetDepthBox().GetRect().Top;
+
+            return (z1 - offset > z2);
+        }
+
+        public static bool VerticleCollisionBottom(this Entity e1, Entity e2, int offset = 0) {
+            int z1 = e1.GetDepthBox().GetRect().Top;
+            int z2 = e2.GetDepthBox().GetRect().Bottom;
+
+            return (z1 + offset < z2);
         }
     }
 }

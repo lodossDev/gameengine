@@ -16,8 +16,9 @@ namespace Game1
             followPosition = Vector2.Zero;
             aiStateMachine = GetAiStateMachine();
 
+            aiStateMachine.Add("FOLLOW_PATH", new AiState_Follow(this));
             aiStateMachine.Add("FOLLOW_XPATH", new AiState_FollowXPath(this));
-            aiStateMachine.Change("FOLLOW_XPATH");
+            aiStateMachine.Change("FOLLOW_PATH");
         }
 
         public virtual Entity GetNearestEntity(List<Entity> entities)
@@ -75,14 +76,15 @@ namespace Game1
                 followPosition.X = 0;
                 followPosition.Y = 0;
 
-                if (this.InRangeZ(target, 130))
+                /*if (this.CollideZ(target, 130))
                 {
                     SetAnimationState(Animation.State.ATTACK1);
                 }
                 else
                 {
                     SetAnimationState(Animation.State.STANCE);
-                }
+                }*/
+                SetAnimationState(Animation.State.ATTACK1);
             }
             else
             {
@@ -98,7 +100,7 @@ namespace Game1
             Entity target = GetNearestEntity(players.ToList<Entity>());
             SetCurrentTarget(target);
 
-            if (target != null)
+            if (target != null && !IsInAnimationAction(Animation.Action.ATTACKING))
             {
                 LookAtTarget(target);
                 aiStateMachine.Update(gameTime);

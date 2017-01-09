@@ -10,18 +10,22 @@ namespace Game1
     {
         private System.StateMachine stateMachine;
         private Entity entity;
-        private float closeDistance;
-        private float idleTime = 0;
-        private float maxIdleTime = 2; 
+        private float maxDistance;
         private Vector2 velocity;
+        private Vector2 sourceDistance;
+        private Vector2 targetDistance;
+
 
         public AiState_FollowXPath(Entity entity)
         {
             this.entity = entity;
             stateMachine = this.entity.GetAiStateMachine();
 
-            closeDistance = 540f;
-            velocity = new Vector2(1.8f, 0f);
+            maxDistance = 220f;
+            sourceDistance = Vector2.Zero;
+            targetDistance = Vector2.Zero;
+
+            velocity = new Vector2(2f, 0f);
         }
 
         public void OnEnter()
@@ -32,51 +36,32 @@ namespace Game1
         public void Update(GameTime gameTime)
         {
             Entity target = entity.GetCurrentTarget();
-            float distance = Vector2.Distance(entity.GetConvertedPosition(), target.GetConvertedPosition());
+
+            targetDistance.X = target.GetPosX();
+            sourceDistance.X = entity.GetPosX();
+
+            float distance = Vector2.Distance(targetDistance, sourceDistance);
 
             if (target != null)
             {
-                if (!entity.IsInAnimationState(Animation.State.STANCE))
+                if (entity.GetPosX() - (entity.GetCurrentSpriteWidth() / 4) - 400 >= target.GetPosX())
                 {
-                    if (entity.GetPosX() - (entity.GetCurrentSpriteWidth()) - 200 > target.GetPosX())
-                    {
-                        velocity.X = -1.0f;
-                    }
-                    else if (entity.GetPosX() + (entity.GetCurrentSpriteWidth() + 200) < target.GetPosX())
-                    {
-                        velocity.X = 2.0f;
-                    }
+                    velocity.X = -2.0f;
+                }
+                else if (entity.GetPosX() + (entity.GetCurrentSpriteWidth() / 4) + 400 <= target.GetPosX())
+                {
+                    velocity.X = 2.0f;
                 }
 
-                if (entity.IsInAnimationState(Animation.State.STANCE))
+                if (velocity.X > 0 && entity.IsLeft() == true || velocity.X < 0 && entity.IsLeft() == false)
                 {
-                    velocity.X = 0f;
-                    idleTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                    if (idleTime > maxIdleTime)
-                    {
-                        entity.SetAnimationState(Animation.State.WALK_BACKWARDS);
-                        idleTime = 0f;
-                    }
-
-                    if ((entity.IsLeft() && velocity.X > 0 || !entity.IsLeft() && velocity.X < 0) && distance > 300)
-                    {
-                        entity.SetAnimationState(Animation.State.WALK_BACKWARDS);
-                    }
+                    entity.SetAnimationState(Animation.State.WALK_BACKWARDS);
                 }
-
-                if (!entity.IsInAnimationState(Animation.State.STANCE))
+                else
                 {
-                    if ((entity.IsLeft() && velocity.X > 0 || !entity.IsLeft() && velocity.X < 0) && distance > 300)
-                    {
-                        entity.SetAnimationState(Animation.State.STANCE);
-                    }
-                    else
-                    {
-                        entity.SetAnimationState(Animation.State.WALK_TOWARDS);
-                    }
+                    entity.SetAnimationState(Animation.State.WALK_TOWARDS);
                 }
-                
+                    
                 entity.VelX(velocity.X);
                 entity.VelZ(velocity.Y);
             }

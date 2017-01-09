@@ -10,8 +10,7 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Game1
 {
-    public class Entity : IComparable<Entity>
-    {
+    public class Entity : IComparable<Entity> {
         private static int id = 0;
         public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL, LIFE_BAR, OTHER, HIT_FLASH}
 
@@ -24,7 +23,9 @@ namespace Game1
         private Dictionary<Animation.State, SoundEffect> animationSounds;
         private Dictionary<Animation.State, int> moveFrames;
         private Dictionary<Animation.State, int> tossFrames;
-        private List<CLNS.BoundingBox> boxes;
+        private CLNS.BoundingBox bodyBox;
+        private CLNS.BoundsBox boundsBox;
+        private CLNS.BoundingBox depthBox;
         private List<Animation.Link> animationLinks;
         private ComboAttack.Chain defaultAttackChain;
         private List<InputHelper.CommandMove> commandMoves;
@@ -40,11 +41,6 @@ namespace Game1
         private Vector2 scale;
         private Vector2 nScale;
         private Vector2 stanceOrigin;
-
-        private int width;
-        private int height;
-        private float depth;
-        private float depthOffSet;
 
         private float ground;
         private float groundBase;
@@ -66,8 +62,7 @@ namespace Game1
         private bool alive;
 
 
-        public Entity(EntityType type, string name)
-        {
+        public Entity(EntityType type, string name) {
             this.type = type;
             this.name = name;
 
@@ -77,30 +72,23 @@ namespace Game1
             animationLinks = new List<Animation.Link>();
             animationSounds = new Dictionary<Animation.State, SoundEffect>();
 
-            boxes = new List<CLNS.BoundingBox>();
             scale = nScale = new Vector2(1f, 1f);
             stanceOrigin = Vector2.Zero;
 
             currentAnimationState = Animation.State.NONE;
-
             colorInfo = new Attributes.ColourInfo();
             
             position = Vector3.Zero;
             convertedPosition = Vector2.Zero;
 
             direction = Vector3.Zero;
-            direction.X = 1;
+            direction.X = 0;
             absoluteDir = direction;
 
             origin = Vector2.Zero;
             velocity = Vector3.Zero;
-
-            width = 0;
-            height = 0;
-            depth = 30f;
-            depthOffSet = 0f;
-
             ground = groundBase = 0;
+
             baseSprite = new Sprite("Sprites/Misc/Marker");
             baseCenter = new Vector2(0f, 0f);
             baseOffset = new Vector2(0f, 0f);
@@ -119,479 +107,352 @@ namespace Game1
             health = 100;
         }
 
-        public void AddSprite(Animation.State state, Sprite sprite)
-        {
+        public void AddSprite(Animation.State state, Sprite sprite) {
             spriteMap.Add(state, sprite);
         }
 
-        public void AddSprite(Animation.State state, Sprite sprite, bool setAsDefaultState)
-        {
+        public void AddSprite(Animation.State state, Sprite sprite, bool setAsDefaultState) {
             AddSprite(state, sprite);
 
-            if (setAsDefaultState)
-            {
+            if (setAsDefaultState) {
                 SetAnimationState(state);
             }
         }
 
-        public void AddSprite(Animation.State state, String location, bool setAsDefaultState)
-        {
+        public void AddSprite(Animation.State state, String location, bool setAsDefaultState) {
             AddSprite(state, new Sprite(location), setAsDefaultState);
         }
 
-        public void AddAnimationLink(Animation.Link link)
-        {
+        public void AddAnimationLink(Animation.Link link) {
             animationLinks.Add(link);
         }
 
-        public void SetAnimationLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
-        {
+        public void SetAnimationLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true) {
             Animation.Link link = animationLinks.Find(item => item.GetOnState() == onState);
             link.SetLink(onState, toState, frameOnStart, onFrameComplete);
         }
 
-        public void SetJumpLink(Animation.State toState)
-        {
+        public void SetJumpLink(Animation.State toState) {
             Sprite jumpStart = GetSprite(Animation.State.JUMP_START);
 
-            if (jumpStart != null)
-            {
+            if (jumpStart != null) {
                 int frames = jumpStart.GetFrames();
                 SetAnimationLink(Animation.State.JUMP_START, toState, frames);
             }
         }
 
-        public void SetAnimationState(Animation.State state)
-        {
-            if (!IsInAnimationState(state))
-            {
+        public void SetAnimationState(Animation.State state) {
+            if (!IsInAnimationState(state)) {
                 attackInfo.lastAttackFrame = -1;
                 attackInfo.lastAttackState = Animation.State.NONE;
                 Sprite newSprite = GetSprite(state);
 
-                if (newSprite != null)
-                {
+                if (newSprite != null) {
                     lastAnimationState = currentAnimationState;
                     currentAnimationState = state;
                     currentSprite = newSprite;
                 }
 
-                foreach (Sprite sprite in spriteMap.Values)
-                {
+                foreach (Sprite sprite in spriteMap.Values) {
                     sprite.ResetAnimation();
                 }
             }
         }
 
-        public void AddBox(CLNS.BoundingBox box)
-        {
-            boxes.Add(box);
+        public void AddBox(Animation.State state, int frame, CLNS.BoundingBox box) {
+            GetSprite(state).AddBox(frame, box);
         }
 
-        public void AddBox(Animation.State state, int frame, CLNS.BoundingBox box)
-        {
-            GetSprite(state).AddBox(frame, box);
+        public void AddBodyBox(int w, int h, int x, int y) {
+            if (bodyBox != null) {
+                bodyBox = null;
+            }
 
-            if (box.GetBoxType() == CLNS.BoxType.BOUNDS_BOX)
-            {
-                CLNS.BoundsBox bbox = (CLNS.BoundsBox)box;
-                double y1 = ((int)(bbox.GetHeight() - (int)bbox.GetRect().Height) / (int)bbox.GetRect().Height) + 1;
-                double y2 = ((int)bbox.GetOffset().Y * y1) / 2;
+            bodyBox = new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, w, h, x, y);
+        }
 
-                AddBox(state, frame, new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, bbox.GetRect().Width, (int)bbox.GetHeight(), (int)bbox.GetOffset().X, (int)bbox.GetOffset().Y + (int)y2));
+        public void AddBoundsBox(int w, int h, int x, int y, int depth) {
+            if (boundsBox != null) {
+                boundsBox = null;
+            }
+
+            boundsBox = new CLNS.BoundsBox(w, h, x, y, depth);
+            AddBodyBox(w, h, x, y);
+
+            AddDepthBox(depth);
+            GetDepthBox().SetZdepth(depth);
+        }
+
+        public void AddDepthBox(int h, int x = 0, int y = 0) {
+            if (depthBox != null) {
+                depthBox = null;
+            }
+
+            if (boundsBox != null) {
+                int x1 = (int)boundsBox.GetOffset().X + x;
+                int y1 = (int)(boundsBox.GetOffset().Y + boundsBox.GetRect().Height + y) - h;
+                
+                depthBox = new CLNS.BoundingBox(CLNS.BoxType.DEPTH_BOX, boundsBox.GetRect().Width, h, x1, y1);
             }
         }
 
-        public void AddBoundsBox(CLNS.BoundsBox box)
-        {
-            AddBox(box);
+        public void AddDepthBox(int w, int h, int x, int y) {
+            if (depthBox != null) {
+                depthBox = null;
+            }
 
-            double y1 = (box.GetRect().Height - box.GetHeight());
-            //AddBox(new CLNS.BoundingBox(CLNS.BoxType.HEIGHT_BOX, box.GetRect().Width, (int)box.GetHeight(), (int)box.GetOffset().X, (int)(box.GetOffset().Y + y1)));
+            depthBox = new CLNS.BoundingBox(CLNS.BoxType.DEPTH_BOX, w, h, x, y);
         }
 
-        public void AddAnimationSound(Animation.State state, String location)
-        {
+        public void AddAnimationSound(Animation.State state, String location) {
             animationSounds.Add(state, Setup.contentManager.Load<SoundEffect>(location));
         }
 
-        public SoundEffect GetAnimationSound(Animation.State state)
-        {
+        public SoundEffect GetAnimationSound(Animation.State state) {
             return animationSounds[state];
         }
 
-        public void AddCommandMove(InputHelper.CommandMove commandMove)
-        {
+        public void AddCommandMove(InputHelper.CommandMove commandMove) {
             commandMoves.Add(commandMove);
         }
 
-        public List<InputHelper.CommandMove> GetCommandMoves()
-        {
+        public List<InputHelper.CommandMove> GetCommandMoves() {
             return commandMoves;
         }
 
-        public CLNS.BoundingBox GetLastBoxFrame(Animation.State state, int frame)
-        {
-            return GetSprite(state).GetBoxes(frame).Last();
-        }
-
-        public CLNS.AttackBox GetAttackBox(Animation.State state, int frame)
-        {
-            return (CLNS.AttackBox)GetSprite(state).GetBoxes(frame).Last();
-        }
-
-        public CLNS.AttackBox GetAttackBox(Animation.State state, int frame, int index)
-        {
-            return (CLNS.AttackBox)GetSprite(state).GetBoxes(frame)[index];
-        }
-
-        public void SetOffset(Animation.State state, int frame, float x, float y)
-        {
+        public void SetOffset(Animation.State state, int frame, float x, float y) {
             GetSprite(state).SetFrameOffset(frame, x, y);
         }
 
-        public void SetOffset(Animation.State state, float x, float y)
-        {   
+        public void SetOffset(Animation.State state, float x, float y) {   
             GetSprite(state).SetFrameOffset(x, y);    
         }
 
-        public void SetSpriteOffSet(Animation.State state, float x, float y)
-        {
+        public void SetSpriteOffSet(Animation.State state, float x, float y) {
             GetSprite(state).SetSpriteOffset(x, y);
         }
 
-        public void SetFrameDelay(Animation.State state, int frame, int ticks)
-        {
+        public void SetFrameDelay(Animation.State state, int frame, int ticks) {
             GetSprite(state).SetFrameTime(frame, ticks);
         }
 
-        public void SetFrameDelay(Animation.State state, int ticks)
-        {
+        public void SetFrameDelay(Animation.State state, int ticks) {
             GetSprite(state).SetFrameTime(ticks);
         }
 
-        public void SetResetFrame(Animation.State state, int frame)
-        {
+        public void SetResetFrame(Animation.State state, int frame) {
             GetSprite(state).SetResetFrame(frame);
         }
 
-        public void SetMoveFrame(Animation.State state, int frame)
-        {
+        public void SetMoveFrame(Animation.State state, int frame) {
             moveFrames.Add(state, frame - 1);
         }
 
-        public void SetTossFrame(Animation.State state, int frame)
-        {
+        public void SetTossFrame(Animation.State state, int frame) {
             tossFrames.Add(state, frame - 1);
         }
 
-        public void SetDefaultAttackChain(ComboAttack.Chain attackChain)
-        {
+        public void SetDefaultAttackChain(ComboAttack.Chain attackChain) {
             defaultAttackChain = attackChain;
         }
 
-        public void SetPostion(float x, float y, float z)
-        {
+        public void SetPostion(float x, float y, float z) {
             position.X = x;
             position.Y = y;
             position.Z = z;
         }
 
-        public void SetPosX(float x)
-        {
+        public void SetPosX(float x) {
             position.X = x;
         }
 
-        public void SetPosY(float y)
-        {
+        public void SetPosY(float y) {
             position.Y = y;
         }
 
-        public void SetPosZ(float z)
-        {
+        public void SetPosZ(float z) {
             position.Z = z;
         }
 
-        public void SetCurrentTarget(Entity target)
-        {
+        public void SetCurrentTarget(Entity target) {
             currentTarget = target;
         }
 
-        public void MoveX(float velX)
-        {
-            if (velX != 0.0)
-            {
+        public void MoveX(float velX) {
+            if (velX != 0.0) {
                 absoluteDir.X = (velX < 0 ? -1 : 1);
             }
 
-            if (IsInMoveFrame() && collisionInfo.collide_x == Attributes.CollisionState.NO_COLLISION)
-            {
+            if (IsInMoveFrame()) {
                 position.X += velX;
             }
         }
 
-        public void MoveY(float velY)
-        {
-            if (velY != 0.0)
-            {
+        public void MoveY(float velY) {
+            if (velY != 0.0) {
                 absoluteDir.Y = (velY < 0 ? -1 : 1);
             }
 
-            if (collisionInfo.collide_y == Attributes.CollisionState.NO_COLLISION)
-            {
-                position.Y += velY;
-            }
+            position.Y += velY;
         }
 
-        public void MoveZ(float velZ)
-        {
-            if (velZ != 0.0)
-            {
+        public void MoveZ(float velZ) {
+            if (velZ != 0.0) {
                 absoluteDir.Z = (velZ < 0 ? -1 : 1);
             }
 
-            if (IsInMoveFrame() && collisionInfo.collide_z == Attributes.CollisionState.NO_COLLISION)
-            {
+            if (IsInMoveFrame()) {
                 position.Z += velZ;
             }
         }
 
-        public void VelX(float velX)
-        {
+        public void VelX(float velX) {
             velocity.X = velX;
 
-            if (velX != 0.0)
-            {
+            if (velX != 0.0) {
                 direction.X = (velX < 0 ? -1 : 1);
             }
         }
 
-        public void VelY(float velY)
-        {
+        public void VelY(float velY) {
             velocity.Y = velY;
 
-            if (velY != 0.0)
-            {
+            if (velY != 0.0) {
                 direction.Y = (velY < 0 ? -1 : 1);
             }
         }
 
-        public void VelZ(float velZ)
-        {
+        public void VelZ(float velZ) {
             velocity.Z = velZ;
 
-            if (velZ != 0.0)
-            {
+            if (velZ != 0.0) {
                 direction.Z = (velZ < 0 ? -1 : 1);
             }
         }
 
-        public void SetScale(float x=1f, float y=1f)
-        {
+        public void SetScale(float x=1f, float y=1f) {
             scale.X = x;
             scale.Y = y;
         }
 
-        public void SetScaleX(float x)
-        {
+        public void SetScaleX(float x) {
             scale.X = x;
         }
 
-        public void SetScaleY(float y)
-        {
+        public void SetScaleY(float y) {
             scale.Y = y;
         }
 
-        public void SetHealth(int health)
-        {
+        public void SetHealth(int health) {
             this.health = health;
         }
 
-        public void SetAlive(bool alive)
-        {
+        public void SetAlive(bool alive) {
             this.alive = alive;
         }
 
-        public void SetIsLeft(bool isLeft)
-        {
-            foreach (Sprite sprite in spriteMap.Values)
-            {
+        public void SetIsLeft(bool isLeft) {
+            foreach (Sprite sprite in spriteMap.Values) {
                 sprite.SetIsLeft(isLeft);
             }
         }
-
-        public void SetWidth(int width)
-        {
-            this.width = width;
-        }
-
-        public void SetHeight(int height)
-        {
-            this.height = height;
-        }
-
-        public void SetDimension(int width, int height, int depth)
-        {
-            this.width = width;
-            this.height = height;
-            this.depth = depth;
-        }
-
-        public void SetDimension(int width, int height)
-        {
-            SetDimension(width, height, (int)this.depth);
-        }
-
-        public void SetDepth(float depth)
-        {
-            this.depth = depth;
-        }
-
-        public void SetDepthOffset(float z)
-        {
-            depthOffSet = z;
-        }
-
-        public void SetGround(float ground)
-        {
+        
+        public void SetGround(float ground) {
             this.ground = ground;
         }
 
-        public void SetGroundBase(float groundBase)
-        {
+        public void SetGroundBase(float groundBase) {
             this.groundBase = groundBase;
         }
         
-        public void SetBaseOffset(float x, float y)
-        {
+        public void SetBaseOffset(float x, float y) {
             baseOffset.X = x;
             baseOffset.Y = y;
         }
 
-        public string GetName()
-        {
+        public string GetName() {
             return name;
         }
 
-        public int GetHealth()
-        {
+        public int GetHealth() {
             return health;
         }
 
-        public bool Alive()
-        {
+        public bool Alive() {
             return alive;
         }
 
-        public bool IsLeft()
-        {
+        public bool IsLeft() {
             return currentSprite.IsLeft();
         }
 
-        public Vector3 GetPosition()
-        {
+        public Vector3 GetPosition() {
             return position;
         }
 
-        public float GetPosX()
-        {
+        public float GetPosX() {
             return position.X;
         }
 
-        public float GetPosY()
-        {
+        public float GetPosY() {
             return position.Y;
         }
 
-        public float GetPosZ()
-        {
+        public float GetPosZ() {
             return position.Z;
         }
 
-        public float GetDepthOffset()
-        {
-            return depthOffSet;
-        }
-
-        public Vector2 GetScale()
-        {
+        public Vector2 GetScale() {
             return scale;
         }
 
-        public int GetDirX()
-        {
+        public int GetDirX() {
             return (int)direction.X;
         }
 
-        public int GetDirY()
-        {
+        public int GetDirY() {
             return (int)direction.Y;
         }
 
-        public int GetDirZ()
-        {
+        public int GetDirZ() {
             return (int)direction.Z;
         }
 
-        public int GetAbsoluteDirX()
-        {
+        public int GetAbsoluteDirX() {
             return (int)absoluteDir.X;
         }
 
-        public int GetAbsoluteDirY()
-        {
+        public int GetAbsoluteDirY() {
             return (int)absoluteDir.Y;
         }
 
-        public int GetAbsoluteDirZ()
-        {
+        public int GetAbsoluteDirZ() {
             return (int)absoluteDir.Z;
         }
-
-        public int GetWidth()
-        {
-            return width;
-        }
-
-        public int GetHeight()
-        {
-            return Math.Abs(height);
-        }
-
-        public float GetDepth()
-        {
-            return depth;
-        }
-
-        public float GetGround()
-        {
+        
+        public float GetGround() {
             return ground;
         }
 
-        public float GetGroundBase()
-        {
+        public float GetGroundBase() {
             return groundBase;
         }
 
-        public EntityType GetEntityType()
-        {
+        public EntityType GetEntityType() {
             return type;
         }
 
-        public bool IsEntity(EntityType type)
-        {
+        public bool IsEntity(EntityType type) {
             return (this.type == type);
         }
 
-        public Vector2 GetConvertedPosition()
-        {
+        public Vector2 GetConvertedPosition() {
             convertedPosition.X = position.X;
             convertedPosition.Y = position.Y + position.Z;
             return convertedPosition;
         }
 
-        public virtual Vector2 GetOrigin()
-        {
+        public virtual Vector2 GetOrigin() {
             Sprite sprite = GetCurrentSprite();
             origin.X = (sprite.GetCurrentTexture().Width / 2);
             origin.Y = 0;
@@ -599,8 +460,7 @@ namespace Game1
             return origin;
         }
 
-        public Vector2 GetStanceOrigin()
-        {
+        public Vector2 GetStanceOrigin() {
             Sprite sprite = GetSprite(Animation.State.STANCE);
             stanceOrigin.X = sprite.GetCurrentTexture().Width / 2;
             stanceOrigin.Y = 0;
@@ -608,95 +468,74 @@ namespace Game1
             return stanceOrigin;
         }
 
-        public Vector3 GetVelocity()
-        {
+        public Vector3 GetVelocity() {
             return velocity;
         }
 
-        public int GetSpriteCount()
-        {
+        public int GetSpriteCount() {
             return spriteMap.Count;
         }
 
-        public Sprite GetSprite(Animation.State state)
-        {
-            if (spriteMap.ContainsKey(state))
-            {
+        public Sprite GetSprite(Animation.State state) {
+            if (spriteMap.ContainsKey(state)) {
                 return spriteMap[state];
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
 
-        public int GetSpriteFrames(Animation.State state)
-        {
+        public int GetSpriteFrames(Animation.State state) {
             return GetSprite(state).GetFrames();
         }
 
-        public Sprite GetCurrentSprite()
-        {
+        public Sprite GetCurrentSprite() {
             return currentSprite;
         }
 
-        public int GetCurrentFrame()
-        {
+        public int GetCurrentFrame() {
             return GetCurrentSprite().GetCurrentFrame();
         }
 
-        public Entity GetCurrentTarget()
-        {
+        public Entity GetCurrentTarget() {
             return currentTarget;
         }
 
-        public float GetSpriteWidth(Animation.State state)
-        {
+        public float GetSpriteWidth(Animation.State state) {
             return GetSprite(state).GetCurrentTexture().Width * GetScale().X;
         }
 
-        public float GetSpriteHeight(Animation.State state)
-        {
+        public float GetSpriteHeight(Animation.State state) {
             return GetSprite(state).GetCurrentTexture().Height * GetScale().Y;
         }
 
-        public float GetCurrentSpriteWidth()
-        {
+        public float GetCurrentSpriteWidth() {
             return GetCurrentSprite().GetCurrentTexture().Width * GetScale().X;
         }
 
-        public float GetCurrentSpriteHeight()
-        {
+        public float GetCurrentSpriteHeight() {
             return GetCurrentSprite().GetCurrentTexture().Height * GetScale().Y;
         }
 
-        public int GetCurrentSpriteFrame()
-        {
+        public int GetCurrentSpriteFrame() {
             return GetCurrentSprite().GetCurrentFrame();
         }
 
-        public Sprite GetBaseSprite()
-        {
+        public Sprite GetBaseSprite() {
             return baseSprite;
         }
 
-        public Color GetSpriteColor()
-        {
+        public Color GetSpriteColor() {
             return colorInfo.GetColor();
         }
 
-        public Vector2 GetBasePosition()
-        {
+        public Vector2 GetBasePosition() {
             Sprite stance = GetSprite(Animation.State.STANCE);
             baseCenter.X = (baseOffset.X * scale.X) + ((stance.GetCurrentTexture().Width * scale.X) / 2);
             baseCenter.Y = (baseOffset.Y * scale.Y) + ((stance.GetCurrentTexture().Height * scale.Y));
 
-            if (IsLeft())
-            {
+            if (IsLeft()) {
                 basePosition.X = GetConvertedPosition().X - baseCenter.X - 3;
-            }
-            else
-            {
+            } else {
                 basePosition.X = GetConvertedPosition().X + baseCenter.X + 8;
             }
 
@@ -704,99 +543,93 @@ namespace Game1
             return basePosition;
         }
 
-        public List<CLNS.BoundingBox> GetAllFrameBoxes()
-        {
+        public CLNS.BoundingBox GetLastBoxFrame(Animation.State state, int frame) {
+            return GetSprite(state).GetBoxes(frame).Last();
+        }
+
+        public CLNS.AttackBox GetAttackBox(Animation.State state, int frame) {
+            return (CLNS.AttackBox)GetSprite(state).GetBoxes(frame).Last();
+        }
+
+        public CLNS.AttackBox GetAttackBox(Animation.State state, int frame, int index) {
+            return (CLNS.AttackBox)GetSprite(state).GetBoxes(frame)[index];
+        }
+
+        public List<CLNS.BoundingBox> GetAllFrameBoxes() {
             List<CLNS.BoundingBox> currentBoxes = new List<CLNS.BoundingBox>();
 
-            foreach (Sprite sprite in spriteMap.Values)
-            {
+            foreach (Sprite sprite in spriteMap.Values) {
                 currentBoxes.AddRange(sprite.GetAllBoxes());
             }
 
             return currentBoxes;
         }
 
-        public List<CLNS.BoundingBox> GetBoxes()
-        {
-            return boxes;
+        public CLNS.BoundingBox GetBodyBox() {
+            return bodyBox;
         }
 
-        public List<CLNS.BoundingBox> GetBoxes(CLNS.BoxType type)
-        {
-            return boxes.FindAll(box => box.GetBoxType() == type);
+        public CLNS.BoundsBox GetBoundsBox() {
+            return boundsBox;
         }
 
-        public List<CLNS.BoundingBox> GetCurrentBoxes()
-        {
+        public CLNS.BoundingBox GetDepthBox() {
+            return depthBox;
+        }
+
+        public List<CLNS.BoundingBox> GetCurrentBoxes() {
             return GetCurrentSprite().GetCurrentBoxes();
         }
 
-        public List<CLNS.BoundingBox> GetCurrentBoxes(CLNS.BoxType type)
-        {
+        public List<CLNS.BoundingBox> GetCurrentBoxes(CLNS.BoxType type) {
             return GetCurrentSprite().GetCurrentBoxes(type);
         }
 
-        public SpriteEffects GetEffects()
-        {
+        public SpriteEffects GetEffects() {
             return currentSprite.GetEffects();
         }
 
-        public System.StateMachine GetAiStateMachine()
-        {
+        public System.StateMachine GetAiStateMachine() {
             return aiStateMachine;
         }
 
-        public bool IsInAnimationState(Animation.State state)
-        {
+        public bool IsInAnimationState(Animation.State state) {
             return (currentSprite != null 
                         && spriteMap.ContainsKey(state) 
                         && currentSprite == GetSprite(state)
                         && this.currentAnimationState == state);
         }
 
-        public Animation.State GetCurrentAnimationState()
-        {
+        public Animation.State GetCurrentAnimationState() {
             return currentAnimationState;
         }
 
-        public Animation.State GetLastAnimationState()
-        {
+        public Animation.State GetLastAnimationState() {
             return lastAnimationState;
         }
 
-        public bool IsInAnimationAction(Animation.Action animationAction)
-        {
+        public bool IsInAnimationAction(Animation.Action animationAction) {
             Animation.Action currentAction = GetCurrentAnimationAction();
             return (currentAction == animationAction);
         }
 
-        public Animation.Action GetCurrentAnimationAction()
-        {
+        public Animation.Action GetCurrentAnimationAction() {
             Animation.Action currentAction = Animation.Action.NONE;
             Animation.State currentState = GetCurrentAnimationState();
 
-            if (currentState.ToString().Contains("ATTACK"))
-            {
+            if (currentState.ToString().Contains("ATTACK")) {
                 return Animation.Action.ATTACKING;
-            }
-            else
-            {
-                if (currentState.ToString().Contains("RECOVER"))
-                {
+            } else {
+                if (currentState.ToString().Contains("RECOVER")) {
                     return Animation.Action.RECOVERY;
-                }
-                else if (currentState.ToString().Contains("JUMP"))
-                {
+                } else if (currentState.ToString().Contains("JUMP")) {
                     return Animation.Action.JUMPING;
-                }
-                else if (currentState.ToString().Contains("FALL"))
-                {
+                } else if (currentState.ToString().Contains("FALL")) {
                     return Animation.Action.FALLING;
                 }
             }
 
-            switch (currentState)
-            {
+            switch (currentState) {
                 case Animation.State.NONE:
                     currentAction = Animation.Action.NONE;
                     break;
@@ -818,85 +651,70 @@ namespace Game1
             return currentAction;
         }
 
-        public bool IsInMoveFrame()
-        {
-            return ((moveFrames.ContainsKey(GetCurrentAnimationState())
+        public bool IsInMoveFrame() {
+            return ((moveFrames.ContainsKey(GetCurrentAnimationState()) 
                         && IsInAnimationState(GetCurrentAnimationState())
-                        && currentSprite.GetCurrentFrame() >= moveFrames[GetCurrentAnimationState()]) 
+                            && currentSprite.GetCurrentFrame() >= moveFrames[GetCurrentAnimationState()]) 
                     || !moveFrames.ContainsKey(GetCurrentAnimationState()));
         }
         
-        public int GetMoveFrame()
-        {
+        public int GetMoveFrame() {
             return (moveFrames.ContainsKey(GetCurrentAnimationState()) ? moveFrames[GetCurrentAnimationState()] : 0);
         }
 
-        public bool IsInTossFrame()
-        {
+        public bool IsInTossFrame() {
             return ((tossFrames.ContainsKey(GetCurrentAnimationState())
                         && IsInAnimationState(GetCurrentAnimationState())
-                        && currentSprite.GetCurrentFrame() >= tossFrames[GetCurrentAnimationState()])
+                            && currentSprite.GetCurrentFrame() >= tossFrames[GetCurrentAnimationState()])
                     || tossFrames.Count == 0);
         }
 
-        public int GetTossFrame()
-        {
+        public int GetTossFrame() {
             return (tossFrames.ContainsKey(GetCurrentAnimationState()) ? tossFrames[GetCurrentAnimationState()] : 0);
         }
 
-        public bool IsFrameComplete(Animation.State state, int frame)
-        {
+        public bool IsFrameComplete(Animation.State state, int frame) {
             Sprite sprite = GetSprite(state);
             return sprite.IsFrameComplete(frame);
         }
 
-        public int GetEntityId()
-        {
+        public int GetEntityId() {
             return entityId;
         }
 
-        public bool IsToss()
-        {
+        public bool IsToss() {
             return tossInfo.isToss;
         }
 
-        public bool HasLanded()
-        {
-            return GetPosY() >= GetGround();
+        public bool HasLanded() {
+            return (double)GetPosY() >= (double)GetGround();
         }
 
-        public bool IsOnGround()
-        {
-            return GetPosY() == GetGroundBase();
+        public bool IsOnGround() {
+            return (double)GetPosY() == (double)GetGroundBase();
         }
 
-        public bool InAir()
-        {
-            return GetPosY() < GetGround();
+        public bool InAir() {
+            return (double)GetPosY() < (double)GetGround();
         }
 
-        public Attributes.TossInfo GetTossInfo()
-        {
+        public Attributes.TossInfo GetTossInfo() {
             return tossInfo;
         }
 
-        public ComboAttack.Chain GetDefaultAttackChain()
-        {
+        public ComboAttack.Chain GetDefaultAttackChain() {
             return defaultAttackChain;
         }
 
-        public Animation.State GetCurrentAttackChainState()
-        {
+        public Animation.State GetCurrentAttackChainState() {
             return defaultAttackChain.GetCurrentAttackState();
         }
 
-        public Animation.State GetPreviousAttackChainState()
-        {
+        public Animation.State GetPreviousAttackChainState() {
             return defaultAttackChain.GetPreviousAttackState();
         }
 
-        public bool InCurrentAttackCancelState()
-        {
+        public bool InCurrentAttackCancelState() {
             List<ComboAttack.Move> attackStates = defaultAttackChain.GetMoves().FindAll(item => item.GetState().Equals(GetCurrentAnimationState()));
 
             return IsInAnimationAction(Animation.Action.ATTACKING)
@@ -906,68 +724,52 @@ namespace Game1
                         && IsFrameComplete(attackStates[0].GetState(), attackStates[0].GetCancelFrame() + 1);
         }
 
-        public void AttackChainStep()
-        {
-            if (!IsInAnimationAction(Animation.Action.ATTACKING) 
-                    || InCurrentAttackCancelState())
-            {
+        public void ProcessAttackChainStep() {
+            if (!IsInAnimationAction(Animation.Action.ATTACKING) || InCurrentAttackCancelState()) {
                 SetAnimationState(GetCurrentAttackChainState());
             }
 
-            if (InCurrentAttackCancelState())
-            {
+            if (InCurrentAttackCancelState()) {
                 GetAttackInfo().Reset();
                 GetCurrentSprite().ResetAnimation();
             }
         }
 
-        public bool InAttackFrame()
-        {
+        public bool InAttackFrame() {
             List<CLNS.BoundingBox> attackBoxes = GetCurrentSprite().GetCurrentBoxes(CLNS.BoxType.HIT_BOX);
             return IsInAnimationAction(Animation.Action.ATTACKING) && attackBoxes != null && attackBoxes.Count > 0;
         }
 
-        public Attributes.CollisionInfo GetCollisionInfo()
-        {
+        public Attributes.CollisionInfo GetCollisionInfo() {
             return collisionInfo;
         }
 
-        public Attributes.AttackInfo GetAttackInfo()
-        {
+        public Attributes.AttackInfo GetAttackInfo() {
             return attackInfo;
         }
 
-        public bool IsJumpingOrInAir()
-        {
+        public bool IsJumpingOrInAir() {
             return (IsToss() || IsInAnimationAction(Animation.Action.JUMPING));
         }
 
-        public void SetJump(float height = -25f, float velX = 0f) 
-        {
+        public void SetJump(float height = -25f, float velX = 0f)  {
             Toss(height, velX);
             Sprite jumpStart = GetSprite(Animation.State.JUMP_START);
 
-            if (jumpStart != null)
-            {
+            if (jumpStart != null) {
                 SetAnimationState(Animation.State.JUMP_START);
-            }
-            else
-            {
+            } else {
                 SetAnimationState(Animation.State.JUMP);
             }
 
-            if (velX < 0.0 || velX > 0.0)
-            {
+            if (velX < 0.0 || velX > 0.0) {
                 SetJumpLink(Animation.State.JUMP_TOWARDS);
-            }
-            else
-            {
+            } else {
                 SetJumpLink(Animation.State.JUMP);
             }
         }
 
-        public void Toss(float height = -20, float velX = 0f)
-        {
+        public void Toss(float height = -20, float velX = 0f) {
             tossInfo.height = height;
             tossInfo.velocity.Y = (height / 2);
             tossInfo.velocity.X = velX;
@@ -975,8 +777,7 @@ namespace Game1
             tossInfo.isToss = true;
         }
 
-        public void ResetToss()
-        {
+        public void ResetToss() {
             velocity.Y = 0f;
             velocity.X = 0f;
             tossInfo.velocity.X = 0f;
@@ -985,27 +786,21 @@ namespace Game1
             tossInfo.isToss = false;
         }
 
-        public void UpdateToss(GameTime gameTime)
-        {
+        public void UpdateToss(GameTime gameTime) {
             bool alwaysToss = IsInAnimationAction(Animation.Action.FALLING);
 
-            if (tossInfo.isToss || alwaysToss)
-            {
-                if (IsInTossFrame() || alwaysToss)
-                {
-                    if (!tossInfo.inTossFrame)
-                    {
+            if (tossInfo.isToss || alwaysToss) {
+                if (IsInTossFrame() || alwaysToss) {
+                    if (!tossInfo.inTossFrame) {
                         MoveY(tossInfo.height);
                         tossInfo.inTossFrame = true;
                     }
                 }
 
-                if (tossInfo.inTossFrame)
-                {
+                if (tossInfo.inTossFrame) {
                     tossInfo.velocity.Y += tossInfo.gravity;
                     
-                    if (tossInfo.velocity.Y >= tossInfo.maxVelocity.Y)
-                    {
+                    if (tossInfo.velocity.Y >= tossInfo.maxVelocity.Y) {
                         tossInfo.velocity.Y = tossInfo.maxVelocity.Y;
                     }
 
@@ -1013,8 +808,7 @@ namespace Game1
                     VelY(tossInfo.velocity.Y);
                 }
 
-                if (GetPosY() > GetGround())
-                {
+                if ((int)GetPosY() > (int)GetGround()) {
                     SetPosY(GetGround());
                     SetAnimationState(Animation.State.LAND);
                     ResetToss();
@@ -1022,37 +816,27 @@ namespace Game1
             }
         }
 
-        public void UpdateAnimationLinks(GameTime gameTime)
-        {
+        public void UpdateAnimationLinks(GameTime gameTime) {
             List<Animation.Link> links = animationLinks.FindAll(item => item.GetOnState() == GetCurrentAnimationState());
 
-            foreach (Animation.Link link in links)
-            {
-                if (link.OnFrameComplete() 
-                        && currentSprite.GetCurrentFrame() >= link.GetOnFrameStart())
-                {
-                    if (IsFrameComplete(link.GetOnState(), link.GetOnFrameStart() + 1))
-                    {
+            foreach (Animation.Link link in links) {
+                if (link.OnFrameComplete() && currentSprite.GetCurrentFrame() >= link.GetOnFrameStart()) {
+                    if (IsFrameComplete(link.GetOnState(), link.GetOnFrameStart() + 1)) {
                         SetAnimationState(link.GetToState());
                     }
-                }
-                else
-                {
-                    if (link.GetOnFrameStart() == currentSprite.GetCurrentFrame())
-                    {
+                } else {
+                    if (link.GetOnFrameStart() == currentSprite.GetCurrentFrame()) {
                         SetAnimationState(link.GetToState());
                     }
                 }
             }
         }
 
-        public bool IsNonActionState()
-        {
+        public bool IsNonActionState() { 
             return (!IsToss() && !IsInAnimationAction(Animation.Action.ATTACKING));
         }
 
-        public bool InResetState()
-        {
+        public bool InResetState() {
             return (!InAir()
                         &&  (IsInAnimationAction(Animation.Action.WALKING)
                                 || IsInAnimationAction(Animation.Action.JUMPING)
@@ -1063,50 +847,41 @@ namespace Game1
                                         && GetCurrentSprite().IsAnimationComplete());
         }
 
-        public virtual void ResetToIdle(GameTime gameTime)
-        {
-            if (InResetState())
-            {
+        public virtual void ResetToIdle(GameTime gameTime) {
+            if (InResetState()) {
                 int frame = (IsEntity(EntityType.PLAYER) ? GetCurrentSprite().GetCurrentFrame() : GetCurrentSprite().GetFrames());
 
                 bool isFrameComplete = (IsEntity(EntityType.PLAYER) ? IsFrameComplete(GetCurrentAnimationState(), frame) 
                                             : IsFrameComplete(GetCurrentAnimationState(), frame) && !IsInAnimationAction(Animation.Action.WALKING));
 
-                if (isFrameComplete)
-                {
+                if (isFrameComplete) {
                     SetAnimationState(Animation.State.STANCE);
                 }
             }
         }
 
-        public void UpdateAnimation(GameTime gameTime)
-        {
+        public void UpdateAnimation(GameTime gameTime) {
             currentSprite.UpdateAnimation(gameTime);
             UpdateAnimationLinks(gameTime);
         }
 
-        public void UpdateDefaultAttackChain(GameTime gameTime)
-        {
-            if (defaultAttackChain != null)
-            {
+        public void UpdateDefaultAttackChain(GameTime gameTime) {
+            if (defaultAttackChain != null) {
                 defaultAttackChain.UpdateCombo(gameTime);
             }
         }
 
-        public void SetFade(int alpha)
-        {
+        public void SetFade(int alpha) {
             colorInfo.alpha = (float)alpha;
         }
 
-        public void SetColor(int r, int g, int b)
-        {
+        public void SetColor(int r, int g, int b) {
             colorInfo.r = r;
             colorInfo.g = g;
             colorInfo.b = b;
         }
 
-        public void Flash(float time = 5, float speed = 80f)
-        {
+        public void Flash(float time = 5, float speed = 80f) {
             colorInfo.isFlash = true;
             colorInfo.expired = false;
             colorInfo.alpha = 255;
@@ -1116,41 +891,33 @@ namespace Game1
             colorInfo.maxFadeTime = time;
         }
 
-        public void UpdateFade(GameTime gameTime)
-        {
-            if (colorInfo.isFlash)
-            {
-                if (!colorInfo.expired)
-                {
+        public void UpdateFade(GameTime gameTime) {
+            if (colorInfo.isFlash) {
+                if (!colorInfo.expired) {
                     colorInfo.currentFadeTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (colorInfo.alpha >= 255 || colorInfo.alpha <= 0)
-                    {
+                    if (colorInfo.alpha >= 255 || colorInfo.alpha <= 0) {
                         colorInfo.fadeFrequency *= -1;
                     }
 
                     colorInfo.alpha += colorInfo.fadeFrequency;
                 }
 
-                if (colorInfo.currentFadeTime > colorInfo.maxFadeTime)
-                {
+                if (colorInfo.currentFadeTime > colorInfo.maxFadeTime) {
                     colorInfo.expired = true;
                 }
                 
-                if (colorInfo.expired)
-                {
+                if (colorInfo.expired) {
                     colorInfo.currentFadeTime = 0f;
 
-                    if (colorInfo.alpha != 255)
-                    {
+                    if (colorInfo.alpha != 255) {
                         float freq = colorInfo.originalFreq * 1f;
 
                         colorInfo.fadeFrequency = 1 * Math.Abs(freq);
                         colorInfo.alpha += colorInfo.fadeFrequency;
                     }
 
-                    if (colorInfo.alpha >= 255)
-                    {
+                    if (colorInfo.alpha >= 255) {
                         colorInfo.alpha = 255;
                         colorInfo.isFlash = false;
                         colorInfo.expired = false;
@@ -1159,18 +926,15 @@ namespace Game1
             }
         }
 
-        public bool IsPauseHit(GameTime gameTime)
-        {
+        public bool IsPauseHit(GameTime gameTime) {
             bool isPauseHit = false;
 
-            if (attackInfo.hitPauseTime > 0)
-            {
+            if (attackInfo.hitPauseTime > 0) {
                 attackInfo.hitPauseTime -= (5 * (float)gameTime.ElapsedGameTime.Milliseconds);
                 isPauseHit = true;
             }
 
-            if (attackInfo.hitPauseTime < 0)
-            {
+            if (attackInfo.hitPauseTime < 0) {
                 attackInfo.hitPauseTime = 0;
                 isPauseHit = false;
             }
@@ -1178,26 +942,22 @@ namespace Game1
             return isPauseHit;
         }
 
-        public void Update(GameTime gameTime)
-        {
+        public void Update(GameTime gameTime) {
             bool isPauseHit = IsPauseHit(gameTime);
             Vector2 drawScale = scale;
             
-            if (IsEntity(EntityType.LIFE_BAR))
-            {
+            if (IsEntity(EntityType.LIFE_BAR)) {
                 drawScale = nScale;
             }
 
-            foreach (Sprite sprite in spriteMap.Values)
-            {
+            foreach (Sprite sprite in spriteMap.Values) {
                 sprite.Update(gameTime, position, drawScale);
             }
 
             UpdateFade(gameTime);
 
             //Update animation.
-            if (!isPauseHit)
-            {
+            if (!isPauseHit) {
                 UpdateAnimation(gameTime);
             }
 
@@ -1207,14 +967,20 @@ namespace Game1
             UpdateToss(gameTime);
 
             //Update bounding boxes.
-            foreach (CLNS.BoundingBox box in GetAllFrameBoxes())
-            {
-                box.Update(gameTime, IsLeft(), GetConvertedPosition());
+            foreach (CLNS.BoundingBox box in GetAllFrameBoxes()) {
+                box.Update(gameTime, this);
             }
             
-            foreach (CLNS.BoundingBox box in boxes)
-            {
-                box.Update(gameTime, IsLeft(), GetConvertedPosition());
+            if (boundsBox != null) {
+                boundsBox.Update(gameTime, this);
+            }
+
+            if (bodyBox != null) {
+                bodyBox.Update(gameTime, this);
+            }
+
+            if (depthBox != null) {
+                depthBox.Update(gameTime, this);
             }
 
             //Update movement.
@@ -1223,27 +989,18 @@ namespace Game1
             MoveZ(velocity.Z);
         }
 
-        public int CompareTo(Entity other)
-        {
-            if (other == null)
-            {
+        public int CompareTo(Entity other) {
+            if (other == null || other.GetDepthBox() == null || GetDepthBox() == null) {
                 return 0;
             }
 
-            int h1 = GetSprite(Animation.State.STANCE).GetCurrentTexture().Height;
-            int h2 = other.GetSprite(Animation.State.STANCE).GetCurrentTexture().Height;
-            int offset = (h1 - h2) / 2;
-
-            float z1 = h1 + (GetPosZ() / 2);
-            float z2 = h2 + (other.GetPosZ() / 2) - offset;
-
-            if (z1.Equals(z2))
-            {
+            int h1 = GetDepthBox().GetRect().Bottom;
+            int h2 = other.GetDepthBox().GetRect().Bottom;
+            
+            if (h1.Equals(h2)) {
                 return GetEntityId().CompareTo(other.GetEntityId());
-            }
-            else
-            {
-                return z1.CompareTo(z2);
+            } else {
+                return h1.CompareTo(h2);
             }
         }
     }

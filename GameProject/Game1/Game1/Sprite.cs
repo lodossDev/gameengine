@@ -363,8 +363,7 @@ namespace Game1
         {
             isAnimationComplete = false;
 
-            if (sprites.Count > 1 && (animationType == Animation.Type.ONCE
-                    || animationType == Animation.Type.REPEAT))
+            if (sprites.Count > 1 && (animationType == Animation.Type.ONCE || animationType == Animation.Type.REPEAT))
             {
                 frameTimeElapsed -= (float)(gameTime.ElapsedGameTime.TotalSeconds);
                 totalTimeRemaining -= (float)(gameTime.ElapsedGameTime.TotalSeconds);

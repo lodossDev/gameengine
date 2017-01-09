@@ -225,7 +225,7 @@ namespace Game1
             {
                 if (!player.IsToss())
                 {
-                    player.AttackChainStep();
+                    player.ProcessAttackChainStep();
                 }
                 else
                 {

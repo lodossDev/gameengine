@@ -20,25 +20,26 @@ namespace Game1
             SetSpriteOffSet(Animation.State.WALK_BACKWARDS, 5, -20);
 
             AddSprite(Animation.State.ATTACK1, new Sprite("Sprites/Actors/Taskmaster/Attack1", Animation.Type.ONCE));
-            SetFrameDelay(Animation.State.ATTACK1, 5);
-            SetSpriteOffSet(Animation.State.ATTACK1, -5, -28);
+            SetFrameDelay(Animation.State.ATTACK1, 4);
+            SetSpriteOffSet(Animation.State.ATTACK1, -10, -27);
 
             AddSprite(Animation.State.ATTACK2, new Sprite("Sprites/Actors/Taskmaster/Attack2", Animation.Type.ONCE));
-            SetFrameDelay(Animation.State.ATTACK2, 5);
+            SetFrameDelay(Animation.State.ATTACK2, 4);
             SetSpriteOffSet(Animation.State.ATTACK2, 75, -116);
 
             AddSprite(Animation.State.ATTACK3, new Sprite("Sprites/Actors/Taskmaster/Attack3", Animation.Type.ONCE));
-            SetFrameDelay(Animation.State.ATTACK3, 5);
+            SetFrameDelay(Animation.State.ATTACK3, 4);
             SetSpriteOffSet(Animation.State.ATTACK3, 8, -121);
 
             AddSprite(Animation.State.ATTACK4, new Sprite("Sprites/Actors/Taskmaster/Attack4", Animation.Type.ONCE));
-            SetFrameDelay(Animation.State.ATTACK4, 5);
+            SetFrameDelay(Animation.State.ATTACK4, 4);
             SetSpriteOffSet(Animation.State.ATTACK4, 25, -88);
 
             SetAnimationState(Animation.State.STANCE);
-            AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 120, 283, -60, -20));
+            //AddBox(new CLNS.BoundingBox(CLNS.BoxType.BOUNDS_BOX, 120, 283, -60, -20));
+            AddBoundsBox(120, 283, -60, 0, 50);
 
-            SetScale(1.9f, 2.7f);
+            SetScale(2.2f, 2.8f);
             SetPostion(650, 0, 340);
             SetBaseOffset(-90, -25f);
         }
