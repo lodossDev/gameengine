@@ -493,7 +493,10 @@ namespace Game1
 
             renderManager.Draw(gameTime);
 
+             List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
+
             spriteBatch.DrawString(font1, "HIT COUNT: " + (CollisionManager.hitCount), new Vector2(20, 20), Color.Black);
+            spriteBatch.DrawString(font1, "LEO ATTACK CHAIN STEP: " + (leo.GetDefaultAttackChain().GetCurrentMoveIndex()), new Vector2(20, 40), Color.Black);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

@@ -175,28 +175,26 @@ namespace Game1
             private int hitDamage;
             private int hitPoints;
             private float hitStrength;
-            private int resetHit;
             private int comboStep;
             private int juggleCost;
             private AttackPosition attackPosition;
             private BlockPosition blockPosition;
             private SparkRenderType sparkRenderType;
-            private Effect.EffectState sparkState;
+            private Effect.State sparkState;
             private Vector2 sparkOffset;
 
-            public AttackBox(int w, int h, int x, int y, int resetHit = -1, float zDepth = 30,
-                                        float hitPauseTime = 1 / 60, float painTime = 20 / 60, int hitDamage = 5,
+            public AttackBox(int w, int h, int x, int y, float zDepth = 30, float hitPauseTime = 1 / 60, 
+                                        float painTime = 20 / 60, int hitDamage = 5,
                                         int hitPoints = 5, float hitStrength = 0.4f, int comboStep = 1,
                                         int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.NONE,
                                         BlockPosition blockPosition = BlockPosition.NONE,
                                         SparkRenderType sparkRenderFrame = SparkRenderType.ALL,
-                                        Effect.EffectState sparkState = Effect.EffectState.NONE,
+                                        Effect.State sparkState = Effect.State.NONE,
                                         float sparkX = 0, float sparkY = 0)
                                     : base(BoxType.HIT_BOX, w, h, x, y) {
 
                 sparkOffset = Vector2.Zero;
 
-                SetResetHit(resetHit);
                 SetZdepth(zDepth);
                 SetHitPauseTime(hitPauseTime);
                 SetPainTime(painTime);
@@ -231,10 +229,6 @@ namespace Game1
                 hitStrength = strength;
             }
 
-            public void SetResetHit(int hit) {
-                resetHit = hit;
-            }
-
             public void SetComboStep(int step) {
                 comboStep = step;
             }
@@ -255,7 +249,7 @@ namespace Game1
                 this.sparkRenderType = sparkRenderFrame;
             }
 
-            public void SetSparkState(Effect.EffectState sparkState) {
+            public void SetSparkState(Effect.State sparkState) {
                 this.sparkState = sparkState;
             }
 
@@ -284,10 +278,6 @@ namespace Game1
                 return hitStrength;
             }
 
-            public int GetResetHit() {
-                return resetHit;
-            }
-
             public int GetComboStep() {
                 return comboStep;
             }
@@ -308,7 +298,7 @@ namespace Game1
                 return sparkRenderType;
             }
 
-            public Effect.EffectState GetSparkState() {
+            public Effect.State GetSparkState() {
                 return sparkState;
             }
 

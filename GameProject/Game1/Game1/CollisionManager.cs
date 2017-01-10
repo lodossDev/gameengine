@@ -12,7 +12,6 @@ namespace Game1
 {
     public class CollisionManager : Manager {
         public static long current_hit_id = 0;
-        public static long static_hit_id = 0;
         private SoundEffect hiteffect1;
         private SoundEffectInstance soundInstance, soundInstance2;
         private RenderManager renderManager;
@@ -209,7 +208,7 @@ namespace Game1
         private void OnAttack(Entity entity, Entity target, CLNS.AttackBox attackBox) {
             if (entity != target) {
                 ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
-                //attackChain.IncrementMoveIndex(attackBox.GetComboStep());
+                attackChain.IncrementMoveIndex(attackBox.GetComboStep());
                 entity.GetAttackInfo().hitPauseTime = 3000f;
             }
         }
@@ -223,6 +222,13 @@ namespace Game1
 
                 target.Toss(-10 * attackBox.GetHitStrength());
                 //target.MoveY(-125 * attackBox.GetHitStrength());
+            }
+        }
+
+        private void OnHit(Entity target, Entity entity) {
+            if (target != entity) {
+                hitCount++;
+                hiteffect1.CreateInstance().Play();
             }
         }
 
@@ -257,7 +263,6 @@ namespace Game1
             List<CLNS.AttackBox> attackBoxesHitInFrame = new List<CLNS.AttackBox>();
 
             Attributes.AttackInfo entityAttackInfo = entity.GetAttackInfo();
-            CLNS.BoundsBox entityBox = entity.GetBoundsBox();
             CLNS.BoundingBox eDepthBox = entity.GetDepthBox();
 
             if (attackBoxes != null && attackBoxes.Count > 0) {
@@ -265,17 +270,19 @@ namespace Game1
                 foreach (Entity target in entities) {
                     if (entity != target) {
                         //Get all body boxes for collision with attack boxes
-                        List<CLNS.BoundingBox> targetBoxes = entity.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
+                        List<CLNS.BoundingBox> targetBoxes = target.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
                         targetBoxes.Add(target.GetBodyBox());
+
+                        Debug.WriteLine("targetBoxes: " + targetBoxes.Count);
                         
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
-                        CLNS.BoundsBox targetBox = target.GetBoundsBox();
                         CLNS.BoundingBox tDepthBox = target.GetDepthBox();
+                        CLNS.BoundingBox tBodyBox = null;
                         bool targetHit = false;
-                        //int sparkTargetCount = 3;
 
                         if (Math.Abs(eDepthBox.GetRect().Bottom - tDepthBox.GetRect().Bottom) < tDepthBox.GetZdepth() + 10
-                                && entity.IsInAnimationAction(Animation.Action.ATTACKING) && entity.InAttackFrame()) {
+                                && entity.IsInAnimationAction(Animation.Action.ATTACKING) 
+                                && attackBoxes.Count > 0 && targetBoxes.Count > 0) {
 
                             //Get all attackboxes for this one frame, you can only hit once in each attack frame.
                             foreach (CLNS.AttackBox attackBox in attackBoxes) {
@@ -284,7 +291,18 @@ namespace Game1
 
                                     if (attackBox.Intersects(bodyBox)) {
                                         attackBoxesHitInFrame.Add(attackBox);
+                                        tBodyBox = bodyBox;
                                         targetHit = true;
+
+                                        if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState()) {
+                                            OnAttack(entity, target, attackBox);
+                                            entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();                                               
+                                        }
+
+                                        if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame()) {
+                                            current_hit_id++;
+                                            entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                        }    
                                     }
                                 }
                             }
@@ -292,70 +310,40 @@ namespace Game1
                             attackBoxesHitInFrame = attackBoxesHitInFrame.Distinct().ToList();
                             Debug.WriteLine("AttackBoxes: " + attackBoxesHitInFrame.Count);
                             
-                            if (targetHit && attackBoxesHitInFrame.Count > 0) {
+                            if (targetHit && attackBoxesHitInFrame.Count > 0 && targetAttackInfo.hitByAttackId != current_hit_id) {
                                 int sparkTargetCount = attackBoxesHitInFrame.Count;
+                                OnHit(target, entity);
 
                                 foreach (CLNS.AttackBox attackBox in attackBoxesHitInFrame) {
+                                    //OnHit(target, entity, attackBox);
 
-                                    if (attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
-                                            || attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
-                                    {
-                                        sparkTargetCount = 1;
-                                    }
-
-                                    //This will hit the target in a different attack frame.
-                                    if (attackBox.GetResetHit() == 1) {
-                                        if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame()) {
-                                            current_hit_id++;
-                                            OnAttack(entity, target, attackBox);
-                                            entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
-                                        }
-
-                                        if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState()) {
-                                            static_hit_id++;
-                                            entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();
-                                        }
-                                    } else {
-                                        if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState()) {
-                                            current_hit_id++;
-                                            static_hit_id++;
-                                            OnAttack(entity, target, attackBox);
-                                            entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();                                               
-                                        }
-
-                                        if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame()) {
-                                            current_hit_id++;
-                                            //targetAttackInfo.hitByAttackFrameCount = 0;
-                                            entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
-                                        }
-
-                                        ///Only 1 attack box will hit target.
-                                        if (targetAttackInfo.hitByAttackId != current_hit_id)
+                                    if (attackBox.Intersects(tBodyBox)) { 
+                                        if (attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
+                                                || attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
                                         {
-                                            OnHit(target, entity, attackBox);
-                                            targetAttackInfo.hitByAttackFrameCount = 0;
-                                            targetAttackInfo.hitByAttackId = current_hit_id;
+                                            sparkTargetCount = 1;
                                         }
-                                    }
 
-                                    if (targetAttackInfo.hitByAttackFrameCount < sparkTargetCount && entityAttackInfo.hitByStaticAttackId != target.GetEntityId()) {
-                                        float x1 = TargetBodyX(target, entity, attackBox);
-                                        float y1 = TargetBodyY(target, entity, attackBox);
+                                        
+                                            float x1 = TargetBodyX(target, entity, attackBox);
+                                            float y1 = TargetBodyY(target, entity, attackBox);
 
-                                        Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
-                                        hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
-                                        hitSpark1.SetAnimationState(Animation.State.STANCE);
-                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 2);
-                                        //hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
-                                        hitSpark1.SetScale(1.2f, 1.2f);
-                                        hitSpark1.SetPostion(x1 , y1, target.GetPosZ() + 8);
-                                        hitSpark1.SetFade(225);
+                                            Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
+                                            hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
+                                            hitSpark1.SetAnimationState(Animation.State.STANCE);
+                                            hitSpark1.SetFrameDelay(Animation.State.STANCE, 2);
+                                            //hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
+                                            hitSpark1.SetScale(1.2f, 1.2f);
+                                            hitSpark1.SetPostion(x1 , y1, target.GetPosZ() + 8);
+                                            hitSpark1.SetFade(225);
 
-                                        renderManager.AddEntity(hitSpark1);
-                                        targetAttackInfo.hitByAttackFrameCount++;
-                                        entityAttackInfo.hitByStaticAttackId = target.GetEntityId();
+                                            renderManager.AddEntity(hitSpark1);
+             
+                                        
                                     }
                                 }
+
+                                targetAttackInfo.hitByAttackId = current_hit_id;
                             }
 
                             Debug.WriteLine("SparkCount: " + renderManager.entities.FindAll(item => item.IsEntity(Entity.EntityType.HIT_FLASH)).ToList().Count);

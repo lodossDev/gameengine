@@ -75,10 +75,8 @@ namespace Game1
         public class AttackInfo
         {
             public long hitByAttackId;
-            public long hitByStaticAttackId;
             public Animation.State lastAttackState;
             public int lastAttackFrame;
-            public int hitByAttackFrameCount;
             public float hitPauseTime;
 
 
@@ -90,9 +88,7 @@ namespace Game1
             public void Reset()
             {
                 lastAttackFrame = -1;
-                hitByAttackId = hitByStaticAttackId = - 1;
                 lastAttackState = Animation.State.NONE;
-                hitByAttackFrameCount = 0;
                 hitPauseTime = 0;
             }
         }

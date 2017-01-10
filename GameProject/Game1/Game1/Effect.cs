@@ -8,15 +8,15 @@ namespace Game1
 {
     public class Effect
     {
-        public enum EffectType { HIT_SPARK }
-        public enum EffectState { NONE, LIGHT, MEDIUM, HEAVY }
+        public enum Type { HIT_SPARK }
+        public enum State { NONE, LIGHT, MEDIUM, HEAVY }
 
         private Vector2 offset;
-        private EffectType effectType;
-        private EffectState effectState;
+        private Type effectType;
+        private State effectState;
         
 
-        public Effect(EffectType effectType, EffectState effectState, float x1, float y1)
+        public Effect(Type effectType, State effectState, float x1, float y1)
         {
             this.effectType = effectType;
             this.effectState = effectState;
@@ -28,12 +28,12 @@ namespace Game1
             return offset;
         }
 
-        public EffectState GetEffectState()
+        public State GetState()
         {
             return effectState;
         }
 
-        public EffectType GetEffectType()
+        public Type GetType()
         {
             return effectType;
         }
