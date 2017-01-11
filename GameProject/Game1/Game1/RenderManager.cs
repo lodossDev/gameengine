@@ -28,7 +28,6 @@ namespace Game1
             renderBoxes = false;
         }
 
-        //entity.GetBoundsBox(), entity.GetDepthBox(), ), null
         private void RenderBoxes(Entity entity) {
             if (renderBoxes) {
                 foreach (CLNS.BoundingBox box in entity.GetCurrentSprite().GetCurrentBoxes()) {
@@ -49,11 +48,48 @@ namespace Game1
             }
         }
 
+        private void RenderLevelBackLayers(GameTime gameTime) {
+            foreach (Level level in levels) {
+                List<Entity> layers1 = level.GetLayers(1);
+                List<Entity> layers2 = level.GetLayers(2);
+
+                foreach (Entity entity in layers1) {
+                    if (entity.Alive()) {
+                        entity.Update(gameTime);
+                        Sprite currentSprite = entity.GetCurrentSprite();
+                        Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
+                    }
+                }
+
+                foreach (Entity entity in layers2) {
+                    if (entity.Alive()) {
+                        entity.Update(gameTime);
+                        Sprite currentSprite = entity.GetCurrentSprite();
+                        Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
+                    }
+                }
+            }
+        }
+
+        private void RenderLevelFrontLayers(GameTime gameTime) {
+            foreach (Level level in levels) {
+                List<Entity> layers3 = level.GetLayers(3);
+
+                foreach (Entity entity in layers3) {
+                    if (entity.Alive()) {
+                        entity.Update(gameTime);
+                        Sprite currentSprite = entity.GetCurrentSprite();
+                        Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
+                    }
+                }
+            }
+        }
+
         public void Update(GameTime gameTime) {
-            entities.RemoveAll(item => item != null &&item.IsEntity(Entity.EntityType.HIT_FLASH) && item.GetCurrentSprite().IsAnimationComplete());
+            entities.RemoveAll(item => item.IsEntity(Entity.EntityType.HIT_FLASH) && item.GetCurrentSprite().IsAnimationComplete());
 
             foreach (Entity entity in entities) {
-                if (entity != null && entity.Alive()) {
+                if (entity.Alive()) {
                     entity.Update(gameTime);
                 }
             }
@@ -62,33 +98,7 @@ namespace Game1
         public void Draw(GameTime gameTime) {
             entities.Sort();
 
-            foreach(Level level in levels)
-            {
-                List<Entity> layers2 = level.GetLayers(2);
-                
-                List<Entity> layers1 = level.GetLayers(1);
-               // Debug.WriteLine("LAYERS1: " + layers1.Count);
-
-                foreach (Entity entity in layers1)
-                {
-                    if (entity.Alive())
-                    {
-                        entity.Update(gameTime);
-                        Sprite currentSprite = entity.GetCurrentSprite();
-                        Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
-                    }
-                }
-
-                foreach (Entity entity in layers2)
-                {
-                    if (entity.Alive())
-                    {
-                        entity.Update(gameTime);
-                        Sprite currentSprite = entity.GetCurrentSprite();
-                        Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
-                    }
-                }
-            }
+            RenderLevelBackLayers(gameTime);
 
             foreach (Entity entity in entities)
             {
@@ -137,6 +147,8 @@ namespace Game1
                     Setup.spriteBatch.Draw(entity.GetBaseSprite().GetCurrentTexture(), entity.GetBasePosition(), null, Color.White * 1f, 0f, baseSpriteOrigin, baseSpriteScale, SpriteEffects.None, 0f);
                 }
             }
+
+            RenderLevelFrontLayers(gameTime);
         }
     }
 }

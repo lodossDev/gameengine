@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Audio;
 namespace Game1
 {
     public class CollisionManager : Manager {
+        public static int hitCount = 0;
         public static long current_hit_id = 0;
         private SoundEffect hiteffect1;
         private SoundEffectInstance soundInstance, soundInstance2;
@@ -25,7 +26,7 @@ namespace Game1
             this.renderManager = renderManager;
         }
 
-        public List<Entity> FindAbove(Entity entity){
+        public List<Entity> FindAbove(Entity entity) {
             List<Entity> found = new List<Entity>();
             CLNS.BoundsBox entityBox = entity.GetBoundsBox();
             CLNS.BoundingBox eDepthBox = entity.GetDepthBox();
@@ -34,7 +35,7 @@ namespace Game1
             int eGround = (int)Math.Abs(entity.GetGround());
             int eHeight = (int)(ePosY + (entityBox.GetHeight() - entityBox.GetZdepth()));
 
-            foreach (Entity target in entities){
+            foreach (Entity target in entities) {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
                     CLNS.BoundsBox targetBox = target.GetBoundsBox();
                     CLNS.BoundingBox tDepthBox = target.GetDepthBox();
@@ -68,7 +69,7 @@ namespace Game1
             int eGround = (int)Math.Abs(entity.GetGround());
             int eHeight = (int)(ePosY + (entityBox.GetHeight() - entityBox.GetZdepth()));
 
-            foreach (Entity target in entities){
+            foreach (Entity target in entities) {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
                     CLNS.BoundsBox targetBox = target.GetBoundsBox();
                     CLNS.BoundingBox tDepthBox = target.GetDepthBox();
@@ -96,15 +97,12 @@ namespace Game1
         private void CheckFall(Entity entity) {
             List<Entity> belowEntities = FindBelow(entity);
 
-            if ((belowEntities.Count == 0 && (int)entity.GetGround() != (int)entity.GetGroundBase() && entity.HasLanded()) 
+            if ((belowEntities.Count == 0 && (int)entity.GetGround() != (int)entity.GetGroundBase() && entity.HasLanded() && !entity.IsToss())
                     || (belowEntities.Count == 0 && Math.Abs((int)entity.GetPosY()) != (int)entity.GetGround() && !entity.IsToss())) {
 
                 entity.SetGround(entity.GetGroundBase());
-
-                if (!entity.IsToss()) {
-                    entity.SetAnimationState(Animation.State.FALL1);
-                    entity.Toss(5);
-                }
+                entity.SetAnimationState(Animation.State.FALL1);
+                entity.Toss(5);
             }
         }
 
@@ -116,7 +114,7 @@ namespace Game1
             int eGround = (int)Math.Abs(entity.GetGround());
             int eHeight = (int)(ePosY + (entityBox.GetHeight() - entityBox.GetZdepth()));
 
-            foreach (Entity target in entities){
+            foreach (Entity target in entities) {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
                     CLNS.BoundsBox targetBox = target.GetBoundsBox();
                     CLNS.BoundingBox tDepthBox = target.GetDepthBox();
@@ -184,7 +182,7 @@ namespace Game1
                             }
                         }
 
-                        if ((isWithInBoundsX1 || !isWithInBoundsX1 && !isWithInBoundsZ1) && (isWithInBoundsZ2)) {
+                        if ((isWithInBoundsX1 || !isWithInBoundsX1 && !isWithInBoundsZ1) && isWithInBoundsZ2) {
                             if (entity.GetAbsoluteDirX() < 0 && entity.HorizontalCollisionRight(target, 5)) {
                                 entity.MoveX(depthX);
                                 entity.GetCollisionInfo().Left();
@@ -205,33 +203,6 @@ namespace Game1
             }
         }
         
-        private void OnAttack(Entity entity, Entity target, CLNS.AttackBox attackBox) {
-            if (entity != target) {
-                ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
-                attackChain.IncrementMoveIndex(attackBox.GetComboStep());
-                entity.GetAttackInfo().hitPauseTime = 3000f;
-            }
-        }
-
-        public static int hitCount = 0;
-
-        private void OnHit(Entity target, Entity entity, CLNS.AttackBox attackBox) {
-            if (target != entity) {
-                hitCount++;
-                hiteffect1.CreateInstance().Play();
-
-                target.Toss(-10 * attackBox.GetHitStrength());
-                //target.MoveY(-125 * attackBox.GetHitStrength());
-            }
-        }
-
-        private void OnHit(Entity target, Entity entity) {
-            if (target != entity) {
-                hitCount++;
-                hiteffect1.CreateInstance().Play();
-            }
-        }
-
         private float TargetBodyX(Entity target, Entity entity, CLNS.AttackBox attack) {
             int x1 = entity.GetBoundsBox().GetWidth();
             int x2 = target.GetBoundsBox().GetWidth();
@@ -258,6 +229,31 @@ namespace Game1
             return (y1 - (attack.GetRect().Height)) + (attack.GetOffset().Y / 2f) - 80;
         }
 
+        private void OnAttack(Entity entity, Entity target, CLNS.AttackBox attackBox) {
+            if (entity != target) {
+                ComboAttack.Chain attackChain = entity.GetDefaultAttackChain();
+                attackChain.IncrementMoveIndex(attackBox.GetComboStep());
+                entity.GetAttackInfo().hitPauseTime = 3000f;
+            }
+        }
+
+        private void OnHit(Entity target, Entity entity, CLNS.AttackBox attackBox) {
+            if (target != entity) {
+                hitCount++;
+                hiteffect1.CreateInstance().Play();
+
+                target.Toss(-10 * attackBox.GetHitStrength());
+                //target.MoveY(-125 * attackBox.GetHitStrength());
+            }
+        }
+
+        private void OnHit(Entity target, Entity entity) {
+            if (target != entity) {
+                hitCount++;
+                hiteffect1.CreateInstance().Play();
+            }
+        }
+
         private void CheckAttack(Entity entity) {
             List<CLNS.AttackBox> attackBoxes = entity.GetCurrentBoxes(CLNS.BoxType.HIT_BOX).Cast<CLNS.AttackBox>().ToList();
             List<CLNS.AttackBox> attackBoxesHitInFrame = new List<CLNS.AttackBox>();
@@ -268,6 +264,7 @@ namespace Game1
             if (attackBoxes != null && attackBoxes.Count > 0) {
 
                 foreach (Entity target in entities) {
+
                     if (entity != target) {
                         //Get all body boxes for collision with attack boxes
                         List<CLNS.BoundingBox> targetBoxes = target.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
@@ -278,6 +275,7 @@ namespace Game1
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
                         CLNS.BoundingBox tDepthBox = target.GetDepthBox();
                         CLNS.BoundingBox tBodyBox = null;
+                        int currentAttackHits = 0;
                         bool targetHit = false;
 
                         if (Math.Abs(eDepthBox.GetRect().Bottom - tDepthBox.GetRect().Bottom) < tDepthBox.GetZdepth() + 10
@@ -292,10 +290,10 @@ namespace Game1
                                     if (attackBox.Intersects(bodyBox)) {
                                         attackBoxesHitInFrame.Add(attackBox);
                                         tBodyBox = bodyBox;
-                                        targetHit = true;
 
                                         if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState()) {
                                             OnAttack(entity, target, attackBox);
+                                            entity.OnAttack(target, attackBox);
                                             entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();                                               
                                         }
 
@@ -310,36 +308,40 @@ namespace Game1
                             attackBoxesHitInFrame = attackBoxesHitInFrame.Distinct().ToList();
                             Debug.WriteLine("AttackBoxes: " + attackBoxesHitInFrame.Count);
                             
-                            if (targetHit && attackBoxesHitInFrame.Count > 0 && targetAttackInfo.hitByAttackId != current_hit_id) {
-                                int sparkTargetCount = attackBoxesHitInFrame.Count;
-                                OnHit(target, entity);
+                            if (tBodyBox != null && attackBoxesHitInFrame.Count > 0 
+                                    && targetAttackInfo.hitByAttackId != current_hit_id) {
 
                                 foreach (CLNS.AttackBox attackBox in attackBoxesHitInFrame) {
-                                    //OnHit(target, entity, attackBox);
+                                    
+                                    if (attackBox.Intersects(tBodyBox)) {
 
-                                    if (attackBox.Intersects(tBodyBox)) { 
-                                        if (attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
-                                                || attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)
-                                        {
-                                            sparkTargetCount = 1;
+                                        if (currentAttackHits > 0 && (attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
+                                                || attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)) {
+
+                                            break;
                                         }
 
-                                        
-                                            float x1 = TargetBodyX(target, entity, attackBox);
-                                            float y1 = TargetBodyY(target, entity, attackBox);
+                                        if (!targetHit) {
+                                            OnHit(target, entity, attackBox);
+                                            target.OnHit(entity, attackBox);
 
-                                            Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
-                                            hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
-                                            hitSpark1.SetAnimationState(Animation.State.STANCE);
-                                            hitSpark1.SetFrameDelay(Animation.State.STANCE, 2);
-                                            //hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
-                                            hitSpark1.SetScale(1.2f, 1.2f);
-                                            hitSpark1.SetPostion(x1 , y1, target.GetPosZ() + 8);
-                                            hitSpark1.SetFade(225);
+                                            targetHit = true;
+                                        }
 
-                                            renderManager.AddEntity(hitSpark1);
-             
-                                        
+                                        float x1 = TargetBodyX(target, entity, attackBox);
+                                        float y1 = TargetBodyY(target, entity, attackBox);
+
+                                        Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
+                                        hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
+                                        hitSpark1.SetAnimationState(Animation.State.STANCE);
+                                        hitSpark1.SetFrameDelay(Animation.State.STANCE, 2);
+                                        //hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
+                                        hitSpark1.SetScale(1.2f, 1.2f);
+                                        hitSpark1.SetPostion(x1 , y1, target.GetPosZ() + 8);
+                                        hitSpark1.SetFade(225);
+
+                                        renderManager.AddEntity(hitSpark1);
+                                        currentAttackHits++;
                                     }
                                 }
 

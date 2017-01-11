@@ -989,6 +989,16 @@ namespace Game1
             MoveZ(velocity.Z);
         }
 
+        public virtual void OnAttack(Entity target, CLNS.AttackBox attackBox) {
+            if (this != target) {
+            }
+        }
+
+        public virtual void OnHit(Entity attacker, CLNS.AttackBox attackBox) {
+            if (this != attacker) {
+            }
+        }
+
         public int CompareTo(Entity other) {
             if (other == null || other.GetDepthBox() == null || GetDepthBox() == null) {
                 return 0;
