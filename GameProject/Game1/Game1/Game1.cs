@@ -437,27 +437,29 @@ namespace Game1
                 inputManager.Update(gameTime);
 
                 if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-                    drum3.VelX(-5);
+                    //drum3.VelX(-5);
+                    level1.ScrollX(-5);
                 } else if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-                    drum3.VelX(5);
+                    //drum3.VelX(5);
+                    level1.ScrollX(5);
                 } else {
-                    drum3.VelX(0);
+                    //drum3.VelX(0);
                 }
 
                 if(Keyboard.GetState().IsKeyDown(Keys.NumPad8)) {
-                    drum3.VelZ(-5);
+                    //drum3.VelZ(-5);
+                    level1.ScrollY(-5);
                 } else if(Keyboard.GetState().IsKeyDown(Keys.NumPad2)) {
-                    drum3.VelZ(5);
+                    //drum3.VelZ(5);
+                    level1.ScrollY(5);
                 } else {
-                    drum3.VelZ(0);
+                    //drum3.VelZ(0);
                 }
 
                 renderManager.Update(gameTime);
 
-                
                 ((Character)taskMaster).UpdateAI(gameTime, collisionManager.GetPlayers());
                 ((Character)taskMaster).ResetToIdle(gameTime);
-
 
                 /*level1.ScrollX(-leo.GetVelocity().X);
                 drum.MoveX(-leo.GetVelocity().X);
@@ -495,8 +497,8 @@ namespace Game1
 
              List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
 
-            spriteBatch.DrawString(font1, "HIT COUNT: " + (CollisionManager.hitCount), new Vector2(20, 20), Color.Black);
-            spriteBatch.DrawString(font1, "LEO ATTACK CHAIN STEP: " + (leo.GetDefaultAttackChain().GetCurrentMoveIndex()), new Vector2(20, 40), Color.Black);
+            spriteBatch.DrawString(font1, "HIT COUNT: " + (CollisionManager.hitCount), new Vector2(20, 20), Color.BlueViolet);
+            spriteBatch.DrawString(font1, "LEO ATTACK CHAIN STEP: " + (leo.GetDefaultAttackChain().GetCurrentMoveIndex()), new Vector2(20, 40), Color.BlueViolet);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

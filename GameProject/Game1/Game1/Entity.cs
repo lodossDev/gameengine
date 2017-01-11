@@ -262,6 +262,11 @@ namespace Game1
             position.Z = z;
         }
 
+        public void SetPostion(float x, float y) {
+            position.X = x;
+            position.Y = y;
+        }
+
         public void SetPosX(float x) {
             position.X = x;
         }

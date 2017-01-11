@@ -33,7 +33,7 @@ namespace Game1
             return effectState;
         }
 
-        public Type GetType()
+        public Type GetEffectType()
         {
             return effectType;
         }

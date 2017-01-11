@@ -168,7 +168,7 @@ namespace Game1
         public class AttackBox : BoundingBox {
             public enum AttackPosition { STANDING, LOW, AIR, NONE };
             public enum BlockPosition { HI, LOW, AIR, NONE };
-            public enum SparkRenderType { ALL, FRAME, ONCE }
+            public enum SettingType { ALL, FRAME, ONCE }
 
             private float hitPauseTime;
             private float painTime;
@@ -179,7 +179,7 @@ namespace Game1
             private int juggleCost;
             private AttackPosition attackPosition;
             private BlockPosition blockPosition;
-            private SparkRenderType sparkRenderType;
+            private SettingType settingType;
             private Effect.State sparkState;
             private Vector2 sparkOffset;
 
@@ -188,7 +188,7 @@ namespace Game1
                                         int hitPoints = 5, float hitStrength = 0.4f, int comboStep = 1,
                                         int juggleCost = 0, AttackPosition attackPosiiton = AttackPosition.NONE,
                                         BlockPosition blockPosition = BlockPosition.NONE,
-                                        SparkRenderType sparkRenderFrame = SparkRenderType.ALL,
+                                        SettingType settingType = SettingType.ALL,
                                         Effect.State sparkState = Effect.State.NONE,
                                         float sparkX = 0, float sparkY = 0)
                                     : base(BoxType.HIT_BOX, w, h, x, y) {
@@ -204,7 +204,7 @@ namespace Game1
                 SetComboStep(comboStep);
                 SetJuggleCost(juggleCost);
                 SetAttackPosition(attackPosition);
-                SetSparkRenderType(sparkRenderFrame);
+                SetSettingType(settingType);
                 SetSparkState(sparkState);
                 SetSparkOffset(sparkX, sparkY);
             }
@@ -245,8 +245,8 @@ namespace Game1
                 blockPosition = position;
             }
 
-            public void SetSparkRenderType(SparkRenderType sparkRenderFrame) {
-                this.sparkRenderType = sparkRenderFrame;
+            public void SetSettingType(SettingType sparkRenderFrame) {
+                this.settingType = sparkRenderFrame;
             }
 
             public void SetSparkState(Effect.State sparkState) {
@@ -294,8 +294,8 @@ namespace Game1
                 return blockPosition;
             }
 
-            public SparkRenderType GetSparkRenderType() {
-                return sparkRenderType;
+            public SettingType GetSettingType() {
+                return settingType;
             }
 
             public Effect.State GetSparkState() {

@@ -61,13 +61,13 @@ namespace Game1
                     }
                 }
 
-                foreach (Entity entity in layers2) {
+                /*foreach (Entity entity in layers2) {
                     if (entity.Alive()) {
                         entity.Update(gameTime);
                         Sprite currentSprite = entity.GetCurrentSprite();
                         Setup.spriteBatch.Draw(currentSprite.GetCurrentTexture(), currentSprite.GetPosition(), null, Color.White * 1f, 0f, entity.GetOrigin(), entity.GetScale(), entity.GetEffects(), 0f);
                     }
-                }
+                }*/
             }
         }
 
@@ -148,7 +148,7 @@ namespace Game1
                 }
             }
 
-            RenderLevelFrontLayers(gameTime);
+            //RenderLevelFrontLayers(gameTime);
         }
     }
 }

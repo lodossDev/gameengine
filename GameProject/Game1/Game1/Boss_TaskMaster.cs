@@ -36,35 +36,6 @@ namespace Game1
             SetSpriteOffSet(Animation.State.ATTACK4, 25, -88);
 
             SetAnimationState(Animation.State.STANCE);
-
-            AddBox(Animation.State.STANCE, 1, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 2, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 3, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 4, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 5, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 6, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 7, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-
-            AddBox(Animation.State.STANCE, 8, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 9, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.STANCE, 10, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-
-            AddBox(Animation.State.WALK_BACKWARDS, 1, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_BACKWARDS, 2, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_BACKWARDS, 3, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_BACKWARDS, 4, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_BACKWARDS, 5, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_BACKWARDS, 6, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_BACKWARDS, 7, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-
-            AddBox(Animation.State.WALK_TOWARDS, 1, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_TOWARDS, 2, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_TOWARDS, 3, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_TOWARDS, 4, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_TOWARDS, 5, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_TOWARDS, 6, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-            AddBox(Animation.State.WALK_TOWARDS, 7, new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 600, 200, 30, 20));
-
             AddBoundsBox(120, 283, -60, 0, 50);
 
             SetScale(2.2f, 2.8f);

@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/lodoss118/Desktop/Git Game Engine/gameengine/GameProject/Game1/Game1/Content/Sprites/Misc/Drum/drum.png</SourceFile>
   <SourceTime>2016-12-26T14:59:36.8220285+00:00</SourceTime>
   <DestFile>C:/Users/lodoss118/Desktop/Git Game Engine/gameengine/GameProject/Game1/Game1/Content/bin/Windows/Sprites/Misc/Drum/drum.xnb</DestFile>
-  <DestTime>2017-01-09T21:22:47.6773043+00:00</DestTime>
+  <DestTime>2017-01-11T20:00:37.8470863+00:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T07:36:08+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
@@ -26,6 +26,10 @@
   </Parameters>
   <Parameters>
     <Key>ResizeToPowerOfTwo</Key>
+    <Value>False</Value>
+  </Parameters>
+  <Parameters>
+    <Key>MakeSquare</Key>
     <Value>False</Value>
   </Parameters>
   <Parameters>

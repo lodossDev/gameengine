@@ -269,8 +269,6 @@ namespace Game1
                         //Get all body boxes for collision with attack boxes
                         List<CLNS.BoundingBox> targetBoxes = target.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
                         targetBoxes.Add(target.GetBodyBox());
-
-                        Debug.WriteLine("targetBoxes: " + targetBoxes.Count);
                         
                         Attributes.AttackInfo targetAttackInfo = target.GetAttackInfo();
                         CLNS.BoundingBox tDepthBox = target.GetDepthBox();
@@ -291,15 +289,27 @@ namespace Game1
                                         attackBoxesHitInFrame.Add(attackBox);
                                         tBodyBox = bodyBox;
 
-                                        if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState()) {
-                                            OnAttack(entity, target, attackBox);
-                                            entity.OnAttack(target, attackBox);
-                                            entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();                                               
-                                        }
+                                        if (attackBox.GetSettingType() == CLNS.AttackBox.SettingType.ONCE) { 
+                                            if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState()) {
+                                                current_hit_id++;
 
-                                        if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame()) {
-                                            current_hit_id++;
-                                            entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                                OnAttack(entity, target, attackBox);
+                                                entity.OnAttack(target, attackBox);
+
+                                                entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();                                               
+                                            }
+                                        } else { 
+                                            if (entityAttackInfo.lastAttackState != entity.GetCurrentAnimationState()) {
+                                                OnAttack(entity, target, attackBox);
+                                                entity.OnAttack(target, attackBox);
+
+                                                entityAttackInfo.lastAttackState = entity.GetCurrentAnimationState();                                               
+                                            }
+
+                                            if (entityAttackInfo.lastAttackFrame != entity.GetCurrentSprite().GetCurrentFrame()) {
+                                                current_hit_id++;
+                                                entityAttackInfo.lastAttackFrame = entity.GetCurrentSprite().GetCurrentFrame();
+                                            }
                                         }    
                                     }
                                 }
@@ -314,9 +324,10 @@ namespace Game1
                                 foreach (CLNS.AttackBox attackBox in attackBoxesHitInFrame) {
                                     
                                     if (attackBox.Intersects(tBodyBox)) {
+                                        Debug.WriteLine("currentAttackHits: " + currentAttackHits);
 
-                                        if (currentAttackHits > 0 && (attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.FRAME
-                                                || attackBox.GetSparkRenderType() == CLNS.AttackBox.SparkRenderType.ONCE)) {
+                                        if (currentAttackHits > 0 && (attackBox.GetSettingType() == CLNS.AttackBox.SettingType.FRAME
+                                                || attackBox.GetSettingType() == CLNS.AttackBox.SettingType.ONCE)) {
 
                                             break;
                                         }
