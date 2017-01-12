@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Game1
-{
-    public class Animation
-    {
+namespace Game1 {
+    public class Animation {
         /**
         * 1 game-tick is 1/60 of a sec, so 60 ticks is 1 second
         */
@@ -25,50 +23,47 @@ namespace Game1
             JUMP_TOWARD_ATTACK5, JUMP_TOWARD_ATTACK6, JUMP_TOWARD_ATTACK7, JUMP_TOWARD_ATTACK8,
             JUMP_TOWARD_ATTACK9, JUMP_TOWARD_ATTACK10,
 
-            JUMP_RECOVER1, JUMP_RECOVER2
+            JUMP_RECOVER1, JUMP_RECOVER2,
+
+            PAIN1, PAIN2, PAIN3, PAIN4, PAIN5, PAIN6,
+
+            DIE1, DIE2, DIE3, DIE4, DIE5, DIE6
         }
 
         public enum Action {NONE, ATTACKING, JUMPING, FALLING, IDLE, WALKING, LANDING, RECOVERY}
 
         public enum Type {NONE, ONCE, REPEAT}
 
-        public class Link
-        {
+        public class Link {
             private Animation.State onState;
             private Animation.State toState;
             private int onFrameState;
             private bool onFrameComplete;
 
-            public Link(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
-            {
+            public Link(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true) {
                 SetLink(onState, toState, frameOnStart, onFrameComplete);
             }
 
-            public void SetLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true)
-            {
+            public void SetLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true) {
                 this.onState = onState;
                 this.toState = toState;
                 this.onFrameState = (frameOnStart - 1);
                 this.onFrameComplete = onFrameComplete;
             }
 
-            public Animation.State GetOnState()
-            {
+            public Animation.State GetOnState() {
                 return onState;
             }
 
-            public Animation.State GetToState()
-            {
+            public Animation.State GetToState() {
                 return toState;
             }
 
-            public int GetOnFrameStart()
-            {
+            public int GetOnFrameStart() {
                 return onFrameState;
             }
 
-            public bool OnFrameComplete()
-            {
+            public bool OnFrameComplete() {
                 return onFrameComplete;
             }
         }

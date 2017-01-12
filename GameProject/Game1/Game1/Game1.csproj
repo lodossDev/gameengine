@@ -43,18 +43,19 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AiState_Follow.cs" />
-    <Compile Include="AiState_FollowXPath.cs" />
+    <Compile Include="AiStates\AiState_Follow.cs" />
+    <Compile Include="AiStates\AiState_FollowXPath.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="Boss.cs" />
-    <Compile Include="Boss_TaskMaster.cs" />
+    <Compile Include="Characters\Boss_TaskMaster.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="CLNS.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CollisionHelper.cs" />
     <Compile Include="CollisionManager.cs" />
     <Compile Include="ComboAttack.cs" />
+    <Compile Include="Obstacles\Drum1.cs" />
     <Compile Include="Effect.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
@@ -63,11 +64,13 @@
     <Compile Include="InputControl.cs" />
     <Compile Include="InputHelper.cs" />
     <Compile Include="InputManager.cs" />
+    <Compile Include="Obstacle.cs" />
+    <Compile Include="Obstacles\PhoneBooth1.cs" />
     <Compile Include="System.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LifeBar.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Player_Leo.cs" />
+    <Compile Include="Characters\Player_Leo.cs" />
     <Compile Include="Stage1.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Program.cs" />

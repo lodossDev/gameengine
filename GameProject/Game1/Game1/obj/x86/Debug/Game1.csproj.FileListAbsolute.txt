@@ -1792,3 +1792,5 @@ C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bi
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Drum\Pain1\drum.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Drum\Pain2\drum.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Drum\Stance\drum.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Phone\Die1\pbroke.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Phone\Stance\pbooth.xnb

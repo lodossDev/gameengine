@@ -36,6 +36,7 @@ namespace Game1
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 700;
+            //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
         }
 

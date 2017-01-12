@@ -14,6 +14,8 @@ namespace Game1
 
         public Level(String name) {
             layers = new Dictionary<int, List<Entity>>();
+            misc = new List<Entity>();
+
             this.name = name;
             maxLeft = maxRight = 0;
 
@@ -44,23 +46,25 @@ namespace Game1
         }
 
         public virtual void ScrollX(float velX) {
-            List<Entity> layers = this.layers.SelectMany(item => item.Value).ToList();
+            List<Entity> entities = this.layers.SelectMany(item => item.Value).ToList();
+            entities.AddRange(misc);
 
-            foreach (Entity entity in layers) {
-                if ((int)velX < 0 && (int)entity.GetPosX() > maxRight) { 
-                    entity.MoveX(velX);
+            foreach (Entity entity in entities) {
+                if ((int)velX < 0 && (int)entity.GetPosX() <= maxRight 
+                        || (int)velX > 0 && (int)entity.GetPosX() >= maxLeft) { 
+                    
+                    return;
                 }
 
-                if ((int)velX > 0 && (int)entity.GetPosX() < maxLeft) { 
-                    entity.MoveX(velX);
-                }
+                entity.MoveX(velX);
             }
         }
 
         public void ScrollY(float velY) {
-            List<Entity> layers = this.layers.SelectMany(item => item.Value).ToList();
+            List<Entity> entities = this.layers.SelectMany(item => item.Value).ToList();
+            entities.AddRange(misc);
 
-            foreach (Entity entity in layers) {
+            foreach (Entity entity in entities) {
                 entity.MoveY(velY);
             }
         }
