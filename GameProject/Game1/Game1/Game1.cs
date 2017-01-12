@@ -220,7 +220,7 @@ namespace Game1
 
 
             drum = new Entity(Entity.EntityType.OBSTACLE, "DRUM1");
-            drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
+            drum.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum/Stance"));
             drum.SetAnimationState(Animation.State.STANCE);
             //drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -63, -15));
             drum.AddBoundsBox(125, 210, -63, -15, 40);
@@ -228,7 +228,7 @@ namespace Game1
             drum.SetPostion(700, 0, 200);
 
             drum2 = new Entity(Entity.EntityType.OBSTACLE, "DRUM2");
-            drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
+            drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum/Stance"));
             drum2.SetAnimationState(Animation.State.STANCE);
             //drum2.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -63, -15));
             drum2.AddBoundsBox(125, 210, -63, -15, 40);
@@ -238,7 +238,7 @@ namespace Game1
            
 
             drum3 = new Entity(Entity.EntityType.OBSTACLE, "DRUM3");
-            drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
+            drum3.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum/Stance"));
             drum3.SetAnimationState(Animation.State.STANCE);
             //drum3.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -63, -15));
             drum3.AddBoundsBox(125, 210, -63, -15, 40);
@@ -246,7 +246,7 @@ namespace Game1
             drum3.SetPostion(100, 0, 200);
 
             drum4 = new Entity(Entity.EntityType.OBSTACLE, "DRUM4");
-            drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum"));
+            drum4.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum/Stance"));
             drum4.SetAnimationState(Animation.State.STANCE);
 
             //drum4.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -63, -15));
@@ -438,10 +438,10 @@ namespace Game1
 
                 if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
                     //drum3.VelX(-5);
-                    level1.ScrollX(-5);
+                    level1.ScrollX(-12);
                 } else if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
                     //drum3.VelX(5);
-                    level1.ScrollX(5);
+                    level1.ScrollX(12);
                 } else {
                     //drum3.VelX(0);
                 }
@@ -498,7 +498,7 @@ namespace Game1
              List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
 
             spriteBatch.DrawString(font1, "HIT COUNT: " + (CollisionManager.hitCount), new Vector2(20, 20), Color.BlueViolet);
-            spriteBatch.DrawString(font1, "LEO ATTACK CHAIN STEP: " + (leo.GetDefaultAttackChain().GetCurrentMoveIndex()), new Vector2(20, 40), Color.BlueViolet);
+            spriteBatch.DrawString(font1, "LEO ATTACK CHAIN STEP: " + (level1.GetLayers(3)[0].GetPosX()), new Vector2(20, 50), Color.BlueViolet);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

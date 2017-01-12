@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/lodoss118/Desktop/Git Game Engine/gameengine/GameProject/Game1/Game1/Content/Sprites/Levels/Stage1/pal.png</SourceFile>
-  <SourceTime>2016-12-26T14:59:36.7389697+00:00</SourceTime>
-  <DestFile>C:/Users/lodoss118/Desktop/Git Game Engine/gameengine/GameProject/Game1/Game1/Content/bin/Windows/Sprites/Levels/Stage1/pal.xnb</DestFile>
-  <DestTime>2017-01-11T20:00:40.4374682+00:00</DestTime>
+  <SourceFile>C:/Users/lodoss118/Desktop/Git Game Engine/gameengine/GameProject/Game1/Game1/Content/Sprites/Misc/Drum/Pain1/drum.png</SourceFile>
+  <SourceTime>2017-01-12T21:09:09.6685599+00:00</SourceTime>
+  <DestFile>C:/Users/lodoss118/Desktop/Git Game Engine/gameengine/GameProject/Game1/Game1/Content/bin/Windows/Sprites/Misc/Drum/Pain1/drum.xnb</DestFile>
+  <DestTime>2017-01-12T21:21:42.5404344+00:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T07:36:08+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

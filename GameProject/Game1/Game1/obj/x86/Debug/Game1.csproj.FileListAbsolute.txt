@@ -1754,11 +1754,6 @@ C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bi
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame3.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame4.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Taskmaster\Walk Towards\Frame5.xnb
-C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\bg.xnb
-C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\ddbg1.xnb
-C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\ddpanel1.xnb
-C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\pal.xnb
-C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\panel.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\Bar\bar.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\Container\container.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\LifeBars\RedEarth\Placeholder\placeholder.xnb
@@ -1793,3 +1788,7 @@ C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\obj\x86\De
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\front.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\front2.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Levels\Stage1\normal01.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Drum\Die1\drum.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Drum\Pain1\drum.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Drum\Pain2\drum.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Misc\Drum\Stance\drum.xnb
