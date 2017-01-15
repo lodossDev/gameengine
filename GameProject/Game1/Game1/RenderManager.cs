@@ -7,8 +7,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 
-namespace Game1
-{
+namespace Game1 {
+
     public class RenderManager : Manager {
         private bool renderBoxes;
         private Vector2 baseSpriteScale;
@@ -28,6 +28,10 @@ namespace Game1
             renderBoxes = false;
         }
 
+        public void RenderBoxes() {
+            renderBoxes = !renderBoxes;
+        }
+
         private void RenderBoxes(Entity entity) {
             if (renderBoxes) {
                 foreach (CLNS.BoundingBox box in entity.GetCurrentSprite().GetCurrentBoxes()) {
@@ -44,6 +48,14 @@ namespace Game1
 
                 if (entity.GetDepthBox() != null) {
                     entity.GetDepthBox().DrawRectangle(CLNS.DrawType.LINES);
+                }
+
+                if (entity.GetBoundsBottomRay() != null) {
+                    //entity.GetBoundsBottomRay().DrawRectangle(CLNS.DrawType.LINES);
+                }
+
+                if (entity.GetBoundsTopRay() != null) {
+                    //entity.GetBoundsTopRay().DrawRectangle(CLNS.DrawType.LINES);
                 }
             }
         }

@@ -322,7 +322,7 @@ namespace Game1
 
         private void OnFrameComplete()
         {
-            isFrameComplete[currentFrame - 1] = true;
+            isFrameComplete[currentFrame] = true;
 
             if (animationType == Animation.Type.REPEAT)
             {
@@ -363,7 +363,7 @@ namespace Game1
         {
             isAnimationComplete = false;
 
-            if (sprites.Count > 1 && (animationType == Animation.Type.ONCE || animationType == Animation.Type.REPEAT))
+            if (sprites.Count > 0 && (animationType != Animation.Type.NONE))
             {
                 frameTimeElapsed -= (float)(gameTime.ElapsedGameTime.TotalSeconds);
                 totalTimeRemaining -= (float)(gameTime.ElapsedGameTime.TotalSeconds);

@@ -300,7 +300,7 @@ namespace Game1
 
         public void Update(GameTime gameTime)
         {
-            currentKeyboardState = Keyboard.GetState(playerIndex);
+            currentKeyboardState = Keyboard.GetState();
             currentPadState = GamePad.GetState(playerIndex);
 
             UpdateDefaultControls(gameTime);

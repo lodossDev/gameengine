@@ -18,6 +18,7 @@ namespace Game1
             layer1.SetPostion(4000, 0, -130);
             layer1.SetScale(3.1f, 3.4f);
             AddLayer(1, layer1);
+            SetMainLayer(layer1);
 
             Entity layer3 = new Entity(Entity.EntityType.LEVEL, "LAYER 3");
             layer3.AddSprite(Animation.State.NONE, new Sprite(Setup.contentManager.Load<Texture2D>("Sprites/Levels/Stage1/front")), true);
@@ -27,6 +28,7 @@ namespace Game1
             AddLayer(3, layer3);
 
             Obstacle phoneBooth = new PhoneBooth1();
+            phoneBooth.SetPostion(200, 0, 100);
             AddMisc(phoneBooth);
 
             SetXScrollBoundry(4000, -2744);

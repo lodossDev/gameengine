@@ -12,9 +12,9 @@ namespace Game1 {
             AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Phone/Stance"), true);
             AddSprite(Animation.State.DIE1, new Sprite("Sprites/Misc/Phone/Die1"));
 
-            AddBoundsBox(125, 380, -63, -10, 60);
-            SetScale(2.2f, 2.6f);
-            SetPostion(200, 0, 300);
+            AddBoundsBox(141, 380, -70, 110, 60);
+            SetScale(2.5f, 3.0f);
+            SetPostion(200, 0, 100);
         }
     }
 }

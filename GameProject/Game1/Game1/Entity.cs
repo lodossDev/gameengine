@@ -23,20 +23,27 @@ namespace Game1
         private Dictionary<Animation.State, SoundEffect> animationSounds;
         private Dictionary<Animation.State, int> moveFrames;
         private Dictionary<Animation.State, int> tossFrames;
+
         private CLNS.BoundingBox bodyBox;
-        private CLNS.BoundsBox boundsBox;
         private CLNS.BoundingBox depthBox;
+        private CLNS.BoundingBox boundsBottomRay;
+        private CLNS.BoundingBox boundsTopRay;
+        private CLNS.BoundsBox boundsBox;
+        
         private List<Animation.Link> animationLinks;
         private ComboAttack.Chain defaultAttackChain;
         private List<InputHelper.CommandMove> commandMoves;
 
         private string name;
         private EntityType type;
+
         private Vector3 position;
+        private Vector2 convertedPosition;
+
         private Vector3 velocity;
         private Vector3 absoluteDir;
         private Vector3 direction;
-        private Vector2 convertedPosition;
+
         private Vector2 origin;
         private Vector2 scale;
         private Vector2 nScale;
@@ -129,7 +136,10 @@ namespace Game1
 
         public void SetAnimationLink(Animation.State onState, Animation.State toState, int frameOnStart, bool onFrameComplete = true) {
             Animation.Link link = animationLinks.Find(item => item.GetOnState() == onState);
-            link.SetLink(onState, toState, frameOnStart, onFrameComplete);
+
+            if (link != null) { 
+                link.SetLink(onState, toState, frameOnStart, onFrameComplete);
+            }
         }
 
         public void SetJumpLink(Animation.State toState) {
@@ -177,10 +187,26 @@ namespace Game1
             }
 
             boundsBox = new CLNS.BoundsBox(w, h, x, y, depth);
-            AddBodyBox(w, h, x, y);
+            boundsTopRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, boundsBox.GetRect().Width, 100, x, y - 100);
 
+            AddBodyBox(w, h, x, y);
             AddDepthBox(depth);
-            GetDepthBox().SetZdepth(depth);
+        }
+
+        public void SetBoundsTopRay(int w, int h, int x, int y) {
+            if (boundsTopRay != null) {
+                boundsTopRay = null;
+            }
+
+            boundsTopRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, w, h, x, y);
+        }
+
+        public void SetBoundsBottomRay(int w, int h, int x, int y) {
+            if (boundsBottomRay != null) {
+                boundsBottomRay = null;
+            }
+
+            boundsBottomRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, w, h, x, y);
         }
 
         public void AddDepthBox(int h, int x = 0, int y = 0) {
@@ -193,6 +219,9 @@ namespace Game1
                 int y1 = (int)(boundsBox.GetOffset().Y + boundsBox.GetRect().Height + y) - h;
                 
                 depthBox = new CLNS.BoundingBox(CLNS.BoxType.DEPTH_BOX, boundsBox.GetRect().Width, h, x1, y1);
+                depthBox.SetZdepth(h);
+
+                boundsBottomRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, boundsBox.GetRect().Width, 100, x1, y1 + 40);
             }
         }
 
@@ -202,6 +231,7 @@ namespace Game1
             }
 
             depthBox = new CLNS.BoundingBox(CLNS.BoxType.DEPTH_BOX, w, h, x, y);
+            depthBox.SetZdepth(h);
         }
 
         public void AddAnimationSound(Animation.State state, String location) {
@@ -285,7 +315,7 @@ namespace Game1
 
         public void MoveX(float velX) {
             if (velX != 0.0) {
-                absoluteDir.X = (velX < 0 ? -1 : 1);
+                direction.X = velX;
             }
 
             if (IsInMoveFrame()) {
@@ -295,7 +325,7 @@ namespace Game1
 
         public void MoveY(float velY) {
             if (velY != 0.0) {
-                absoluteDir.Y = (velY < 0 ? -1 : 1);
+                direction.Y = velY;
             }
 
             position.Y += velY;
@@ -303,7 +333,7 @@ namespace Game1
 
         public void MoveZ(float velZ) {
             if (velZ != 0.0) {
-                absoluteDir.Z = (velZ < 0 ? -1 : 1);
+                direction.Z = velZ;
             }
 
             if (IsInMoveFrame()) {
@@ -312,27 +342,18 @@ namespace Game1
         }
 
         public void VelX(float velX) {
+            absoluteDir.X = velX;
             velocity.X = velX;
-
-            if (velX != 0.0) {
-                direction.X = (velX < 0 ? -1 : 1);
-            }
         }
 
         public void VelY(float velY) {
+            absoluteDir.Y = velY;
             velocity.Y = velY;
-
-            if (velY != 0.0) {
-                direction.Y = (velY < 0 ? -1 : 1);
-            }
         }
 
         public void VelZ(float velZ) {
+            absoluteDir.Z = velZ;
             velocity.Z = velZ;
-
-            if (velZ != 0.0) {
-                direction.Z = (velZ < 0 ? -1 : 1);
-            }
         }
 
         public void SetScale(float x=1f, float y=1f) {
@@ -574,6 +595,14 @@ namespace Game1
             return bodyBox;
         }
 
+        public CLNS.BoundingBox GetBoundsTopRay() {
+            return boundsTopRay;
+        }
+
+        public CLNS.BoundingBox GetBoundsBottomRay() {
+            return boundsBottomRay;
+        }
+
         public CLNS.BoundsBox GetBoundsBox() {
             return boundsBox;
         }
@@ -660,7 +689,8 @@ namespace Game1
             return ((moveFrames.ContainsKey(GetCurrentAnimationState()) 
                         && IsInAnimationState(GetCurrentAnimationState())
                             && currentSprite.GetCurrentFrame() >= moveFrames[GetCurrentAnimationState()]) 
-                    || !moveFrames.ContainsKey(GetCurrentAnimationState()));
+                    || !moveFrames.ContainsKey(GetCurrentAnimationState())
+                    || moveFrames.Count == 0);
         }
         
         public int GetMoveFrame() {
@@ -671,6 +701,7 @@ namespace Game1
             return ((tossFrames.ContainsKey(GetCurrentAnimationState())
                         && IsInAnimationState(GetCurrentAnimationState())
                             && currentSprite.GetCurrentFrame() >= tossFrames[GetCurrentAnimationState()])
+                    /*|| !tossFrames.ContainsKey(GetCurrentAnimationState())*/
                     || tossFrames.Count == 0);
         }
 
@@ -691,16 +722,29 @@ namespace Game1
             return tossInfo.isToss;
         }
 
+        public bool IsMovingX() {
+            return ((double)velocity.X != 0.0);
+        }
+
+        public bool IsMovingY() {
+            return ((double)velocity.Y != 0.0 || (int)Math.Abs(GetPosY()) > 0);
+        }
+
+        public bool IsMovingZ() {
+            return ((double)velocity.Z != 0.0);
+        }
+
         public bool HasLanded() {
-            return (double)GetPosY() >= (double)GetGround();
+            return ((double)GetPosY() >= (double)GetGround() 
+                        && (double)GetGroundBase() > (double)GetGround());
         }
 
         public bool IsOnGround() {
-            return (double)GetPosY() == (double)GetGroundBase();
+            return ((double)GetPosY() == (double)GetGroundBase());
         }
 
         public bool InAir() {
-            return (double)GetPosY() < (double)GetGround();
+            return ((double)GetGround() > (double)GetPosY());
         }
 
         public Attributes.TossInfo GetTossInfo() {
@@ -720,6 +764,8 @@ namespace Game1
         }
 
         public bool InCurrentAttackCancelState() {
+            if (defaultAttackChain == null) return false;
+
             List<ComboAttack.Move> attackStates = defaultAttackChain.GetMoves().FindAll(item => item.GetState().Equals(GetCurrentAnimationState()));
 
             return IsInAnimationAction(Animation.Action.ATTACKING)
@@ -730,6 +776,8 @@ namespace Game1
         }
 
         public void ProcessAttackChainStep() {
+            if (defaultAttackChain == null) return;
+
             if (!IsInAnimationAction(Animation.Action.ATTACKING) || InCurrentAttackCancelState()) {
                 SetAnimationState(GetCurrentAttackChainState());
             }
@@ -986,6 +1034,14 @@ namespace Game1
 
             if (depthBox != null) {
                 depthBox.Update(gameTime, this);
+            }
+
+            if (boundsBottomRay != null) {
+                boundsBottomRay.Update(gameTime, this);
+            }
+
+            if (boundsTopRay != null) {
+                boundsTopRay.Update(gameTime, this);
             }
 
             //Update movement.

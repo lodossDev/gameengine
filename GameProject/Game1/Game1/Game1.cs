@@ -15,7 +15,7 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Player leo;
-        Entity taskMaster, drum, drum2, drum3, drum4, hitSpark1;
+        Entity taskMaster, drum, drum2, drum3, drum4, hitSpark1, ryo;
         RenderManager renderManager;
         CollisionManager collisionManager;
         CLNS.BoundingBox box1;
@@ -72,6 +72,7 @@ namespace Game1
 
             leo = new Player("Leo1");
             taskMaster = new Boss_TaskMaster();
+            ryo = new Player_Ryo();
 
             leo.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Stance"));
             leo.SetFrameDelay(Animation.State.STANCE, 5);
@@ -226,7 +227,7 @@ namespace Game1
             //drum.AddBox(new CLNS.BoundingBox(CLNS.BoxType.BODY_BOX, 125, 210, -63, -15));
             drum.AddBoundsBox(125, 210, -63, -15, 40);
             drum.SetScale(2.2f, 2.6f);
-            drum.SetPostion(700, 0, 200);
+            drum.SetPostion(700, 0, 400);
 
             drum2 = new Entity(Entity.EntityType.OBSTACLE, "DRUM2");
             drum2.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Misc/Drum/Stance"));
@@ -264,7 +265,7 @@ namespace Game1
 
             renderManager = new RenderManager();
             renderManager.AddEntity(leo);
-            renderManager.AddEntity(taskMaster);
+            //renderManager.AddEntity(taskMaster);
             renderManager.AddEntity(drum);
             renderManager.AddEntity(drum2);
             renderManager.AddEntity(drum3);
@@ -274,12 +275,15 @@ namespace Game1
 
             collisionManager = new CollisionManager(renderManager);
             collisionManager.AddEntity(leo);
-            collisionManager.AddEntity(taskMaster);
+            //collisionManager.AddEntity(taskMaster);
             collisionManager.AddEntity(drum);
             collisionManager.AddEntity(drum2);
             collisionManager.AddEntity(drum3);
             //collisionManager.AddEntity(drum4);
-            
+
+
+            collisionManager.AddEntity(ryo);
+            renderManager.AddEntity(ryo);
 
             command = new InputHelper.CommandMove("TEST", Animation.State.ATTACK6, new List<InputHelper.KeyState>
             {
@@ -297,7 +301,7 @@ namespace Game1
             //control = new InputControl(leo, PlayerIndex.One);
 
             inputManager = new InputManager();
-            inputManager.AddControl(leo, PlayerIndex.One);
+            inputManager.AddControl(ryo, PlayerIndex.One);
 
             // TODO: use this.Content to load your game content here
         }
@@ -311,6 +315,9 @@ namespace Game1
             // TODO: Unload any non ContentManager content here
         }
 
+        private KeyboardState oldKeyboardState, currentKeyboardState;
+        private int dir = 1;
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -321,10 +328,11 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            currentKeyboardState = Keyboard.GetState();
             //TimeSpan ts = new TimeSpan(60);
             //ticks = (float)ts.TotalMilliseconds;
             //collisionManager.Update(gameTime);
-            if (Keyboard.GetState().IsKeyDown(Keys.O))
+            if (currentKeyboardState.IsKeyDown(Keys.O) && oldKeyboardState.IsKeyUp(Keys.O))
             {
                 Setup.isPause = false;
                 //taskMaster.SetAnimationState(Animation.State.ATTACK4);
@@ -335,16 +343,12 @@ namespace Game1
                 Setup.isPause = true;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            if (currentKeyboardState.IsKeyDown(Keys.Q) && oldKeyboardState.IsKeyUp(Keys.Q))
             {
-                renderManager.HideBoxes();
+                renderManager.RenderBoxes();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
-            {
-                renderManager.ShowBoxes();
-            }
-
+            
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
             {
                 //Setup.rotate += 2.5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -434,30 +438,41 @@ namespace Game1
                 drum3.Update(gameTime);
                 drum4.Update(gameTime);
                 */
+
+                
                 collisionManager.Update(gameTime);
                 inputManager.Update(gameTime);
 
                 if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-                    //drum3.VelX(-5);
-                    level1.ScrollX(-12);
+                    drum3.VelX(-5);
+                    //level1.ScrollX(-12);
                 } else if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-                    //drum3.VelX(5);
-                    level1.ScrollX(12);
+                    drum3.VelX(5);
+                    //level1.ScrollX(12);
                 } else {
-                    //drum3.VelX(0);
+                    drum3.VelX(0);
                 }
 
                 if(Keyboard.GetState().IsKeyDown(Keys.NumPad8)) {
-                    //drum3.VelZ(-5);
-                    level1.ScrollY(-5);
+                    drum3.VelZ(-5);
+                    //level1.ScrollY(-5);
                 } else if(Keyboard.GetState().IsKeyDown(Keys.NumPad2)) {
-                    //drum3.VelZ(5);
-                    level1.ScrollY(5);
+                    drum3.VelZ(5);
+                    //level1.ScrollY(5);
                 } else {
-                    //drum3.VelZ(0);
+                    drum3.VelZ(0);
                 }
 
+                if ((int)Math.Abs(drum.GetPosY()) <= 0) {
+                    dir = -dir;
+                } else if ((int)Math.Abs(drum.GetPosY()) >= 200) {
+                    dir = -1*dir;
+                }
+
+                drum.VelY(5*dir);
+
                 renderManager.Update(gameTime);
+                //level1.ScrollY(leo.GetVelocity().Y/2);
 
                 ((Character)taskMaster).UpdateAI(gameTime, collisionManager.GetPlayers());
                 ((Character)taskMaster).ResetToIdle(gameTime);
@@ -472,6 +487,9 @@ namespace Game1
             // TODO: Add your update logic here
             bar.Update(gameTime);
             camera.LookAt(leo.GetConvertedPosition());
+
+            oldKeyboardState = currentKeyboardState;
+
             base.Update(gameTime);
         }
 
@@ -496,10 +514,11 @@ namespace Game1
 
             renderManager.Draw(gameTime);
 
-             List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
+            List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
 
-            spriteBatch.DrawString(font1, "HIT COUNT: " + (CollisionManager.hitCount), new Vector2(20, 20), Color.BlueViolet);
-            spriteBatch.DrawString(font1, "LEO ATTACK CHAIN STEP: " + (level1.GetLayers(3)[0].GetPosX()), new Vector2(20, 50), Color.BlueViolet);
+            spriteBatch.DrawString(font1, "LEO GROUND BASE: " + (ryo.GetGround()), new Vector2(20, 20), Color.Blue);
+            spriteBatch.DrawString(font1, "DRUM TOP " + (collisionManager.FindBelow(ryo).Count), new Vector2(20, 50), Color.Blue);
+            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.GetCurrentSprite().GetTotalRemainingTime()), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

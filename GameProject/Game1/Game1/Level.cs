@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Game1
-{
+namespace Game1 {
+
     public abstract class Level {
         private Dictionary<int, List<Entity>> layers;
         private List<Entity> misc;
+        private Entity mainLayer;
         private String name;
         private int maxLeft, maxRight;
 
@@ -40,32 +41,42 @@ namespace Game1
             this.name = name;
         }
 
+        public void SetMainLayer(Entity layer) {
+            mainLayer = layer;
+        }
+
         public void SetXScrollBoundry(int maxLeft, int maxRight) {
             this.maxLeft = maxLeft;
             this.maxRight = maxRight;
         }
 
         public virtual void ScrollX(float velX) {
-            List<Entity> entities = this.layers.SelectMany(item => item.Value).ToList();
-            entities.AddRange(misc);
+            if (mainLayer != null) { 
+                List<Entity> entities = this.layers.SelectMany(item => item.Value).ToList();
+                entities.AddRange(misc);
 
-            foreach (Entity entity in entities) {
-                if ((int)velX < 0 && (int)entity.GetPosX() <= maxRight 
-                        || (int)velX > 0 && (int)entity.GetPosX() >= maxLeft) { 
+                float x1 = mainLayer.GetPosX();
+
+                if ((int)velX < 0 && (int)x1 <= maxRight 
+                        || (int)velX > 0 && (int)x1 >= maxLeft) { 
                     
                     return;
                 }
 
-                entity.MoveX(velX);
+                foreach (Entity entity in entities) {
+                    entity.MoveX(velX);
+                }
             }
         }
 
         public void ScrollY(float velY) {
-            List<Entity> entities = this.layers.SelectMany(item => item.Value).ToList();
-            entities.AddRange(misc);
+            if (mainLayer != null) {
+                List<Entity> entities = this.layers.SelectMany(item => item.Value).ToList();
+                entities.AddRange(misc);
 
-            foreach (Entity entity in entities) {
-                entity.MoveY(velY);
+                foreach (Entity entity in entities) {
+                    entity.MoveY(velY);
+                }
             }
         }
 
@@ -91,6 +102,10 @@ namespace Game1
 
         public int GetMaxRight() {
             return maxRight;
+        }
+
+        public Entity GetMainLayer() {
+            return mainLayer;
         }
     }
 }
