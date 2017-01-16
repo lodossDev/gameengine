@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Audio;
 
-namespace Game1
-{
+namespace Game1 {
+
     public class Entity : IComparable<Entity> {
         private static int id = 0;
         public enum EntityType {PLAYER, ENEMY, OBSTACLE, PLATFORM, ITEM, WEAPON, LEVEL, LIFE_BAR, OTHER, HIT_FLASH}
@@ -143,9 +143,9 @@ namespace Game1
         }
 
         public void SetJumpLink(Animation.State toState) {
-            Sprite jumpStart = GetSprite(Animation.State.JUMP_START);
+            if (HasSprite(Animation.State.JUMP_START)) {
+                Sprite jumpStart = GetSprite(Animation.State.JUMP_START);
 
-            if (jumpStart != null) {
                 int frames = jumpStart.GetFrames();
                 SetAnimationLink(Animation.State.JUMP_START, toState, frames);
             }
@@ -510,6 +510,10 @@ namespace Game1
             }
         }
 
+        public bool HasSprite(Animation.State state) {
+            return spriteMap.ContainsKey(state);
+        }
+
         public int GetSpriteFrames(Animation.State state) {
             return GetSprite(state).GetFrames();
         }
@@ -807,16 +811,19 @@ namespace Game1
 
         public void SetJump(float height = -25f, float velX = 0f)  {
             Toss(height, velX);
-            Sprite jumpStart = GetSprite(Animation.State.JUMP_START);
-
-            if (jumpStart != null) {
+ 
+            if (HasSprite(Animation.State.JUMP_START)) {
                 SetAnimationState(Animation.State.JUMP_START);
             } else {
                 SetAnimationState(Animation.State.JUMP);
             }
 
             if (velX < 0.0 || velX > 0.0) {
-                SetJumpLink(Animation.State.JUMP_TOWARDS);
+                if (HasSprite(Animation.State.JUMP_TOWARDS)) {
+                    SetJumpLink(Animation.State.JUMP_TOWARDS);
+                } else {
+                    SetJumpLink(Animation.State.JUMP);
+                }
             } else {
                 SetJumpLink(Animation.State.JUMP);
             }

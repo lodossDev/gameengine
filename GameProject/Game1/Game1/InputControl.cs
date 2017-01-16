@@ -8,12 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 
-namespace Game1
-{
-    public class InputControl
-    {
+namespace Game1 {
+
+    public class InputControl {
         public enum InputDirection {NONE, UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT}
-        public bool UP, DOWN, LEFT, RIGHT, JUMP_PRESS, ATTACK_PRESS;
+        private bool UP, DOWN, LEFT, RIGHT, JUMP_PRESS, ATTACK_PRESS;
 
         private Entity player;
         private InputDirection inputDirection;
@@ -28,8 +27,7 @@ namespace Game1
         private float walkPressTime = 0f;
 
 
-        public InputControl(Entity player, PlayerIndex index)
-        {
+        public InputControl(Entity player, PlayerIndex index) {
             this.player = player;
             this.playerIndex = index;
             inputDirection = InputDirection.NONE;
@@ -49,100 +47,107 @@ namespace Game1
             ATTACK_PRESS = false;
         }
 
-        private void Reset()
-        {
+        private void Reset() {
             inputDirection = InputDirection.NONE;
             JUMP_PRESS = false;
             ATTACK_PRESS = false;
 
-            if (UP && currentKeyboardState.IsKeyUp(Keys.Up))
-            {
+            if (UP && currentKeyboardState.IsKeyUp(Keys.Up)) {
                 player.VelZ(0f);
                 walkPressTime = 0f;
                 UP = false;
             }
 
-            if (DOWN && currentKeyboardState.IsKeyUp(Keys.Down))
-            {
+            if (DOWN && currentKeyboardState.IsKeyUp(Keys.Down)) {
                 player.VelZ(0f);
                 walkPressTime = 0f;
                 DOWN = false;
             }
 
-            if (RIGHT && currentKeyboardState.IsKeyUp(Keys.Right))
-            {
+            if (RIGHT && currentKeyboardState.IsKeyUp(Keys.Right)) {
                 player.VelX(0f);
                 walkPressTime = 0f;
                 RIGHT = false;
             }
 
-            if (LEFT && currentKeyboardState.IsKeyUp(Keys.Left))
-            {
+            if (LEFT && currentKeyboardState.IsKeyUp(Keys.Left)) {
                 player.VelX(0f);
                 walkPressTime = 0f;
                 LEFT = false;
             }
 
-            if (JUMP_PRESS && currentKeyboardState.IsKeyUp(Keys.Space))
-            {
+            if (JUMP_PRESS && currentKeyboardState.IsKeyUp(Keys.Space)) {
                 JUMP_PRESS = false;
             }
 
-            if (ATTACK_PRESS && currentKeyboardState.IsKeyUp(Keys.A))
-            {
+            if (ATTACK_PRESS && currentKeyboardState.IsKeyUp(Keys.A)) {
                 ATTACK_PRESS = false;
             }
         }
 
-        public void UpdateDefaultControls(GameTime gameTime)
-        {
+        public void UpdateDefaultControls(GameTime gameTime) {
             Reset();
 
-            if (player.IsNonActionState())
-            {
-                if (!DOWN && currentKeyboardState.IsKeyDown(Keys.Up))
-                {
-                    if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
-                    {
+            if ((currentKeyboardState.IsKeyDown(Keys.Space))
+                    && (!oldKeyboardState.IsKeyDown(Keys.Space))) {
+
+                JUMP_PRESS = true;
+            }
+
+            if ((currentKeyboardState.IsKeyDown(Keys.A))
+                    && (!oldKeyboardState.IsKeyDown(Keys.A))) {
+
+                ATTACK_PRESS = true;
+            }
+
+            if ((currentKeyboardState.IsKeyDown(Keys.Z))
+                    && (!oldKeyboardState.IsKeyDown(Keys.Z))) {
+
+                player.GetCurrentSprite().IncrementFrame();
+            }
+
+            ProcessAttack();
+            ProcessJump();
+
+            if (player.IsNonActionState()) {
+
+                if (!DOWN && currentKeyboardState.IsKeyDown(Keys.Up)) {
+
+                    if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
                         inputDirection = InputDirection.UP_LEFT;
                         player.VelX(-5);
                         player.SetIsLeft(true);
                         LEFT = true;
-                    }
-                    else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right))
-                    {
+
+                    } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
                         inputDirection = InputDirection.UP_RIGHT;
                         player.VelX(5);
                         player.SetIsLeft(false);
                         RIGHT = true;
-                    }
-                    else
-                    {
+
+                    } else {
                         inputDirection = InputDirection.UP;
                     }
 
                     player.SetAnimationState(Animation.State.WALK_TOWARDS);
                     player.VelZ(-5);
                     UP = true;
-                }
-                else if (!UP && currentKeyboardState.IsKeyDown(Keys.Down))
-                {
-                    if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
-                    {
+
+                } else if (!UP && currentKeyboardState.IsKeyDown(Keys.Down)) {
+
+                    if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
                         inputDirection = InputDirection.DOWN_LEFT;
                         player.VelX(-5);
                         player.SetIsLeft(true);
                         LEFT = true;
-                    }
-                    else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right))
-                    {
+
+                    } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
                         inputDirection = InputDirection.DOWN_RIGHT;
                         player.VelX(5);
                         player.SetIsLeft(false);
                         RIGHT = true;
-                    }
-                    else
-                    {
+
+                    } else {
                         inputDirection = InputDirection.DOWN;
                     }
 
@@ -152,15 +157,13 @@ namespace Game1
                 }
             }
 
-            if (!IsDirectionalPress() && player.IsNonActionState())
-            {
-                if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left))
-                {
+            if (player.IsNonActionState() && !IsDirectionalPress()) {
+
+                if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
                     inputDirection = InputDirection.LEFT;
                     walkPressTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (walkPressTime >= 120)
-                    {
+                    if (walkPressTime >= 120) {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                         player.VelX(-5);
                         walkPressTime = 0f;
@@ -168,15 +171,12 @@ namespace Game1
 
                     player.SetIsLeft(true);
                     LEFT = true;
-                }
-                else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right))
-                {
-                    inputDirection = InputDirection.RIGHT;
 
+                } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
+                    inputDirection = InputDirection.RIGHT; 
                     walkPressTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (walkPressTime >= 120)
-                    {
+                    if (walkPressTime >= 120) {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                         player.VelX(5);
                         walkPressTime = 0f;
@@ -186,79 +186,65 @@ namespace Game1
                     RIGHT = true;
                 }
             }
+        }
 
-            if ((currentKeyboardState.IsKeyDown(Keys.Space)) && (!oldKeyboardState.IsKeyDown(Keys.Space)))
-            {
-                JUMP_PRESS = true;
-            }
+        private void ProcessJump() {
+            if (player.IsNonActionState()) {
 
-            if ((currentKeyboardState.IsKeyDown(Keys.A)) && (!oldKeyboardState.IsKeyDown(Keys.A)))
-            {
-                ATTACK_PRESS = true;
-            }
+                if (JUMP_PRESS) {
 
-            if ((currentKeyboardState.IsKeyDown(Keys.Z)) && (!oldKeyboardState.IsKeyDown(Keys.Z)))
-            {
-                player.GetCurrentSprite().IncrementFrame();
-            }
-
-            if (player.IsNonActionState())
-            {
-                if (JUMP_PRESS)
-                {
-                    if (LEFT)
-                    {
+                    if (LEFT) {
                         player.SetJump(-29f, -5f);
-                    }
-                    else if (RIGHT)
-                    {
+
+                    } else if (RIGHT) {
                         player.SetJump(-29f, 5f);
-                    }
-                    else
-                    {
+
+                    } else {
                         player.SetJump(-29f);
                     }
                 }
             }
+        }
 
-            if (ATTACK_PRESS)
-            {
-                if (!player.IsToss())
-                {
+        private void ProcessAttack() {
+            if (ATTACK_PRESS) {
+
+                if (!player.IsToss()) {
                     player.ProcessAttackChainStep();
-                }
-                else
-                {
+
+                } else {
                     if (!player.IsInAnimationAction(Animation.Action.ATTACKING)
-                            && !player.IsInAnimationAction(Animation.Action.RECOVERY))
-                    {
-                        if (player.GetTossInfo().velocity.X == 0.0)
-                        {
-                            if (!player.InAir())
-                            {
+                            && !player.IsInAnimationAction(Animation.Action.RECOVERY)) {
+
+                        if ((double)player.GetTossInfo().velocity.X == 0.0) {
+
+                            if (!player.InAir()) {
                                 player.SetAnimationState(Animation.State.JUMP_START);
                                 player.SetJumpLink(Animation.State.JUMP_ATTACK1);
-                            }
-                            else
-                            {
+
+                            } else {
                                 player.SetAnimationState(Animation.State.JUMP_ATTACK1);
                             }
 
-                            player.SetAnimationLink(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, player.GetSprite(Animation.State.JUMP_ATTACK1).GetFrames());
+                            if (player.HasSprite(Animation.State.JUMP_ATTACK1)) {
+                                Sprite jumpAttack = player.GetSprite(Animation.State.JUMP_ATTACK1);
+                                player.SetAnimationLink(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, jumpAttack.GetFrames());
+                            }
                         }
-                        else
-                        {
-                            if (!player.InAir())
-                            {
+                        else {
+
+                            if (!player.InAir()) {
                                 player.SetAnimationState(Animation.State.JUMP_START);
                                 player.SetJumpLink(Animation.State.JUMP_TOWARD_ATTACK1);
-                            }
-                            else
-                            {
+
+                            } else {
                                 player.SetAnimationState(Animation.State.JUMP_TOWARD_ATTACK1);
                             }
 
-                            player.SetAnimationLink(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, player.GetSprite(Animation.State.JUMP_TOWARD_ATTACK1).GetFrames());
+                            if (player.HasSprite(Animation.State.JUMP_TOWARD_ATTACK1)) {
+                                Sprite jumpTowardAttack = player.GetSprite(Animation.State.JUMP_TOWARD_ATTACK1);
+                                player.SetAnimationLink(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, jumpTowardAttack.GetFrames());
+                            }
                         }
                     }
                 }
