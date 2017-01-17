@@ -59,9 +59,9 @@ namespace Game1 {
             SetMoveFrame(Animation.State.WALK_TOWARDS, 1);
 
             SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 4),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 4),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK2, 222000, 5),
                 new ComboAttack.Move(Animation.State.ATTACK3, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK2, 222000, 5),
