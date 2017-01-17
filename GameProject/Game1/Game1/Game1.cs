@@ -329,18 +329,10 @@ namespace Game1
                 Exit();
 
             currentKeyboardState = Keyboard.GetState();
-            //TimeSpan ts = new TimeSpan(60);
-            //ticks = (float)ts.TotalMilliseconds;
-            //collisionManager.Update(gameTime);
-            if (currentKeyboardState.IsKeyDown(Keys.O) && oldKeyboardState.IsKeyUp(Keys.O))
+          
+            if (Keyboard.GetState().IsKeyDown(Keys.P) && oldKeyboardState.IsKeyUp(Keys.P))
             {
-                Setup.isPause = false;
-                //taskMaster.SetAnimationState(Animation.State.ATTACK4);
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
-            {
-                Setup.isPause = true;
+                Setup.CallPause();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Q) && oldKeyboardState.IsKeyUp(Keys.Q))
@@ -426,7 +418,7 @@ namespace Game1
                 level1.ScrollX(5/2f);
             } 
 
-            if (!Setup.isPause)
+            if (!Setup.IsPause())
             {
                 //control.Update(gameTime);
                
@@ -511,7 +503,7 @@ namespace Game1
                         null,
                         camera.ViewMatrix);
 
-
+            //GraphicsDevice.BlendState =  BlendState.Opaque;
             renderManager.Draw(gameTime);
 
             List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);

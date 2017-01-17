@@ -214,37 +214,14 @@ namespace Game1 {
 
                 } else {
                     if (!player.IsInAnimationAction(Animation.Action.ATTACKING)
-                            && !player.IsInAnimationAction(Animation.Action.RECOVERY)) {
+                            && !player.IsInAnimationAction(Animation.Action.RECOVERY)
+                            && player.InAir()) {
 
                         if ((double)player.GetTossInfo().velocity.X == 0.0) {
-
-                            if (!player.InAir()) {
-                                player.SetAnimationState(Animation.State.JUMP_START);
-                                player.SetJumpLink(Animation.State.JUMP_ATTACK1);
-
-                            } else {
-                                player.SetAnimationState(Animation.State.JUMP_ATTACK1);
-                            }
-
-                            if (player.HasSprite(Animation.State.JUMP_ATTACK1)) {
-                                Sprite jumpAttack = player.GetSprite(Animation.State.JUMP_ATTACK1);
-                                player.SetAnimationLink(Animation.State.JUMP_ATTACK1, Animation.State.JUMP_RECOVER1, jumpAttack.GetFrames());
-                            }
+                            player.SetAnimationState(Animation.State.JUMP_ATTACK1);
                         }
                         else {
-
-                            if (!player.InAir()) {
-                                player.SetAnimationState(Animation.State.JUMP_START);
-                                player.SetJumpLink(Animation.State.JUMP_TOWARD_ATTACK1);
-
-                            } else {
-                                player.SetAnimationState(Animation.State.JUMP_TOWARD_ATTACK1);
-                            }
-
-                            if (player.HasSprite(Animation.State.JUMP_TOWARD_ATTACK1)) {
-                                Sprite jumpTowardAttack = player.GetSprite(Animation.State.JUMP_TOWARD_ATTACK1);
-                                player.SetAnimationLink(Animation.State.JUMP_TOWARD_ATTACK1, Animation.State.JUMP_RECOVER1, jumpTowardAttack.GetFrames());
-                            }
+                            player.SetAnimationState(Animation.State.JUMP_TOWARD_ATTACK1);
                         }
                     }
                 }

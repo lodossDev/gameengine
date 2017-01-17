@@ -138,8 +138,7 @@ namespace Game1
             }
         }
 
-        public class TossInfo
-        {
+        public class TossInfo {
             public Vector3 velocity;
             public Vector3 maxVelocity;
             public bool isToss;
@@ -147,8 +146,7 @@ namespace Game1
             public float gravity;
             public float height;
 
-            public TossInfo()
-            {
+            public TossInfo() {
                 height = 0f;
                 velocity = Vector3.Zero;
                 maxVelocity = new Vector3(10f, 10f, 10f);

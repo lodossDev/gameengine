@@ -9,16 +9,14 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace Game1
-{
-    public static class TextureContent
-    {
-        public static IEnumerable<string> CustomSort(this IEnumerable<string> list)
-        {
+namespace Game1 {
+
+    public static class TextureContent {
+
+        public static IEnumerable<string> CustomSort(this IEnumerable<string> list) {
             int maxLen = list.Select(s => s.Length).Max();
 
-            return list.Select(s => new
-            {
+            return list.Select(s => new {
                 OrgStr = s,
                 SortStr = Regex.Replace(s, @"(\d+)|(\D+)", m => m.Value.PadLeft(maxLen, char.IsDigit(m.Value[0]) ? ' ' : '\xffff'))
             })
@@ -26,12 +24,10 @@ namespace Game1
             .Select(x => x.OrgStr);
         }
 
-        public static List<Texture2D> LoadTextures(string contentFolder)
-        {
+        public static List<Texture2D> LoadTextures(string contentFolder) {
             List<Texture2D> result = new List<Texture2D>();
 
-            foreach (string file in Directory.EnumerateFiles(Setup.contentManager.RootDirectory + "/" + contentFolder).CustomSort().ToList())
-            {
+            foreach (string file in Directory.EnumerateFiles(Setup.contentManager.RootDirectory + "/" + contentFolder).CustomSort().ToList()) {
                 Debug.WriteLine(file);
                 string key = Path.GetFileNameWithoutExtension(file);
                 result.Add(Setup.contentManager.Load<Texture2D>(contentFolder + "/" + key));

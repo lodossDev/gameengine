@@ -428,6 +428,18 @@ namespace Game1 {
             return position.Z;
         }
 
+        public float GetVelX() {
+            return velocity.X;
+        }
+
+        public float GetVelY() {
+            return velocity.Y;
+        }
+
+        public float GetVelZ() {
+            return velocity.Z;
+        }
+
         public Vector2 GetScale() {
             return scale;
         }
@@ -847,9 +859,9 @@ namespace Game1 {
         }
 
         public void UpdateToss(GameTime gameTime) {
-            bool alwaysToss = IsInAnimationAction(Animation.Action.FALLING);
+            bool alwaysToss = false;
 
-            if (tossInfo.isToss || alwaysToss) {
+            if (tossInfo.isToss) {
                 if (IsInTossFrame() || alwaysToss) {
                     if (!tossInfo.inTossFrame) {
                         MoveY(tossInfo.height);
@@ -914,7 +926,7 @@ namespace Game1 {
                 bool isFrameComplete = (IsEntity(EntityType.PLAYER) ? IsFrameComplete(GetCurrentAnimationState(), frame) 
                                             : IsFrameComplete(GetCurrentAnimationState(), frame) && !IsInAnimationAction(Animation.Action.WALKING));
 
-                if (isFrameComplete) {
+                if (isFrameComplete && !IsJumpingOrInAir()) {
                     SetAnimationState(Animation.State.STANCE);
                 }
             }

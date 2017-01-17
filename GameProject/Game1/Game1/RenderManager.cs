@@ -115,13 +115,18 @@ namespace Game1 {
 
         public void Draw(GameTime gameTime) {
             entities.Sort();
-
             RenderLevelBackLayers(gameTime);
 
             foreach (Entity entity in entities)
             {
                 if (entity != null && entity.Alive())
                 {
+                    if (entity.IsEntity(Entity.EntityType.HIT_FLASH)) {
+                        Setup.graphicsDevice.BlendState = BlendState.Additive;
+                    } else {
+                        Setup.graphicsDevice.BlendState = BlendState.NonPremultiplied;
+                    }
+
                     Sprite currentSprite = entity.GetCurrentSprite();
                     Sprite stance = entity.GetSprite(Animation.State.STANCE);
 
@@ -130,8 +135,8 @@ namespace Game1 {
                         //Setup.spriteBatch.Draw(stance.GetCurrentTexture(), stance.GetPosition(), null, Color.White * 1f, 0f, entity.GetStanceOrigin(), entity.GetScale(), stance.GetEffects(), 0f);
                     }
 
-                    float y1 = 100f * (entity.GetScale().Y / 256); 
-                    float x1 = 230f * (entity.GetScale().X / 256);
+                    float y1 = 120f * (entity.GetScale().Y / 256); 
+                    float x1 = 200f * (entity.GetScale().X / 256);
 
                     float x2 = entity.GetPosition().X + (float)((currentSprite.GetSpriteOffSet().X + currentSprite.GetCurrentFrameOffSet().X) * (x1 / entity.GetScale().X));
 

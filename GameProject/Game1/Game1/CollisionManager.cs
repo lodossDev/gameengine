@@ -273,7 +273,7 @@ namespace Game1
                     attackChain.IncrementMoveIndex(attackBox.GetComboStep());
                 }
 
-                entity.GetAttackInfo().hitPauseTime = 3000f;
+                //entity.GetAttackInfo().hitPauseTime = 3000f;
             }
         }
 
@@ -383,13 +383,13 @@ namespace Game1
                                         float y1 = TargetBodyY(target, entity, attackBox);
 
                                         Entity hitSpark1 = new Entity(Entity.EntityType.HIT_FLASH, "SPARK1");
-                                        hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Leo/Spark1", Animation.Type.ONCE));
+                                        hitSpark1.AddSprite(Animation.State.STANCE, new Sprite("Sprites/Actors/Ryo/Hitflash1", Animation.Type.ONCE));
                                         hitSpark1.SetAnimationState(Animation.State.STANCE);
                                         hitSpark1.SetFrameDelay(Animation.State.STANCE, 2);
                                         //hitSpark1.SetFrameDelay(Animation.State.STANCE, 1, 5);
-                                        hitSpark1.SetScale(1.2f, 1.2f);
+                                        hitSpark1.SetScale(1.8f, 1.5f);
                                         hitSpark1.SetPostion(x1 , y1, target.GetPosZ() + 8);
-                                        hitSpark1.SetFade(225);
+                                        //hitSpark1.SetFade(225);
 
                                         renderManager.AddEntity(hitSpark1);
                                         currentAttackHits++;
