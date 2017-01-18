@@ -506,11 +506,13 @@ namespace Game1
             //GraphicsDevice.BlendState =  BlendState.Opaque;
             renderManager.Draw(gameTime);
 
+            GraphicsDevice.BlendState = BlendState.NonPremultiplied;
+
             List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
 
             spriteBatch.DrawString(font1, "LEO GROUND BASE: " + (ryo.GetGround()), new Vector2(20, 20), Color.Blue);
             spriteBatch.DrawString(font1, "DRUM TOP " + (collisionManager.FindBelow(ryo).Count), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.GetCurrentSprite().GetTotalRemainingTime()), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.tossFrames.ContainsKey(ryo.GetCurrentAnimationState())), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

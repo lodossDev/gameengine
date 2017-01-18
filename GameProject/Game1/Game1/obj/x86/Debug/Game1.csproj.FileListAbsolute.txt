@@ -2275,3 +2275,7 @@ C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bi
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack3\Frame04.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack3\Frame05.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack3\Frame06.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Fall1\Frame00.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Fall1\Frame01.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Fall1\Frame02.xnb
+C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Fall1\Frame03.xnb

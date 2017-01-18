@@ -13,11 +13,14 @@ namespace Game1 {
         private bool renderBoxes;
         private Vector2 baseSpriteScale;
         private Vector2 baseSpriteOrigin;
+        private SpriteFont font1;
 
         public RenderManager() {
             renderBoxes = false;
             baseSpriteScale = new Vector2(0.5f, 0.5f);
             baseSpriteOrigin = Vector2.Zero;
+
+            font1 = Setup.contentManager.Load<SpriteFont>("Fonts/MyFont");
         }
 
         public void ShowBoxes() {
@@ -171,6 +174,8 @@ namespace Game1 {
                 }
             }
 
+            Setup.graphicsDevice.BlendState = BlendState.NonPremultiplied;
+            Setup.spriteBatch.DrawString(font1, "AMIR GROUND BASE: ", new Vector2(20, 220), Color.Blue);
             RenderLevelFrontLayers(gameTime);
         }
     }

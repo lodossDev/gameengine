@@ -350,8 +350,9 @@ namespace Game1
 
         private void NextFrame()
         {
-            currentFrame++;
             isFrameComplete[currentFrame] = true;
+            currentFrame++;
+            //isFrameComplete[currentFrame] = true;
         }
 
         public void SetCurrentFrame(int frame)

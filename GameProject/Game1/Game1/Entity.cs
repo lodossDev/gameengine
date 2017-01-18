@@ -22,7 +22,7 @@ namespace Game1 {
 
         private Dictionary<Animation.State, SoundEffect> animationSounds;
         private Dictionary<Animation.State, int> moveFrames;
-        private Dictionary<Animation.State, int> tossFrames;
+        public Dictionary<Animation.State, int> tossFrames;
 
         private CLNS.BoundingBox bodyBox;
         private CLNS.BoundingBox depthBox;
@@ -160,11 +160,9 @@ namespace Game1 {
                 if (newSprite != null) {
                     lastAnimationState = currentAnimationState;
                     currentAnimationState = state;
-                    currentSprite = newSprite;
-                }
 
-                foreach (Sprite sprite in spriteMap.Values) {
-                    sprite.ResetAnimation();
+                    newSprite.ResetAnimation();
+                    currentSprite = newSprite;
                 }
             }
         }
@@ -716,8 +714,10 @@ namespace Game1 {
         public bool IsInTossFrame() {
             return ((tossFrames.ContainsKey(GetCurrentAnimationState())
                         && IsInAnimationState(GetCurrentAnimationState())
-                            && currentSprite.GetCurrentFrame() >= tossFrames[GetCurrentAnimationState()])
-                    /*|| !tossFrames.ContainsKey(GetCurrentAnimationState())*/
+                            && currentSprite.GetCurrentFrame() >= tossFrames[GetCurrentAnimationState()]
+                            && IsFrameComplete(GetCurrentAnimationState(), tossFrames[GetCurrentAnimationState()] + 1))
+                    || (!tossFrames.ContainsKey(GetCurrentAnimationState()) 
+                            && IsInAnimationState(GetCurrentAnimationState()) && IsToss()) 
                     || tossFrames.Count == 0);
         }
 
@@ -859,10 +859,8 @@ namespace Game1 {
         }
 
         public void UpdateToss(GameTime gameTime) {
-            bool alwaysToss = false;
-
             if (tossInfo.isToss) {
-                if (IsInTossFrame() || alwaysToss) {
+                if (IsInTossFrame()) {
                     if (!tossInfo.inTossFrame) {
                         MoveY(tossInfo.height);
                         tossInfo.inTossFrame = true;

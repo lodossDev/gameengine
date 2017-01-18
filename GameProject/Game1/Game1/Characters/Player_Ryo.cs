@@ -17,11 +17,15 @@ namespace Game1 {
 
             AddSprite(Animation.State.JUMP_START, new Sprite("Sprites/Actors/Ryo/JumpStart", Animation.Type.ONCE));
             SetSpriteOffSet(Animation.State.JUMP_START, 5, 10);
-            SetFrameDelay(Animation.State.JUMP_START, 5);
+            SetFrameDelay(Animation.State.JUMP_START, 40);
 
             AddSprite(Animation.State.JUMP, new Sprite("Sprites/Actors/Ryo/Jump", Animation.Type.ONCE));
             SetFrameDelay(Animation.State.JUMP, 5);
             SetSpriteOffSet(Animation.State.JUMP, 8, -30);
+
+            AddSprite(Animation.State.FALL1, new Sprite("Sprites/Actors/Ryo/Fall1", Animation.Type.ONCE));
+            SetFrameDelay(Animation.State.FALL1, 5);
+            SetSpriteOffSet(Animation.State.FALL1, 8, -20);
 
             AddSprite(Animation.State.LAND, new Sprite("Sprites/Actors/Ryo/Land1", Animation.Type.ONCE));
             SetFrameDelay(Animation.State.LAND, 5);
@@ -54,14 +58,15 @@ namespace Game1 {
 
             AddAnimationLink(new Animation.Link(Animation.State.JUMP_START, Animation.State.JUMP, 1));
 
+            SetTossFrame(Animation.State.JUMP_START, 1);
             SetTossFrame(Animation.State.JUMP, 1);
             SetTossFrame(Animation.State.JUMP_TOWARDS, 1);
             SetMoveFrame(Animation.State.WALK_TOWARDS, 1);
 
             SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 4),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 4),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 4),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
                 new ComboAttack.Move(Animation.State.ATTACK2, 222000, 5),
                 new ComboAttack.Move(Animation.State.ATTACK3, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK2, 222000, 5),
