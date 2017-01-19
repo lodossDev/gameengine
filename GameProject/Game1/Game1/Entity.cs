@@ -22,7 +22,7 @@ namespace Game1 {
 
         private Dictionary<Animation.State, SoundEffect> animationSounds;
         private Dictionary<Animation.State, int> moveFrames;
-        public Dictionary<Animation.State, int> tossFrames;
+        private Dictionary<Animation.State, int> tossFrames;
 
         private CLNS.BoundingBox bodyBox;
         private CLNS.BoundingBox depthBox;
@@ -703,7 +703,7 @@ namespace Game1 {
             return ((moveFrames.ContainsKey(GetCurrentAnimationState()) 
                         && IsInAnimationState(GetCurrentAnimationState())
                             && currentSprite.GetCurrentFrame() >= moveFrames[GetCurrentAnimationState()]) 
-                    || !moveFrames.ContainsKey(GetCurrentAnimationState())
+                    || (!moveFrames.ContainsKey(GetCurrentAnimationState()) && IsInAnimationState(GetCurrentAnimationState()))
                     || moveFrames.Count == 0);
         }
         

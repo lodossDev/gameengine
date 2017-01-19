@@ -17,7 +17,7 @@ namespace Game1 {
 
             AddSprite(Animation.State.JUMP_START, new Sprite("Sprites/Actors/Ryo/JumpStart", Animation.Type.ONCE));
             SetSpriteOffSet(Animation.State.JUMP_START, 5, 10);
-            SetFrameDelay(Animation.State.JUMP_START, 40);
+            SetFrameDelay(Animation.State.JUMP_START, 3);
 
             AddSprite(Animation.State.JUMP, new Sprite("Sprites/Actors/Ryo/Jump", Animation.Type.ONCE));
             SetFrameDelay(Animation.State.JUMP, 5);
@@ -51,9 +51,9 @@ namespace Game1 {
             SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 5);
             SetSpriteOffSet(Animation.State.JUMP_TOWARD_ATTACK1, 8, -30);
 
-            AddBox(Animation.State.ATTACK1, 2, new CLNS.AttackBox(100, 80, 132, 45));
-            AddBox(Animation.State.ATTACK2, 2, new CLNS.AttackBox(100, 80, 132, 45));
-            AddBox(Animation.State.ATTACK3, 2, new CLNS.AttackBox(100, 80, 132, 45));
+            AddBox(Animation.State.ATTACK1, 2, new CLNS.AttackBox(200, 150, 132, 45));
+            AddBox(Animation.State.ATTACK2, 2, new CLNS.AttackBox(200, 150, 132, 45));
+            AddBox(Animation.State.ATTACK3, 2, new CLNS.AttackBox(200, 150, 132, 45));
             //AddBox(Animation.State.ATTACK1, 3, new CLNS.AttackBox(100, 80, 132, 45));
 
             AddAnimationLink(new Animation.Link(Animation.State.JUMP_START, Animation.State.JUMP, 1));
@@ -79,7 +79,7 @@ namespace Game1 {
             AddBoundsBox(120, 340, -60, 15, 50);
             
             SetScale(3.2f, 3.2f);
-            SetPostion(650, 0, 340);
+            SetPostion(400, 0, 200);
             SetBaseOffset(0, -10f);
         }
     }

@@ -178,5 +178,13 @@ namespace Game1
 
             return (z1 + offset < z2);
         }
+
+        public static bool IsWithinBoundsX(this Entity e1, Entity e2, int offset = 5) {
+            return (e1.HorizontalCollisionLeft(e2, offset) == true && e1.HorizontalCollisionRight(e2, offset) == true);
+        }
+
+        public static bool IsWithinBoundsZ(this Entity e1, Entity e2, int offset = 5) {
+            return (e1.VerticleCollisionTop(e2, offset) == true && e1.VerticleCollisionBottom(e2, offset) == true);
+        }
     }
 }

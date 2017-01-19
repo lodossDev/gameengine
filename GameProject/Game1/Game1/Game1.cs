@@ -431,7 +431,6 @@ namespace Game1
                 drum4.Update(gameTime);
                 */
 
-                
                 collisionManager.Update(gameTime);
                 inputManager.Update(gameTime);
 
@@ -455,13 +454,17 @@ namespace Game1
                     drum3.VelZ(0);
                 }
 
-                if ((int)Math.Abs(drum.GetPosY()) <= 0) {
+
+                if ((int)drum.GetPosY() >= 0) {
+                    dir = -1 * dir;
+
+                } else if ((int)drum.GetPosY() <= -500)
+                {
                     dir = -dir;
-                } else if ((int)Math.Abs(drum.GetPosY()) >= 200) {
-                    dir = -1*dir;
                 }
 
-                drum.VelY(5*dir);
+                drum.VelY(5 * dir);
+
 
                 renderManager.Update(gameTime);
                 //level1.ScrollY(leo.GetVelocity().Y/2);
@@ -512,7 +515,7 @@ namespace Game1
 
             spriteBatch.DrawString(font1, "LEO GROUND BASE: " + (ryo.GetGround()), new Vector2(20, 20), Color.Blue);
             spriteBatch.DrawString(font1, "DRUM TOP " + (collisionManager.FindBelow(ryo).Count), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.tossFrames.ContainsKey(ryo.GetCurrentAnimationState())), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.HasLanded()), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

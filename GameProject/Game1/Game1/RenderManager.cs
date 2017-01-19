@@ -54,7 +54,7 @@ namespace Game1 {
                 }
 
                 if (entity.GetBoundsBottomRay() != null) {
-                    //entity.GetBoundsBottomRay().DrawRectangle(CLNS.DrawType.LINES);
+                    entity.GetBoundsBottomRay().DrawRectangle(CLNS.DrawType.LINES);
                 }
 
                 if (entity.GetBoundsTopRay() != null) {

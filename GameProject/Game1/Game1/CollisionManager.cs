@@ -143,8 +143,9 @@ namespace Game1
 
                         if (entity.GetBoundsBottomRay() != null 
                                 && entity.GetBoundsBottomRay().Intersects(targetBox) 
-                                && isWithInBoundsX1 && isWithInBoundsZ1 && ePosY > tHeight - 10
-                                && target.IsMovingY())  { 
+                                && isWithInBoundsX1 && isWithInBoundsZ1 && (ePosY > tHeight - 10 
+                                    || (entity.GetBoundsBottomRay() != null && entity.GetBoundsBottomRay().Intersects(targetBox)))
+                                && (target.IsMovingY()))  { 
                         
                             entity.SetGround(-(tHeight + 5));
                             entity.MoveY(target.GetDirY());
