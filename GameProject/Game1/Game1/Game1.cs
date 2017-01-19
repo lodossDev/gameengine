@@ -515,7 +515,7 @@ namespace Game1
 
             spriteBatch.DrawString(font1, "LEO GROUND BASE: " + (ryo.GetGround()), new Vector2(20, 20), Color.Blue);
             spriteBatch.DrawString(font1, "DRUM TOP " + (collisionManager.FindBelow(ryo).Count), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.HasLanded()), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.GetTossInfo().velocity.Y), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

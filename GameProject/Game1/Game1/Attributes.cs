@@ -145,6 +145,11 @@ namespace Game1
             public bool inTossFrame;
             public float gravity;
             public float height;
+            public int maxHitGround;
+            public int hitGoundCount;
+            public int tossCount;
+            public int maxTossCount;
+
 
             public TossInfo() {
                 height = 0f;
@@ -153,6 +158,10 @@ namespace Game1
                 gravity = 0.48f;
                 inTossFrame = false;
                 isToss = false;
+                hitGoundCount = 0;
+                tossCount = 0;
+                maxHitGround = 3;
+                maxTossCount = 1;
             }
         }
 

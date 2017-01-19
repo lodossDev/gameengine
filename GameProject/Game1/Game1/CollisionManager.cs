@@ -113,8 +113,8 @@ namespace Game1
                 entity.SetGround(entity.GetGroundBase());
 
                 if (!entity.IsToss()) { 
-                    entity.SetAnimationState(Animation.State.FALL1);
-                    entity.Toss(5);
+                    //entity.SetAnimationState(Animation.State.FALL1);
+                    //entity.Toss(5);
                 }
             }
         }

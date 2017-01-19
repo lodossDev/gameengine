@@ -850,15 +850,24 @@ namespace Game1 {
         }
 
         public void ResetToss() {
-            velocity.Y = 0f;
             velocity.X = 0f;
+            velocity.Y = 0f;
+
             tossInfo.velocity.X = 0f;
             tossInfo.velocity.Y = 0f;
+
             tossInfo.inTossFrame = false;
             tossInfo.isToss = false;
+
+            tossInfo.hitGoundCount = 0;
+            tossInfo.maxHitGround = 3;
+
+            tossInfo.tossCount = 0;
+            tossInfo.maxTossCount = 1;
         }
 
         public void UpdateToss(GameTime gameTime) {
+            
             if (tossInfo.isToss) {
                 if (IsInTossFrame()) {
                     if (!tossInfo.inTossFrame) {
@@ -880,8 +889,25 @@ namespace Game1 {
 
                 if ((int)GetPosY() > (int)GetGround()) {
                     SetPosY(GetGround());
-                    SetAnimationState(Animation.State.LAND);
-                    ResetToss();
+
+                    MoveY(tossInfo.height);
+                    tossInfo.velocity.Y = (tossInfo.height / 2);
+                     
+                    if (tossInfo.hitGoundCount > 0) { 
+                       tossInfo.height += 8;
+                    }
+
+                    tossInfo.velocity.Y = tossInfo.height;
+
+                    if (tossInfo.inTossFrame) { 
+                        tossInfo.hitGoundCount += 1;
+                        tossInfo.inTossFrame = false;
+                    }
+                    
+                    if (tossInfo.hitGoundCount > tossInfo.maxHitGround) {
+                        SetAnimationState(Animation.State.LAND);
+                        ResetToss();
+                    }
                 }
             }
         }
