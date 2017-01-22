@@ -106,15 +106,16 @@ namespace Game1
             if ((belowEntities.Count == 0 
                     && (int)entity.GetGround() != (int)entity.GetGroundBase() 
                     && entity.HasLanded())
+
                     || (belowEntities.Count == 0 
                             && (int)entity.GetGround() != (int)entity.GetGroundBase() 
                             && !entity.HasLanded())) {
 
                 entity.SetGround(entity.GetGroundBase());
 
-                if (!entity.IsToss()) { 
-                    //entity.SetAnimationState(Animation.State.FALL1);
-                    //entity.Toss(5);
+                if (!entity.IsToss()) {
+                    entity.SetAnimationState(Animation.State.FALL1);
+                    entity.Toss(5);
                 }
             }
         }
@@ -143,9 +144,7 @@ namespace Game1
 
                         if (entity.GetBoundsBottomRay() != null 
                                 && entity.GetBoundsBottomRay().Intersects(targetBox) 
-                                && isWithInBoundsX1 && isWithInBoundsZ1 && (ePosY > tHeight - 10 
-                                    || (entity.GetBoundsBottomRay() != null && entity.GetBoundsBottomRay().Intersects(targetBox)))
-                                && (target.IsMovingY()))  { 
+                                && isWithInBoundsX1 && isWithInBoundsZ1 && (ePosY >= tHeight - 10))  { 
                         
                             entity.SetGround(-(tHeight + 5));
                             entity.MoveY(target.GetDirY());
@@ -159,7 +158,7 @@ namespace Game1
                         }
 
                         if (isWithInBoundsX1 && isWithInBoundsZ1 
-                                && (double)entity.GetVelocity().Y > 1 && ePosY >= tHeight - 10) {
+                                && (double)entity.GetVelocity().Y > 0 && ePosY >= tHeight - 10) {
 
                             entity.SetGround(-(tHeight + 5));
                         }
@@ -283,7 +282,7 @@ namespace Game1
                 hitCount++;
                 hiteffect1.CreateInstance().Play();
 
-                target.Toss(-10 * attackBox.GetHitStrength());
+                target.Toss(-1.2f, 0, 200000000);
                 //target.MoveY(-125 * attackBox.GetHitStrength());
             }
         }
@@ -376,7 +375,6 @@ namespace Game1
                                         if (!targetHit) {
                                             OnHit(target, entity, attackBox);
                                             target.OnHit(entity, attackBox);
-
                                             targetHit = true;
                                         }
 

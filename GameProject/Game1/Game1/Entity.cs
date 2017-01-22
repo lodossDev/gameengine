@@ -822,89 +822,97 @@ namespace Game1 {
         }
 
         public void SetJump(float height = -25f, float velX = 0f)  {
-            Toss(height, velX);
+            if (tossInfo.tossCount < tossInfo.maxTossCount && !InAir()) { 
+                Toss(height, velX);
  
-            if (HasSprite(Animation.State.JUMP_START)) {
-                SetAnimationState(Animation.State.JUMP_START);
-            } else {
-                SetAnimationState(Animation.State.JUMP);
-            }
+                if (HasSprite(Animation.State.JUMP_START)) {
+                    SetAnimationState(Animation.State.JUMP_START);
+                } else {
+                    SetAnimationState(Animation.State.JUMP);
+                }
 
-            if (velX < 0.0 || velX > 0.0) {
-                if (HasSprite(Animation.State.JUMP_TOWARDS)) {
-                    SetJumpLink(Animation.State.JUMP_TOWARDS);
+                if (velX < 0.0 || velX > 0.0) {
+                    if (HasSprite(Animation.State.JUMP_TOWARDS)) {
+                        SetJumpLink(Animation.State.JUMP_TOWARDS);
+                    } else {
+                        SetJumpLink(Animation.State.JUMP);
+                    }
                 } else {
                     SetJumpLink(Animation.State.JUMP);
                 }
-            } else {
-                SetJumpLink(Animation.State.JUMP);
+
+            } else if (tossInfo.tossCount < tossInfo.maxTossCount && InAir()) {
+                Toss(height, tossInfo.velocity.X);
+                tossInfo.inTossFrame = true;
+                SetAnimationState(GetCurrentAnimationState());
+                GetCurrentSprite().ResetAnimation();
             }
         }
 
-        public void Toss(float height = -20, float velX = 0f) {
-            tossInfo.height = height;
-            tossInfo.velocity.Y = (height / 2);
-            tossInfo.velocity.X = velX;
-            tossInfo.inTossFrame = false;
-            tossInfo.isToss = true;
+        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 1) {
+            if (tossInfo.tossCount < maxToss) { 
+                tossInfo.height = height;
+                tossInfo.velocity.Y = height;
+                tossInfo.velocity.X = velX;
+                tossInfo.inTossFrame = false;
+                tossInfo.isToss = true;
+                tossInfo.hitGoundCount = 0;
+                tossInfo.maxTossCount = maxToss;
+                tossInfo.maxHitGround = maxHitGround;
+                tossInfo.tossCount ++;
+            }
         }
 
         public void ResetToss() {
             velocity.X = 0f;
             velocity.Y = 0f;
 
+            tossInfo.height = 0;
             tossInfo.velocity.X = 0f;
             tossInfo.velocity.Y = 0f;
 
+            tossInfo.hitGoundCount = 0;
+            tossInfo.tossCount = 0;
+
             tossInfo.inTossFrame = false;
             tossInfo.isToss = false;
-
-            tossInfo.hitGoundCount = 0;
-            tossInfo.maxHitGround = 3;
-
-            tossInfo.tossCount = 0;
-            tossInfo.maxTossCount = 1;
         }
 
         public void UpdateToss(GameTime gameTime) {
-            
             if (tossInfo.isToss) {
                 if (IsInTossFrame()) {
-                    if (!tossInfo.inTossFrame) {
-                        MoveY(tossInfo.height);
-                        tossInfo.inTossFrame = true;
-                    }
+                    tossInfo.inTossFrame = true;
                 }
 
                 if (tossInfo.inTossFrame) {
+                    VelX(tossInfo.velocity.X);
+                    VelY(tossInfo.velocity.Y);
+
                     tossInfo.velocity.Y += tossInfo.gravity;
                     
                     if (tossInfo.velocity.Y >= tossInfo.maxVelocity.Y) {
                         tossInfo.velocity.Y = tossInfo.maxVelocity.Y;
                     }
-
-                    VelX(tossInfo.velocity.X);
-                    VelY(tossInfo.velocity.Y);
                 }
 
                 if ((int)GetPosY() > (int)GetGround()) {
-                    SetPosY(GetGround());
-
+                    tossInfo.hitGoundCount += 1;
                     MoveY(tossInfo.height);
-                    tossInfo.velocity.Y = (tossInfo.height / 2);
-                     
-                    if (tossInfo.hitGoundCount > 0) { 
-                       tossInfo.height += 8;
-                    }
 
-                    tossInfo.velocity.Y = tossInfo.height;
+                    if (tossInfo.maxHitGround > 1) { 
+                        tossInfo.height += (float)(8.2 / tossInfo.maxHitGround);
 
-                    if (tossInfo.inTossFrame) { 
-                        tossInfo.hitGoundCount += 1;
-                        tossInfo.inTossFrame = false;
+                        if (tossInfo.height >= 0) {
+                            tossInfo.height = 0;
+                        }
+
+                        SetPosY(GetGround());
+                        MoveY(tossInfo.height);
+                        tossInfo.velocity.Y = tossInfo.height;
                     }
-                    
+                      
                     if (tossInfo.hitGoundCount > tossInfo.maxHitGround) {
+                        SetPosY(GetGround());
                         SetAnimationState(Animation.State.LAND);
                         ResetToss();
                     }

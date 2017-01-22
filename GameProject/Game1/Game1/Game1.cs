@@ -283,6 +283,7 @@ namespace Game1
 
 
             collisionManager.AddEntity(ryo);
+            collisionManager.AddEntity(level1.GetMisc()[0]);
             renderManager.AddEntity(ryo);
 
             command = new InputHelper.CommandMove("TEST", Animation.State.ATTACK6, new List<InputHelper.KeyState>
@@ -513,9 +514,9 @@ namespace Game1
 
             List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
 
-            spriteBatch.DrawString(font1, "LEO GROUND BASE: " + (ryo.GetGround()), new Vector2(20, 20), Color.Blue);
-            spriteBatch.DrawString(font1, "DRUM TOP " + (collisionManager.FindBelow(ryo).Count), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "LEO TOP: " + (ryo.GetTossInfo().velocity.Y), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "COUNT: " + (ryo.GetGround()), new Vector2(20, 20), Color.Blue);
+            spriteBatch.DrawString(font1, "TOSS HEIGHT " + (ryo.HasLanded()), new Vector2(20, 50), Color.Blue);
+            spriteBatch.DrawString(font1, "GOUND Y: " + (ryo.GetPosY()), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

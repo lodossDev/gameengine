@@ -154,7 +154,7 @@ namespace Game1
             public TossInfo() {
                 height = 0f;
                 velocity = Vector3.Zero;
-                maxVelocity = new Vector3(10f, 10f, 10f);
+                maxVelocity = new Vector3(10f, 13f, 10f);
                 gravity = 0.48f;
                 inTossFrame = false;
                 isToss = false;

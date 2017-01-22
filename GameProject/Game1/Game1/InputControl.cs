@@ -189,26 +189,25 @@ namespace Game1 {
         }
 
         private void ProcessJump() {
-            if (player.IsNonActionState()) {
+            //if (player.IsNonActionState()) {
 
                 if (JUMP_PRESS) {
 
                     if (LEFT) {
-                        player.SetJump(-29f, -5f);
+                        player.SetJump(-15f, -5f);
 
                     } else if (RIGHT) {
-                        player.SetJump(-29f, 5f);
+                        player.SetJump(-15f, 5f);
 
                     } else {
-                        player.SetJump(-29f);
+                        player.SetJump(-15f);
                     }
                 }
-            }
+            //}
         }
 
         private void ProcessAttack() {
             if (ATTACK_PRESS) {
-
                 if (!player.IsToss()) {
                     player.ProcessAttackChainStep();
 

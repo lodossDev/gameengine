@@ -52,8 +52,8 @@ namespace Game1 {
             SetSpriteOffSet(Animation.State.JUMP_TOWARD_ATTACK1, 8, -30);
 
             AddBox(Animation.State.ATTACK1, 2, new CLNS.AttackBox(200, 150, 132, 45));
-            AddBox(Animation.State.ATTACK2, 2, new CLNS.AttackBox(200, 150, 132, 45));
-            AddBox(Animation.State.ATTACK3, 2, new CLNS.AttackBox(200, 150, 132, 45));
+            AddBox(Animation.State.ATTACK2, 3, new CLNS.AttackBox(200, 150, 132, 45));
+            AddBox(Animation.State.ATTACK3, 3, new CLNS.AttackBox(200, 150, 132, 45));
             //AddBox(Animation.State.ATTACK1, 3, new CLNS.AttackBox(100, 80, 132, 45));
 
             AddAnimationLink(new Animation.Link(Animation.State.JUMP_START, Animation.State.JUMP, 1));
@@ -64,9 +64,15 @@ namespace Game1 {
             SetMoveFrame(Animation.State.WALK_TOWARDS, 1);
 
             SetDefaultAttackChain(new ComboAttack.Chain(new List<ComboAttack.Move>{
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
-                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 3),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
+                new ComboAttack.Move(Animation.State.ATTACK1, 222000, 2),
                 new ComboAttack.Move(Animation.State.ATTACK2, 222000, 5),
                 new ComboAttack.Move(Animation.State.ATTACK3, 222000, 4),
                 new ComboAttack.Move(Animation.State.ATTACK2, 222000, 5),
