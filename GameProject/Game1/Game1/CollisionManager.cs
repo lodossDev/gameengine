@@ -144,18 +144,18 @@ namespace Game1
 
                         if (entity.GetBoundsBottomRay() != null 
                                 && entity.GetBoundsBottomRay().Intersects(targetBox) 
-                                && isWithInBoundsX1 && isWithInBoundsZ1 && (ePosY >= tHeight - 10))  { 
+                                && isWithInBoundsX1 && isWithInBoundsZ1 && (ePosY >= tHeight - 10) && ePosY != (tHeight + 5))  { 
                         
                             entity.SetGround(-(tHeight + 5));
                             entity.MoveY(target.GetDirY());
                         }
 
-                        if (isWithInBoundsX1 && isWithInBoundsZ1 
+                        /*if (isWithInBoundsX1 && isWithInBoundsZ1 
                                 && ePosY + 40 >= tHeight - 10 && target.IsToss()) {
 
                             entity.SetGround(-(tHeight + 5));
                             entity.SetPosY(-(tHeight + 5));
-                        }
+                        }*/
 
                         if (isWithInBoundsX1 && isWithInBoundsZ1 
                                 && (double)entity.GetVelocity().Y > 0 && ePosY >= tHeight - 10) {

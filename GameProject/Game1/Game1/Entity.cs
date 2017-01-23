@@ -822,7 +822,7 @@ namespace Game1 {
         }
 
         public void SetJump(float height = -25f, float velX = 0f)  {
-            if (tossInfo.tossCount < tossInfo.maxTossCount && !InAir()) { 
+            if (tossInfo.tossCount < tossInfo.maxTossCount && !tossInfo.isToss) { 
                 Toss(height, velX);
  
                 if (HasSprite(Animation.State.JUMP_START)) {
@@ -841,7 +841,7 @@ namespace Game1 {
                     SetJumpLink(Animation.State.JUMP);
                 }
 
-            } else if (tossInfo.tossCount < tossInfo.maxTossCount && InAir()) {
+            } else if (tossInfo.tossCount < tossInfo.maxTossCount && tossInfo.isToss) {
                 Toss(height, tossInfo.velocity.X);
                 tossInfo.inTossFrame = true;
                 SetAnimationState(GetCurrentAnimationState());
@@ -849,16 +849,21 @@ namespace Game1 {
             }
         }
 
-        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 1) {
+        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 2) {
             if (tossInfo.tossCount < maxToss) { 
                 tossInfo.height = height;
+                tossInfo.tempHeight += tossInfo.velocity.Y + height;
+         
                 tossInfo.velocity.Y = height;
                 tossInfo.velocity.X = velX;
+
                 tossInfo.inTossFrame = false;
                 tossInfo.isToss = true;
+
                 tossInfo.hitGoundCount = 0;
                 tossInfo.maxTossCount = maxToss;
                 tossInfo.maxHitGround = maxHitGround;
+
                 tossInfo.tossCount ++;
             }
         }
@@ -867,7 +872,7 @@ namespace Game1 {
             velocity.X = 0f;
             velocity.Y = 0f;
 
-            tossInfo.height = 0;
+            tossInfo.height = tossInfo.tempHeight = 0;
             tossInfo.velocity.X = 0f;
             tossInfo.velocity.Y = 0f;
 
@@ -895,12 +900,13 @@ namespace Game1 {
                     }
                 }
 
-                if ((int)GetPosY() > (int)GetGround()) {
+                if ((double)GetPosY() > (double)GetGround()) {
                     tossInfo.hitGoundCount += 1;
                     MoveY(tossInfo.height);
 
-                    if (tossInfo.maxHitGround > 1) { 
-                        tossInfo.height += (float)(8.2 / tossInfo.maxHitGround);
+                    if (tossInfo.maxHitGround > 1) {
+                        tossInfo.tempHeight += (float)(8.2); 
+                        tossInfo.height = tossInfo.tempHeight;
 
                         if (tossInfo.height >= 0) {
                             tossInfo.height = 0;

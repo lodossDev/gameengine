@@ -145,6 +145,7 @@ namespace Game1
             public bool inTossFrame;
             public float gravity;
             public float height;
+            public float tempHeight;
             public int maxHitGround;
             public int hitGoundCount;
             public int tossCount;
@@ -152,7 +153,7 @@ namespace Game1
 
 
             public TossInfo() {
-                height = 0f;
+                height = tempHeight = 0f;
                 velocity = Vector3.Zero;
                 maxVelocity = new Vector3(10f, 13f, 10f);
                 gravity = 0.48f;
