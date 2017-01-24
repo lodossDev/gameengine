@@ -849,12 +849,16 @@ namespace Game1 {
             }
         }
 
-        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 2) {
+        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 3) {
             if (tossInfo.tossCount < maxToss) { 
                 tossInfo.height = height;
-                tossInfo.tempHeight += tossInfo.velocity.Y + height;
-         
-                tossInfo.velocity.Y = height;
+
+                if (tossInfo.velocity.Y >= -10) { 
+                    tossInfo.tempHeight += tossInfo.velocity.Y + tossInfo.height;
+                    tossInfo.height = tossInfo.tempHeight;
+                }
+
+                tossInfo.velocity.Y = tossInfo.height;
                 tossInfo.velocity.X = velX;
 
                 tossInfo.inTossFrame = false;
@@ -902,22 +906,22 @@ namespace Game1 {
 
                 if ((double)GetPosY() > (double)GetGround()) {
                     tossInfo.hitGoundCount += 1;
-                    MoveY(tossInfo.height);
 
                     if (tossInfo.maxHitGround > 1) {
-                        tossInfo.tempHeight += (float)(8.2); 
-                        tossInfo.height = tossInfo.tempHeight;
-
+                        tossInfo.height -= (tossInfo.tempHeight / tossInfo.maxHitGround);
+                        
                         if (tossInfo.height >= 0) {
-                            tossInfo.height = 0;
+                             tossInfo.height = 0;
                         }
 
                         SetPosY(GetGround());
                         MoveY(tossInfo.height);
-                        tossInfo.velocity.Y = tossInfo.height;
                     }
+
+                    tossInfo.velocity.Y = tossInfo.height;
+                    MoveY(tossInfo.height);
                       
-                    if (tossInfo.hitGoundCount > tossInfo.maxHitGround) {
+                    if (tossInfo.hitGoundCount >= tossInfo.maxHitGround) {
                         SetPosY(GetGround());
                         SetAnimationState(Animation.State.LAND);
                         ResetToss();

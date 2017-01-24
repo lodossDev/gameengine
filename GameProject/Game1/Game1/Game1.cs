@@ -514,9 +514,9 @@ namespace Game1
 
             List<CLNS.BoundingBox> targetBoxes = taskMaster.GetCurrentBoxes(CLNS.BoxType.BODY_BOX);
 
-            spriteBatch.DrawString(font1, "COUNT: " + (ryo.GetTossInfo().tempHeight), new Vector2(20, 20), Color.Blue);
-            spriteBatch.DrawString(font1, "TOSS HEIGHT " + (ryo.HasLanded()), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "GOUND Y: " + (ryo.GetPosY()), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "HEIGHT: " + (ryo.GetTossInfo().tempHeight), new Vector2(20, 20), Color.Blue);
+            spriteBatch.DrawString(font1, "GROUND COUNT " + (ryo.GetTossInfo().hitGoundCount), new Vector2(20, 50), Color.Blue);
+            spriteBatch.DrawString(font1, "GOUND Y: " + (ryo.GetTossInfo().height), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())
