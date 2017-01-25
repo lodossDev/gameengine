@@ -849,15 +849,18 @@ namespace Game1 {
             }
         }
 
-        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 3) {
+        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 2) {
             if (tossInfo.tossCount < maxToss) { 
-                tossInfo.height = height;
-
-                if (tossInfo.velocity.Y >= -10) { 
-                    tossInfo.tempHeight += tossInfo.velocity.Y + tossInfo.height;
+                
+                if (tossInfo.velocity.Y >= -10 && tossInfo.tossCount > 0) { 
+                    tossInfo.tempHeight += (height * tossInfo.gravity);
+                    tossInfo.height = tossInfo.tempHeight;
+                } else {
+                    tossInfo.tempHeight = height;
                     tossInfo.height = tossInfo.tempHeight;
                 }
 
+                //tossInfo.gravity = 0.48f * Math.Abs(tossInfo.height / 15);
                 tossInfo.velocity.Y = tossInfo.height;
                 tossInfo.velocity.X = velX;
 
@@ -882,6 +885,7 @@ namespace Game1 {
 
             tossInfo.hitGoundCount = 0;
             tossInfo.tossCount = 0;
+            tossInfo.gravity = 0.48f;
 
             tossInfo.inTossFrame = false;
             tossInfo.isToss = false;
@@ -919,6 +923,8 @@ namespace Game1 {
                     }
 
                     tossInfo.velocity.Y = tossInfo.height;
+                    //tossInfo.tempHeight = tossInfo.height;
+                    //tossInfo.gravity = 0.48f * Math.Abs(tossInfo.height / 15);
                     MoveY(tossInfo.height);
                       
                     if (tossInfo.hitGoundCount >= tossInfo.maxHitGround) {
