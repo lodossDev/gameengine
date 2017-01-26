@@ -109,9 +109,10 @@ namespace Game1
 
                     || (belowEntities.Count == 0 
                             && (int)entity.GetGround() != (int)entity.GetGroundBase() 
-                            && !entity.HasLanded())) {
+                            && entity.GetCollisionInfo().onTop)) {
 
                 entity.SetGround(entity.GetGroundBase());
+                entity.GetCollisionInfo().onTop = false;
 
                 if (!entity.IsToss()) {
                     entity.SetAnimationState(Animation.State.FALL1);
@@ -144,7 +145,8 @@ namespace Game1
 
                         if (entity.GetBoundsBottomRay() != null 
                                 && entity.GetBoundsBottomRay().Intersects(targetBox) 
-                                && isWithInBoundsX1 && isWithInBoundsZ1 && (ePosY >= tHeight - 10) && ePosY != (tHeight + 5))  { 
+                                && isWithInBoundsX1 && isWithInBoundsZ1 
+                                && entity.GetCollisionInfo().onTop)  { 
                         
                             entity.SetGround(-(tHeight + 5));
                             entity.MoveY(target.GetDirY());
@@ -160,6 +162,7 @@ namespace Game1
                         if (isWithInBoundsX1 && isWithInBoundsZ1 
                                 && (double)entity.GetVelocity().Y > 0 && ePosY >= tHeight - 10) {
 
+                            entity.GetCollisionInfo().onTop = true;
                             entity.SetGround(-(tHeight + 5));
                         }
                     }

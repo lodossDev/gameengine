@@ -27,11 +27,13 @@ namespace Game1
             public CollisionState collide_x;
             public CollisionState collide_y;
             public CollisionState collide_z;
+            public bool onTop;
 
 
             public CollisionInfo() 
             {
                 Reset();
+                onTop = false;
             }
 
             public void Reset()

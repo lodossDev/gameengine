@@ -85,9 +85,9 @@ namespace Game1
             leo.SetSpriteOffSet(Animation.State.JUMP_START, 20, 10);
             leo.SetFrameDelay(Animation.State.JUMP_START, 5);
 
-            leo.AddSprite(Animation.State.LAND, new Sprite("Sprites/Actors/Leo/Land", Animation.Type.ONCE));
-            leo.SetSpriteOffSet(Animation.State.LAND, 30, -11);
-            leo.SetFrameDelay(Animation.State.LAND, 5);
+            leo.AddSprite(Animation.State.LAND1, new Sprite("Sprites/Actors/Leo/Land", Animation.Type.ONCE));
+            leo.SetSpriteOffSet(Animation.State.LAND1, 30, -11);
+            leo.SetFrameDelay(Animation.State.LAND1, 5);
 
             leo.AddSprite(Animation.State.JUMP, new Sprite("Sprites/Actors/Leo/Jump", Animation.Type.REPEAT, 13));
             leo.SetFrameDelay(Animation.State.JUMP, 5);
@@ -286,17 +286,7 @@ namespace Game1
             collisionManager.AddEntity(level1.GetMisc()[0]);
             renderManager.AddEntity(ryo);
 
-            command = new InputHelper.CommandMove("TEST", Animation.State.ATTACK6, new List<InputHelper.KeyState>
-            {
-                new InputHelper.KeyState(InputHelper.KeyPress.A | InputHelper.KeyPress.X, InputHelper.ButtonState.Pressed),
-                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Held, (float)9, 30),
-                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Released, 30),
-                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Released, 30),
-                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Pressed),
-                new InputHelper.KeyState(InputHelper.KeyPress.RIGHT, InputHelper.ButtonState.Released)
-            });
-
-            leo.AddCommandMove(command);
+           
             leo.SetAnimationState(Animation.State.STANCE);
             leo.SetBaseOffset(-60, -30f);
             //control = new InputControl(leo, PlayerIndex.One);
@@ -516,7 +506,7 @@ namespace Game1
 
             spriteBatch.DrawString(font1, "HEIGHT: " + (ryo.GetTossInfo().velocity.Y), new Vector2(20, 20), Color.Blue);
             spriteBatch.DrawString(font1, "GROUND COUNT " + (ryo.GetTossInfo().gravity), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "GOUND Y: " + (ryo.GetTossInfo().height), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "GOUND Y: " + (ryo.GetCollisionInfo().onTop), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

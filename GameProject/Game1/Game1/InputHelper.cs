@@ -133,7 +133,7 @@ namespace Game1
             private Animation.State animationState;
 
 
-            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxMoveTime = 10000f, double priority = 1)
+            public CommandMove(string name, Animation.State animationState, List<InputHelper.KeyState> moves, float maxMoveTime = 1000f, double priority = 1)
             {
                 this.name = name;
                 this.animationState = animationState;

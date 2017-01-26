@@ -665,8 +665,11 @@ namespace Game1 {
             Animation.Action currentAction = Animation.Action.NONE;
             Animation.State currentState = GetCurrentAnimationState();
 
-            if (currentState.ToString().Contains("ATTACK")) {
+            if (currentState.ToString().Contains("ATTACK") 
+                    || currentState.ToString().Contains("SPECIAL")) {
+
                 return Animation.Action.ATTACKING;
+
             } else {
                 if (currentState.ToString().Contains("RECOVER")) {
                     return Animation.Action.RECOVERY;
@@ -674,26 +677,37 @@ namespace Game1 {
                     return Animation.Action.JUMPING;
                 } else if (currentState.ToString().Contains("FALL")) {
                     return Animation.Action.FALLING;
+                } else if (currentState.ToString().Contains("RUN")) {
+                    return Animation.Action.RUNNING;
                 }
             }
 
             switch (currentState) {
-                case Animation.State.NONE:
+                case Animation.State.NONE: { 
                     currentAction = Animation.Action.NONE;
                     break;
-                case Animation.State.STANCE:
+                }
+
+                case Animation.State.STANCE: { 
                     currentAction = Animation.Action.IDLE;
                     break;
+                }
+
                 case Animation.State.WALK_TOWARDS:
-                case Animation.State.WALK_BACKWARDS:
+                case Animation.State.WALK_BACKWARDS: { 
                     currentAction = Animation.Action.WALKING;
                     break;
-                case Animation.State.LAND:
+                }
+
+                case Animation.State.LAND1: { 
                     currentAction = Animation.Action.LANDING;
                     break;
-                default:
+                }
+
+                default: { 
                     currentAction = Animation.Action.NONE;
                     break;
+                }
             }
 
             return currentAction;
@@ -831,7 +845,7 @@ namespace Game1 {
                     SetAnimationState(Animation.State.JUMP);
                 }
 
-                if (velX < 0.0 || velX > 0.0) {
+                if ((double)velX != 0.0) {
                     if (HasSprite(Animation.State.JUMP_TOWARDS)) {
                         SetJumpLink(Animation.State.JUMP_TOWARDS);
                     } else {
@@ -844,23 +858,29 @@ namespace Game1 {
             } else if (tossInfo.tossCount < tossInfo.maxTossCount && tossInfo.isToss) {
                 Toss(height, tossInfo.velocity.X);
                 tossInfo.inTossFrame = true;
-                SetAnimationState(GetCurrentAnimationState());
+
+                if ((double)tossInfo.velocity.X != 0.0) {
+                    SetAnimationState(Animation.State.JUMP_TOWARDS);
+                } else {
+                    SetAnimationState(Animation.State.JUMP);
+                }
+
                 GetCurrentSprite().ResetAnimation();
             }
         }
 
-        public void Toss(float height = -20, float velX = 0f, int maxToss = 2, int maxHitGround = 2) {
+        public void Toss(float height = -20, float velX = 0f, int maxToss = 1, int maxHitGround = 1) {
             if (tossInfo.tossCount < maxToss) { 
                 
                 if (tossInfo.velocity.Y >= -10 && tossInfo.tossCount > 0) { 
                     tossInfo.tempHeight += (height * tossInfo.gravity);
                     tossInfo.height = tossInfo.tempHeight;
+                    tossInfo.gravity = 0.38f * Math.Abs(tossInfo.height / 15);
                 } else {
                     tossInfo.tempHeight = height;
                     tossInfo.height = tossInfo.tempHeight;
                 }
 
-                //tossInfo.gravity = 0.48f * Math.Abs(tossInfo.height / 15);
                 tossInfo.velocity.Y = tossInfo.height;
                 tossInfo.velocity.X = velX;
 
@@ -912,7 +932,7 @@ namespace Game1 {
                     tossInfo.hitGoundCount += 1;
 
                     if (tossInfo.maxHitGround > 1) {
-                        tossInfo.height -= (tossInfo.tempHeight / tossInfo.maxHitGround);
+                        tossInfo.height -= (tossInfo.tempHeight / tossInfo.maxHitGround) + 1.5f;
                         
                         if (tossInfo.height >= 0) {
                              tossInfo.height = 0;
@@ -923,13 +943,11 @@ namespace Game1 {
                     }
 
                     tossInfo.velocity.Y = tossInfo.height;
-                    //tossInfo.tempHeight = tossInfo.height;
-                    //tossInfo.gravity = 0.48f * Math.Abs(tossInfo.height / 15);
                     MoveY(tossInfo.height);
                       
                     if (tossInfo.hitGoundCount >= tossInfo.maxHitGround) {
                         SetPosY(GetGround());
-                        SetAnimationState(Animation.State.LAND);
+                        SetAnimationState(Animation.State.LAND1);
                         ResetToss();
                     }
                 }
@@ -964,7 +982,8 @@ namespace Game1 {
                                 || IsInAnimationAction(Animation.Action.LANDING)
                                         && GetCurrentSprite().IsAnimationComplete())
                                 || IsInAnimationAction(Animation.Action.ATTACKING)
-                                        && GetCurrentSprite().IsAnimationComplete());
+                                        && GetCurrentSprite().IsAnimationComplete()
+                                || IsInAnimationAction(Animation.Action.RUNNING));
         }
 
         public virtual void ResetToIdle(GameTime gameTime) {
@@ -972,7 +991,8 @@ namespace Game1 {
                 int frame = (IsEntity(EntityType.PLAYER) ? GetCurrentSprite().GetCurrentFrame() : GetCurrentSprite().GetFrames());
 
                 bool isFrameComplete = (IsEntity(EntityType.PLAYER) ? IsFrameComplete(GetCurrentAnimationState(), frame) 
-                                            : IsFrameComplete(GetCurrentAnimationState(), frame) && !IsInAnimationAction(Animation.Action.WALKING));
+                                            : IsFrameComplete(GetCurrentAnimationState(), frame) 
+                                                    && !IsInAnimationAction(Animation.Action.WALKING));
 
                 if (isFrameComplete && !IsJumpingOrInAir()) {
                     SetAnimationState(Animation.State.STANCE);
