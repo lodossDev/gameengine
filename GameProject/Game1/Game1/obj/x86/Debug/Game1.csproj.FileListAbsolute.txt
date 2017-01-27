@@ -2384,3 +2384,40 @@ C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bi
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame6.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame7.xnb
 C:\Users\lodoss118\Desktop\Git Game Engine\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame8.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame0.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame1.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame10.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame11.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame2.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame3.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame4.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame5.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame6.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame7.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame8.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Attack4\Frame9.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame0.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame1.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame2.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame3.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame4.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame5.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame6.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame7.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Run\Frame8.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame0.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame1.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame10.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame11.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame12.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame13.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame14.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame15.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame2.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame3.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame4.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame5.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame6.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame7.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame8.xnb
+C:\Users\ahafeez\Desktop\Test Game\gameengine\GameProject\Game1\Game1\bin\Windows\Debug\Content\Sprites\Actors\Ryo\Special1\Frame9.xnb

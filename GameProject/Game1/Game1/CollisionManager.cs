@@ -146,7 +146,7 @@ namespace Game1
                         if (entity.GetBoundsBottomRay() != null 
                                 && entity.GetBoundsBottomRay().Intersects(targetBox) 
                                 && isWithInBoundsX1 && isWithInBoundsZ1 
-                                && entity.GetCollisionInfo().onTop)  { 
+                                && entity.GetCollisionInfo().onTop && target.IsMovingY())  { 
                         
                             entity.SetGround(-(tHeight + 5));
                             entity.MoveY(target.GetDirY());
@@ -194,20 +194,24 @@ namespace Game1
 
                     if (entityBox.Intersects(targetBox) && eDepthBox.Intersects(tDepthBox) 
                             && ePosY <= tHeight - 10 && eHeight >= tPosY 
-                            && (aboveTarget != target && belowTarget != target)) {
+                            /*&& (aboveTarget != target && belowTarget != target)*/) {
 
-                        bool isWithInBoundsX1 = ((entity.HorizontalCollisionLeft(target, 5) == true && entity.HorizontalCollisionRight(target, 5) == false
-                                                    || entity.HorizontalCollisionLeft(target, 5) == false && entity.HorizontalCollisionRight(target, 5) == true));
+                        bool isWithInBoundsX1 = (entity.HorizontalCollisionLeft(target, 5) == true && entity.HorizontalCollisionRight(target, 5) == false
+                                                    || entity.HorizontalCollisionLeft(target, 5) == false && entity.HorizontalCollisionRight(target, 5) == true);
 
                         bool isWithInBoundsZ1 = (entity.VerticleCollisionTop(target, 5) == false && entity.VerticleCollisionBottom(target, 5) == true
                                                     || entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == false);
 
-                        bool isWithInBoundsZ2 = (entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == true);
+                        bool isWithInBoundsZ2 = (entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == true
+                                                    || entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == false
+                                                    || entity.VerticleCollisionTop(target, 5) == false && entity.VerticleCollisionBottom(target, 5) == true);
+
+                        bool isWithInBoundsZ3 = (entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == true);
 
                         float depthX = entityBox.GetRect().GetHorizontalIntersectionDepth(targetBox.GetRect());
                         float depthZ = eDepthBox.GetRect().GetVerticalIntersectionDepth(tDepthBox.GetRect());
 
-                        if (isWithInBoundsZ1 && !isWithInBoundsX1) { 
+                        if (isWithInBoundsZ2 && !isWithInBoundsX1) { 
                             if (entity.GetDirZ() < 0 && entity.VerticleCollisionTop(target, 5)) {
                                 entity.MoveZ(depthZ);
                                 entity.GetCollisionInfo().Bottom();
@@ -220,16 +224,16 @@ namespace Game1
                             }
                         }
 
-                        if ((isWithInBoundsX1 || !isWithInBoundsX1 && !isWithInBoundsZ1) && isWithInBoundsZ2) {
+                        if ((isWithInBoundsX1 || !isWithInBoundsX1 && !isWithInBoundsZ1) && isWithInBoundsZ3) {
                             if (entity.GetDirX() < 0 && entity.HorizontalCollisionRight(target, 5)) {
                                 entity.MoveX(depthX);
                                 entity.GetCollisionInfo().Left();
                                 entity.VelX(0f); 
-
+                                
                             } else if (entity.GetDirX() > 0 && entity.HorizontalCollisionLeft(target, 5)) {
                                 entity.MoveX(depthX);
                                 entity.GetCollisionInfo().Right();
-                                entity.VelX(0f); 
+                                entity.VelX(0f);
                             }
                         }
                     }

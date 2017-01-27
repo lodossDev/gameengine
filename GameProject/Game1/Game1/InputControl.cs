@@ -25,6 +25,9 @@ namespace Game1 {
         private InputBuffer releasedState;
         private InputBuffer heldState;
         private float walkPressTime = 0f;
+        private float walkSpeed = 5f;
+        private float runSpeed = 11f;
+        private float veloctiy = 5f;
 
 
         public InputControl(Entity player, PlayerIndex index) {
@@ -106,6 +109,12 @@ namespace Game1 {
                 player.GetCurrentSprite().IncrementFrame();
             }
 
+            if (!player.IsInAnimationAction(Animation.Action.RUNNING)) {
+                veloctiy = walkSpeed;
+            } else {
+                veloctiy = runSpeed;
+            }
+
             ProcessAttack();
             ProcessJump();
             
@@ -115,13 +124,13 @@ namespace Game1 {
 
                     if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
                         inputDirection = InputDirection.UP_LEFT;
-                        player.VelX(-5);
+                        player.VelX(-veloctiy);
                         player.SetIsLeft(true);
                         LEFT = true;
 
                     } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
                         inputDirection = InputDirection.UP_RIGHT;
-                        player.VelX(5);
+                        player.VelX(veloctiy);
                         player.SetIsLeft(false);
                         RIGHT = true;
 
@@ -129,23 +138,24 @@ namespace Game1 {
                         inputDirection = InputDirection.UP;
                     }
 
-                    if (!player.IsInAnimationAction(Animation.Action.RUNNING))
-                            player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                    if (!player.IsInAnimationAction(Animation.Action.RUNNING)) {
+                        player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                    } 
 
-                    player.VelZ(-5);
+                    player.VelZ(-veloctiy);
                     UP = true;
 
                 } else if (!UP && currentKeyboardState.IsKeyDown(Keys.Down)) {
 
                     if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
                         inputDirection = InputDirection.DOWN_LEFT;
-                        player.VelX(-5);
+                        player.VelX(-veloctiy);
                         player.SetIsLeft(true);
                         LEFT = true;
 
                     } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
                         inputDirection = InputDirection.DOWN_RIGHT;
-                        player.VelX(5);
+                        player.VelX(veloctiy);
                         player.SetIsLeft(false);
                         RIGHT = true;
 
@@ -153,10 +163,11 @@ namespace Game1 {
                         inputDirection = InputDirection.DOWN;
                     }
 
-                    if (!player.IsInAnimationAction(Animation.Action.RUNNING))
-                            player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                    if (!player.IsInAnimationAction(Animation.Action.RUNNING)) {
+                        player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                    }
 
-                    player.VelZ(5);
+                    player.VelZ(veloctiy);
                     DOWN = true;
                 }
             }
@@ -172,7 +183,7 @@ namespace Game1 {
                         if (!player.IsInAnimationAction(Animation.Action.RUNNING))
                                 player.SetAnimationState(Animation.State.WALK_TOWARDS);
 
-                        player.VelX(-5);
+                        player.VelX(-veloctiy);
                         walkPressTime = 0f;
                     }
 
@@ -188,7 +199,7 @@ namespace Game1 {
                         if (!player.IsInAnimationAction(Animation.Action.RUNNING))
                                 player.SetAnimationState(Animation.State.WALK_TOWARDS);
 
-                        player.VelX(5);
+                        player.VelX(veloctiy);
                         walkPressTime = 0f;
                     }
 
