@@ -65,18 +65,23 @@ namespace Game1
             CLNS.BoundsBox entityBox = entity.GetBoundsBox();
             CLNS.BoundingBox eDepthBox = entity.GetDepthBox();
            
-            int ePosY = (int)Math.Abs(entity.GetPosY());
-            int eGround = (int)Math.Abs(entity.GetGround());
-            int eHeight = (int)(ePosY + (entityBox.GetHeight() - entityBox.GetZdepth()));
+            int ePosY = (int)Math.Abs(Math.Round((double)entity.GetPosY()));
+            int ePosZ = (int)Math.Abs(Math.Round((double)entity.GetPosZ()));
+            int eDepth = (int)Math.Abs(Math.Round((double)entityBox.GetZdepth()));
+
+            int eGround = (int)Math.Abs(Math.Round((double)entity.GetGround()));
+            int eHeight = (int)(ePosY + (entityBox.GetHeight() - eDepth));
 
             foreach (Entity target in entities) {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
                     CLNS.BoundsBox targetBox = target.GetBoundsBox();
                     CLNS.BoundingBox tDepthBox = target.GetDepthBox();
            
-                    int tPosY = (int)Math.Abs(target.GetPosY());
-                    int tGround = (int)Math.Abs(target.GetGround());
-                    int tHeight = (int)(tPosY + (targetBox.GetHeight() - targetBox.GetZdepth()));
+                    int tPosY = (int)Math.Abs(Math.Round((double)target.GetPosY()));
+                    int tDepth = (int)Math.Abs(Math.Round((double)targetBox.GetZdepth()));
+
+                    int tGround = (int)Math.Abs(Math.Round((double)target.GetGround()));
+                    int tHeight = (int)(tPosY + (targetBox.GetHeight() - tDepth));
 
                     bool isWithInBoundsX1 = (entity.HorizontalCollisionLeft(target, 5) == true && entity.HorizontalCollisionRight(target, 5) == true);
                     bool isWithInBoundsZ1 = (entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == true);
@@ -88,12 +93,12 @@ namespace Game1
                         found.Add(target);
                     }
 
-                    if (entity.GetBoundsBottomRay() != null 
+                    /*if (entity.GetBoundsBottomRay() != null 
                             && entity.GetBoundsBottomRay().Intersects(targetBox) 
-                            && isWithInBoundsX1 && isWithInBoundsZ1 && eHeight > tPosY)  {
+                            && isWithInBoundsX1 && isWithInBoundsZ1 && ePosY >= tHeight - 50)  {
                         
                         found.Add(target);
-                    }
+                    }*/
                 }
             }
 
@@ -125,18 +130,26 @@ namespace Game1
             CLNS.BoundsBox entityBox = entity.GetBoundsBox();
             CLNS.BoundingBox eDepthBox = entity.GetDepthBox();
            
-            int ePosY = (int)Math.Abs(entity.GetPosY());
-            int eGround = (int)Math.Abs(entity.GetGround());
-            int eHeight = (int)(ePosY + (entityBox.GetHeight() - entityBox.GetZdepth()));
+            int ePosY = (int)Math.Abs(Math.Round((double)entity.GetPosY()));
+            int ePosZ = (int)Math.Abs(Math.Round((double)entity.GetPosZ()));
+            int eDepth = (int)Math.Abs(Math.Round((double)entityBox.GetZdepth()));
+
+            int eGround = (int)Math.Abs(Math.Round((double)entity.GetGround()));
+            int eHeight = (int)(ePosY + (entityBox.GetHeight() - eDepth));
+
+            List<Entity> belowEntities = FindBelow(entity);
 
             foreach (Entity target in entities) {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
+                    Entity belowTarget = belowEntities.Find(item => item == target);
                     CLNS.BoundsBox targetBox = target.GetBoundsBox();
                     CLNS.BoundingBox tDepthBox = target.GetDepthBox();
            
-                    int tPosY = (int)Math.Abs(target.GetPosY());
-                    int tGround = (int)Math.Abs(target.GetGround());
-                    int tHeight = (int)(tPosY + (targetBox.GetHeight() - targetBox.GetZdepth()));
+                    int tPosY = (int)Math.Abs(Math.Round((double)target.GetPosY()));
+                    int tDepth = (int)Math.Abs(Math.Round((double)targetBox.GetZdepth()));
+
+                    int tGround = (int)Math.Abs(Math.Round((double)target.GetGround()));
+                    int tHeight = (int)(tPosY + (targetBox.GetHeight() - tDepth));
 
                     if (entityBox.Intersects(targetBox) && eDepthBox.Intersects(tDepthBox)) {
 
@@ -146,10 +159,10 @@ namespace Game1
                         if (entity.GetBoundsBottomRay() != null 
                                 && entity.GetBoundsBottomRay().Intersects(targetBox) 
                                 && isWithInBoundsX1 && isWithInBoundsZ1 
-                                && entity.GetCollisionInfo().onTop && target.IsMovingY())  { 
+                                && (entity.GetCollisionInfo().onTop || belowTarget != null) && target.IsMovingY())  { 
                         
                             entity.SetGround(-(tHeight + 5));
-                            entity.MoveY(target.GetDirY());
+                            entity.MoveY(target.GetDirVelY());
                         }
 
                         /*if (isWithInBoundsX1 && isWithInBoundsZ1 
@@ -174,9 +187,15 @@ namespace Game1
             CLNS.BoundsBox entityBox = entity.GetBoundsBox();
             CLNS.BoundingBox eDepthBox = entity.GetDepthBox();
            
-            int ePosY = (int)Math.Abs(entity.GetPosY());
-            int eGround = (int)Math.Abs(entity.GetGround());
-            int eHeight = (int)(ePosY + (entityBox.GetHeight() - entityBox.GetZdepth()));
+            int ePosY = (int)Math.Abs(Math.Round((double)entity.GetPosY()));
+            int ePosZ = (int)Math.Abs(Math.Round((double)entity.GetPosZ()));
+            int eDepth = (int)Math.Abs(Math.Round((double)entityBox.GetZdepth()));
+
+            int eGround = (int)Math.Abs(Math.Round((double)entity.GetGround()));
+            int eHeight = (int)(ePosY + (entityBox.GetHeight() - eDepth));
+
+            int vx = Math.Abs(entity.GetDirVelX());
+            int vz = Math.Abs(entity.GetDirVelZ());
 
             List<Entity> aboveEntities = FindAbove(entity);
             List<Entity> belowEntities = FindBelow(entity);
@@ -185,55 +204,50 @@ namespace Game1
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
                     Entity aboveTarget = aboveEntities.Find(item => item == target);
                     Entity belowTarget = belowEntities.Find(item => item == target);
+
                     CLNS.BoundsBox targetBox = target.GetBoundsBox();
                     CLNS.BoundingBox tDepthBox = target.GetDepthBox();
            
-                    int tPosY = (int)Math.Abs(target.GetPosY());
-                    int tGround = (int)Math.Abs(target.GetGround());
-                    int tHeight = (int)(tPosY + (targetBox.GetHeight() - targetBox.GetZdepth()));
+                    int tPosY = (int)Math.Abs(Math.Round((double)target.GetPosY()));
+                    int tDepth = (int)Math.Abs(Math.Round((double)targetBox.GetZdepth()));
+
+                    int tGround = (int)Math.Abs(Math.Round((double)target.GetGround()));
+                    int tHeight = (int)(tPosY + (targetBox.GetHeight() - tDepth));
 
                     if (entityBox.Intersects(targetBox) && eDepthBox.Intersects(tDepthBox) 
                             && ePosY <= tHeight - 10 && eHeight >= tPosY 
-                            /*&& (aboveTarget != target && belowTarget != target)*/) {
+                            && (/*aboveTarget != target &&*/ belowTarget != target)) { 
 
-                        bool isWithInBoundsX1 = (entity.HorizontalCollisionLeft(target, 5) == true && entity.HorizontalCollisionRight(target, 5) == false
-                                                    || entity.HorizontalCollisionLeft(target, 5) == false && entity.HorizontalCollisionRight(target, 5) == true);
+                        bool isWithInBoundsX1 = ((entity.HorizontalCollisionLeft(target, vx) == true && entity.HorizontalCollisionRight(target, vx) == false
+                                                    || entity.HorizontalCollisionLeft(target, vx) == false && entity.HorizontalCollisionRight(target, vx) == true));
 
-                        bool isWithInBoundsZ1 = (entity.VerticleCollisionTop(target, 5) == false && entity.VerticleCollisionBottom(target, 5) == true
-                                                    || entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == false);
+                        bool isWithInBoundsZ1 = (entity.VerticleCollisionTop(target, vz) == false && entity.VerticleCollisionBottom(target, vz) == true
+                                                    || entity.VerticleCollisionTop(target, vz) == true && entity.VerticleCollisionBottom(target, vz) == false);
 
-                        bool isWithInBoundsZ2 = (entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == true
-                                                    || entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == false
-                                                    || entity.VerticleCollisionTop(target, 5) == false && entity.VerticleCollisionBottom(target, 5) == true);
-
-                        bool isWithInBoundsZ3 = (entity.VerticleCollisionTop(target, 5) == true && entity.VerticleCollisionBottom(target, 5) == true);
+                        bool isWithInBoundsZ2 = (entity.VerticleCollisionTop(target, vz) == true && entity.VerticleCollisionBottom(target, vz) == true);
 
                         float depthX = entityBox.GetRect().GetHorizontalIntersectionDepth(targetBox.GetRect());
                         float depthZ = eDepthBox.GetRect().GetVerticalIntersectionDepth(tDepthBox.GetRect());
 
-                        if (isWithInBoundsZ2 && !isWithInBoundsX1) { 
-                            if (entity.GetDirZ() < 0 && entity.VerticleCollisionTop(target, 5)) {
+                        if (isWithInBoundsZ1 && !isWithInBoundsX1) { 
+                            if (entity.GetDirVelZ() < 0 && entity.VerticleCollisionTop(target, 5)) {
                                 entity.MoveZ(depthZ);
                                 entity.GetCollisionInfo().Bottom();
-                                entity.VelZ(0f);
 
-                            } else if (entity.GetDirZ() > 0 && entity.VerticleCollisionBottom(target, 5)) {
+                            } else if (entity.GetDirVelZ() > 0 && entity.VerticleCollisionBottom(target, 5)) {
                                 entity.MoveZ(depthZ);
                                 entity.GetCollisionInfo().Top();
-                                entity.VelZ(0f);
                             }
                         }
-
-                        if ((isWithInBoundsX1 || !isWithInBoundsX1 && !isWithInBoundsZ1) && isWithInBoundsZ3) {
-                            if (entity.GetDirX() < 0 && entity.HorizontalCollisionRight(target, 5)) {
+                        
+                        if ((isWithInBoundsX1 || !isWithInBoundsX1 && !isWithInBoundsZ1) && isWithInBoundsZ2) {
+                            if (entity.GetDirVelX() < 0 && entity.HorizontalCollisionRight(target, 5)) {
                                 entity.MoveX(depthX);
                                 entity.GetCollisionInfo().Left();
-                                entity.VelX(0f); 
-                                
-                            } else if (entity.GetDirX() > 0 && entity.HorizontalCollisionLeft(target, 5)) {
+
+                            } else if (entity.GetDirVelX() > 0 && entity.HorizontalCollisionLeft(target, 5)) {
                                 entity.MoveX(depthX);
                                 entity.GetCollisionInfo().Right();
-                                entity.VelX(0f);
                             }
                         }
                     }

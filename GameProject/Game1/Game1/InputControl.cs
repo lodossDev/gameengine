@@ -26,7 +26,7 @@ namespace Game1 {
         private InputBuffer heldState;
         private float walkPressTime = 0f;
         private float walkSpeed = 5f;
-        private float runSpeed = 11f;
+        private float runSpeed = 15f;
         private float veloctiy = 5f;
 
 
@@ -183,7 +183,10 @@ namespace Game1 {
                         if (!player.IsInAnimationAction(Animation.Action.RUNNING))
                                 player.SetAnimationState(Animation.State.WALK_TOWARDS);
 
-                        player.VelX(-veloctiy);
+                        //if (!player.HasCollidedX()) {
+                            player.VelX(-veloctiy);
+                        //}
+
                         walkPressTime = 0f;
                     }
 
@@ -199,7 +202,10 @@ namespace Game1 {
                         if (!player.IsInAnimationAction(Animation.Action.RUNNING))
                                 player.SetAnimationState(Animation.State.WALK_TOWARDS);
 
-                        player.VelX(veloctiy);
+                        //if (!player.HasCollidedX()) {
+                            player.VelX(veloctiy);
+                        //}
+
                         walkPressTime = 0f;
                     }
 
@@ -212,10 +218,10 @@ namespace Game1 {
         private void ProcessJump() {
             if (JUMP_PRESS) {
                 if (LEFT) {
-                    player.SetJump(-15f, -5f);
+                    player.SetJump(-15f, -Math.Abs(veloctiy));
 
                 } else if (RIGHT) {
-                    player.SetJump(-15f, 5f);
+                    player.SetJump(-15f, Math.Abs(veloctiy));
 
                 } else {
                     player.SetJump(-15f);

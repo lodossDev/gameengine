@@ -506,9 +506,9 @@ namespace Game1
 
             //entity.HorizontalCollisionLeft(target, 5)
 
-            spriteBatch.DrawString(font1, "HEIGHT: " + (ryo.GetTossInfo().velocity.Y), new Vector2(20, 20), Color.Blue);
-            spriteBatch.DrawString(font1, "COLL TOP: " + (ryo.VerticleCollisionTop(level1.GetMisc()[0])), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "COLL BOTTOM: " + (ryo.VerticleCollisionBottom(level1.GetMisc()[0])), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "HEIGHT: " + (ryo.InAir()), new Vector2(20, 20), Color.Blue);
+            spriteBatch.DrawString(font1, "COLL TOP: " + (ryo.GetCollisionInfo().onTop), new Vector2(20, 50), Color.Blue);
+            //spriteBatch.DrawString(font1, "COLL BOTTOM: " + (ryo.VerticleCollisionBottom(level1.GetMisc()[0])), new Vector2(20, 80), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

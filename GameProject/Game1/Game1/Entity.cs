@@ -26,8 +26,8 @@ namespace Game1 {
 
         private CLNS.BoundingBox bodyBox;
         private CLNS.BoundingBox depthBox;
-        private CLNS.BoundingBox boundsBottomRay;
-        private CLNS.BoundingBox boundsTopRay;
+        private CLNS.BoundingBox rayBottom;
+        private CLNS.BoundingBox rayTop;
         private CLNS.BoundsBox boundsBox;
         
         private List<Animation.Link> animationLinks;
@@ -41,8 +41,8 @@ namespace Game1 {
         private Vector2 convertedPosition;
 
         private Vector3 velocity;
-        private Vector3 absoluteDir;
-        private Vector3 direction;
+        private Vector3 absoluteVel;
+        private Vector3 directionVel;
 
         private Vector2 origin;
         private Vector2 scale;
@@ -88,9 +88,9 @@ namespace Game1 {
             position = Vector3.Zero;
             convertedPosition = Vector2.Zero;
 
-            direction = Vector3.Zero;
-            direction.X = 0;
-            absoluteDir = direction;
+            directionVel = Vector3.Zero;
+            directionVel.X = 0;
+            absoluteVel = directionVel;
 
             origin = Vector2.Zero;
             velocity = Vector3.Zero;
@@ -185,26 +185,26 @@ namespace Game1 {
             }
 
             boundsBox = new CLNS.BoundsBox(w, h, x, y, depth);
-            boundsTopRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, boundsBox.GetRect().Width, 100, x, y - 100);
+            rayTop = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, boundsBox.GetRect().Width, 100, x, y - 100);
 
             AddBodyBox(w, h, x, y);
             AddDepthBox(depth);
         }
 
         public void SetBoundsTopRay(int w, int h, int x, int y) {
-            if (boundsTopRay != null) {
-                boundsTopRay = null;
+            if (rayTop != null) {
+                rayTop = null;
             }
 
-            boundsTopRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, w, h, x, y);
+            rayTop = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, w, h, x, y);
         }
 
         public void SetBoundsBottomRay(int w, int h, int x, int y) {
-            if (boundsBottomRay != null) {
-                boundsBottomRay = null;
+            if (rayBottom != null) {
+                rayBottom = null;
             }
 
-            boundsBottomRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, w, h, x, y);
+            rayBottom = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, w, h, x, y);
         }
 
         public void AddDepthBox(int h, int x = 0, int y = 0) {
@@ -219,7 +219,7 @@ namespace Game1 {
                 depthBox = new CLNS.BoundingBox(CLNS.BoxType.DEPTH_BOX, boundsBox.GetRect().Width, h, x1, y1);
                 depthBox.SetZdepth(h);
 
-                boundsBottomRay = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, boundsBox.GetRect().Width, 100, x1, y1 + 40);
+                rayBottom = new CLNS.BoundingBox(CLNS.BoxType.RAY_BOX, boundsBox.GetRect().Width, 100, x1, y1 + 40);
             }
         }
 
@@ -313,7 +313,7 @@ namespace Game1 {
 
         public void MoveX(float velX) {
             if (velX != 0.0) {
-                direction.X = velX;
+                directionVel.X = velX;
             }
 
             if (IsInMoveFrame()) {
@@ -323,7 +323,7 @@ namespace Game1 {
 
         public void MoveY(float velY) {
             if (velY != 0.0) {
-                direction.Y = velY;
+                directionVel.Y = velY;
             }
 
             position.Y += velY;
@@ -331,7 +331,7 @@ namespace Game1 {
 
         public void MoveZ(float velZ) {
             if (velZ != 0.0) {
-                direction.Z = velZ;
+                directionVel.Z = velZ;
             }
 
             if (IsInMoveFrame()) {
@@ -340,17 +340,17 @@ namespace Game1 {
         }
 
         public void VelX(float velX) {
-            absoluteDir.X = velX;
+            absoluteVel.X = velX;
             velocity.X = velX;
         }
 
         public void VelY(float velY) {
-            absoluteDir.Y = velY;
+            absoluteVel.Y = velY;
             velocity.Y = velY;
         }
 
         public void VelZ(float velZ) {
-            absoluteDir.Z = velZ;
+            absoluteVel.Z = velZ;
             velocity.Z = velZ;
         }
 
@@ -442,28 +442,36 @@ namespace Game1 {
             return scale;
         }
 
-        public int GetDirX() {
-            return (int)direction.X;
+        public bool HasCollidedX() {
+             return (collisionInfo.collide_x == Attributes.CollisionState.LEFT_SIDE || collisionInfo.collide_x == Attributes.CollisionState.RIGHT_SIDE);
         }
 
-        public int GetDirY() {
-            return (int)direction.Y;
+        public bool HasCollidedZ() {
+             return (collisionInfo.collide_z == Attributes.CollisionState.TOP || collisionInfo.collide_z == Attributes.CollisionState.BOTTOM);
         }
 
-        public int GetDirZ() {
-            return (int)direction.Z;
+        public int GetDirVelX() {
+            return (int)Math.Round((double)directionVel.X);
         }
 
-        public int GetAbsoluteDirX() {
-            return (int)absoluteDir.X;
+        public int GetDirVelY() {
+            return (int)Math.Round((double)directionVel.Y);
         }
 
-        public int GetAbsoluteDirY() {
-            return (int)absoluteDir.Y;
+        public int GetDirVelZ() {
+            return (int)Math.Round((double)directionVel.Z);
         }
 
-        public int GetAbsoluteDirZ() {
-            return (int)absoluteDir.Z;
+        public int GetAbsoluteVelX() {
+            return (int)Math.Round((double)absoluteVel.X);
+        }
+
+        public int GetAbsoluteVelY() {
+            return (int)Math.Round((double)absoluteVel.Y);
+        }
+
+        public int GetAbsoluteVelZ() {
+            return (int)Math.Round((double)absoluteVel.Z);
         }
         
         public float GetGround() {
@@ -610,11 +618,11 @@ namespace Game1 {
         }
 
         public CLNS.BoundingBox GetBoundsTopRay() {
-            return boundsTopRay;
+            return rayTop;
         }
 
         public CLNS.BoundingBox GetBoundsBottomRay() {
-            return boundsBottomRay;
+            return rayBottom;
         }
 
         public CLNS.BoundsBox GetBoundsBox() {
@@ -928,14 +936,14 @@ namespace Game1 {
                     }
                 }
 
-                if ((double)GetPosY() > (double)GetGround()) {
+                if ((double)GetPosY() > (double)GetGround() && tossInfo.velocity.Y >= 0) {
                     tossInfo.hitGoundCount += 1;
 
                     if (tossInfo.maxHitGround > 1) {
                         tossInfo.height -= (tossInfo.tempHeight / tossInfo.maxHitGround) + 1.5f;
                         
                         if (tossInfo.height >= 0) {
-                             tossInfo.height = 0;
+                            tossInfo.height = 0;
                         }
 
                         SetPosY(GetGround());
@@ -1123,12 +1131,12 @@ namespace Game1 {
                 depthBox.Update(gameTime, this);
             }
 
-            if (boundsBottomRay != null) {
-                boundsBottomRay.Update(gameTime, this);
+            if (rayBottom != null) {
+                rayBottom.Update(gameTime, this);
             }
 
-            if (boundsTopRay != null) {
-                boundsTopRay.Update(gameTime, this);
+            if (rayTop != null) {
+                rayTop.Update(gameTime, this);
             }
 
             //Update movement.
