@@ -385,13 +385,13 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.K))
             {
-                drum3.VelX(-3);
+                drum3.VelX(-0.03f);
                 //drum3.SetIsLeft(true);
                 taskMaster.SetAnimationState(Animation.State.ATTACK2);
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.L))
             {
-                drum3.VelX(3);
+                drum3.VelX(0.03f);
                 //drum3.SetIsLeft(false);
             }
             else
@@ -426,19 +426,20 @@ namespace Game1
                 inputManager.Update(gameTime);
 
                 if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-                    drum3.VelX(-5);
-                    //level1.ScrollX(-12);
+                    //drum3.VelX(-5);
+                    level1.ScrollX(-12);
                 } else if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-                    drum3.VelX(5);
-                    //level1.ScrollX(12);
+                    //drum3.VelX(5);
+                    level1.ScrollX(12);
                 } else {
-                    drum3.VelX(0);
+                    //drum3.VelX(0);
                 }
 
                 if(Keyboard.GetState().IsKeyDown(Keys.NumPad8)) {
                     drum3.VelZ(-5);
                     //level1.ScrollY(-5);
                 } else if(Keyboard.GetState().IsKeyDown(Keys.NumPad2)) {
+                    ryo.MoveX(5, 1);
                     drum3.VelZ(5);
                     //level1.ScrollY(5);
                 } else {
@@ -454,8 +455,7 @@ namespace Game1
                     dir = -dir;
                 }
 
-                drum.VelY(5 * dir);
-
+                drum.VelY(0.3f * dir);
 
                 renderManager.Update(gameTime);
                 //level1.ScrollY(leo.GetVelocity().Y/2);
@@ -506,9 +506,11 @@ namespace Game1
 
             //entity.HorizontalCollisionLeft(target, 5)
 
-            spriteBatch.DrawString(font1, "HEIGHT: " + (ryo.InAir()), new Vector2(20, 20), Color.Blue);
-            spriteBatch.DrawString(font1, "COLL TOP: " + (ryo.GetCollisionInfo().onTop), new Vector2(20, 50), Color.Blue);
-            //spriteBatch.DrawString(font1, "COLL BOTTOM: " + (ryo.VerticleCollisionBottom(level1.GetMisc()[0])), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "IS AIR: " + (ryo.InAir()), new Vector2(20, 20), Color.Blue);
+            spriteBatch.DrawString(font1, "ONTOP: " + (ryo.GetCollisionInfo().onTop), new Vector2(20, 50), Color.Blue);
+            spriteBatch.DrawString(font1, "ABOVE: " + (collisionManager.FindAbove(ryo).Count), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "GROUND: " + (drum2.GetGround()), new Vector2(20, 110), Color.Blue);
+            spriteBatch.DrawString(font1, "VEL: " + (ryo.GetCollisionInfo().collide_x), new Vector2(20, 140), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

@@ -67,9 +67,9 @@ namespace Game1 {
             SetFrameDelay(Animation.State.JUMP_TOWARD_ATTACK1, 5);
             SetSpriteOffSet(Animation.State.JUMP_TOWARD_ATTACK1, 8, -30);
 
-            AddBox(Animation.State.ATTACK1, 2, new CLNS.AttackBox(200, 150, 132, 45));
-            AddBox(Animation.State.ATTACK2, 3, new CLNS.AttackBox(200, 150, 132, 45));
-            AddBox(Animation.State.ATTACK3, 3, new CLNS.AttackBox(200, 150, 132, 45));
+            AddBox(Animation.State.ATTACK1, 2, new CLNS.AttackBox(150, 170, 50, 45));
+            AddBox(Animation.State.ATTACK2, 3, new CLNS.AttackBox(150, 170, 50, 45));
+            AddBox(Animation.State.ATTACK3, 3, new CLNS.AttackBox(150, 170, 50, 45));
             //AddBox(Animation.State.ATTACK1, 3, new CLNS.AttackBox(100, 80, 132, 45));
 
             AddAnimationLink(new Animation.Link(Animation.State.JUMP_START, Animation.State.JUMP, 1));

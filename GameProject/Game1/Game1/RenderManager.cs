@@ -53,11 +53,11 @@ namespace Game1 {
                     entity.GetDepthBox().DrawRectangle(CLNS.DrawType.LINES);
                 }
 
-                if (entity.GetBoundsBottomRay() != null) {
+                if (entity.GetRayBottom() != null) {
                     //entity.GetBoundsBottomRay().DrawRectangle(CLNS.DrawType.LINES);
                 }
 
-                if (entity.GetBoundsTopRay() != null) {
+                if (entity.GetRayTop() != null) {
                     //entity.GetBoundsTopRay().DrawRectangle(CLNS.DrawType.LINES);
                 }
             }

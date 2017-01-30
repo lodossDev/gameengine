@@ -40,7 +40,11 @@ namespace Game1 {
         private Vector3 position;
         private Vector2 convertedPosition;
 
+        public Vector3 acceleration;
+        private Vector3 direction;
         private Vector3 velocity;
+        public Vector3 maxVelocity;
+
         private Vector3 absoluteVel;
         private Vector3 directionVel;
 
@@ -84,16 +88,19 @@ namespace Game1 {
 
             currentAnimationState = Animation.State.NONE;
             colorInfo = new Attributes.ColourInfo();
-            
+
+            acceleration = Vector3.Zero;
+            direction = Vector3.Zero;
+            velocity = Vector3.Zero;
+            maxVelocity = new Vector3(15, 5, 5);
+
             position = Vector3.Zero;
             convertedPosition = Vector2.Zero;
 
             directionVel = Vector3.Zero;
-            directionVel.X = 0;
             absoluteVel = directionVel;
 
             origin = Vector2.Zero;
-            velocity = Vector3.Zero;
             ground = groundBase = 0;
 
             baseSprite = new Sprite("Sprites/Misc/Marker");
@@ -311,6 +318,21 @@ namespace Game1 {
             currentTarget = target;
         }
 
+        public void MoveX(float acc, float dir) {
+            this.acceleration.X = acc;
+            this.direction.X = dir;
+        }
+
+        public void MoveY(float acc, float dir) {
+            this.acceleration.Y = acc;
+            this.direction.Y = dir;
+        }
+
+         public void MoveZ(float acc, float dir) {
+            this.acceleration.Z = acc;
+            this.direction.Z = dir;
+        }
+
         public void MoveX(float velX) {
             if (velX != 0.0) {
                 directionVel.X = velX;
@@ -387,6 +409,8 @@ namespace Game1 {
 
         public void SetGroundBase(float groundBase) {
             this.groundBase = groundBase;
+
+            SetGround(groundBase);
         }
         
         public void SetBaseOffset(float x, float y) {
@@ -617,11 +641,11 @@ namespace Game1 {
             return bodyBox;
         }
 
-        public CLNS.BoundingBox GetBoundsTopRay() {
+        public CLNS.BoundingBox GetRayTop() {
             return rayTop;
         }
 
-        public CLNS.BoundingBox GetBoundsBottomRay() {
+        public CLNS.BoundingBox GetRayBottom() {
             return rayBottom;
         }
 
@@ -1140,9 +1164,26 @@ namespace Game1 {
             }
 
             //Update movement.
-            MoveX(velocity.X);
-            MoveY(velocity.Y);
-            MoveZ(velocity.Z);
+            //MoveX(velocity.X);
+            //MoveY(velocity.Y);
+            //MoveZ(velocity.Z);
+
+            //if (collisionInfo.collide_x == Attributes.CollisionState.NO_COLLISION) { 
+                velocity += acceleration * direction;
+            //}
+
+            velocity.X = MathHelper.Clamp(velocity.X, -maxVelocity.X, maxVelocity.X);
+            velocity.Z = MathHelper.Clamp(velocity.Z, -maxVelocity.Z, maxVelocity.Z);
+
+            if ((double)velocity.X != 0.0) { 
+                directionVel.X = velocity.X;
+            }
+
+            if ((double)velocity.Z != 0.0) { 
+                directionVel.Z = velocity.Z;
+            }
+
+            position += velocity;
         }
 
         public virtual void OnAttack(Entity target, CLNS.AttackBox attackBox) {
@@ -1153,6 +1194,10 @@ namespace Game1 {
         public virtual void OnHit(Entity attacker, CLNS.AttackBox attackBox) {
             if (this != attacker) {
             }
+        }
+
+        public virtual void OnCommandMoveComplete(InputHelper.CommandMove command) {
+            SetAnimationState(command.GetAnimationState());
         }
 
         public int CompareTo(Entity other) {

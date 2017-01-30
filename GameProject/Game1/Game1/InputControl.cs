@@ -56,25 +56,29 @@ namespace Game1 {
             ATTACK_PRESS = false;
 
             if (UP && currentKeyboardState.IsKeyUp(Keys.Up)) {
-                player.VelZ(0f);
+                player.MoveZ(0, 0);
+                player.VelZ(0);
                 walkPressTime = 0f;
                 UP = false;
             }
 
             if (DOWN && currentKeyboardState.IsKeyUp(Keys.Down)) {
-                player.VelZ(0f);
+                player.MoveZ(0, 0);
+                player.VelZ(0);
                 walkPressTime = 0f;
                 DOWN = false;
             }
 
             if (RIGHT && currentKeyboardState.IsKeyUp(Keys.Right)) {
-                player.VelX(0f);
+                player.MoveX(0, 0);
+                player.VelX(0);
                 walkPressTime = 0f;
                 RIGHT = false;
             }
 
             if (LEFT && currentKeyboardState.IsKeyUp(Keys.Left)) {
-                player.VelX(0f);
+                player.MoveX(0, 0);
+                player.VelX(0);
                 walkPressTime = 0f;
                 LEFT = false;
             }
@@ -124,13 +128,19 @@ namespace Game1 {
 
                     if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
                         inputDirection = InputDirection.UP_LEFT;
-                        player.VelX(-veloctiy);
+
+                        player.MoveX(veloctiy, -1);
+                        player.maxVelocity.X = veloctiy;
+
                         player.SetIsLeft(true);
                         LEFT = true;
 
                     } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
                         inputDirection = InputDirection.UP_RIGHT;
-                        player.VelX(veloctiy);
+
+                        player.MoveX(veloctiy, 1);
+                        player.maxVelocity.X = veloctiy;
+
                         player.SetIsLeft(false);
                         RIGHT = true;
 
@@ -142,20 +152,27 @@ namespace Game1 {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                     } 
 
-                    player.VelZ(-veloctiy);
+                    player.MoveZ(veloctiy, -1);
+                    player.maxVelocity.Z = veloctiy;
                     UP = true;
 
                 } else if (!UP && currentKeyboardState.IsKeyDown(Keys.Down)) {
 
                     if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
                         inputDirection = InputDirection.DOWN_LEFT;
-                        player.VelX(-veloctiy);
+
+                        player.MoveX(veloctiy, -1);
+                        player.maxVelocity.X = veloctiy;
+
                         player.SetIsLeft(true);
                         LEFT = true;
 
                     } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
                         inputDirection = InputDirection.DOWN_RIGHT;
-                        player.VelX(veloctiy);
+
+                        player.MoveX(veloctiy, 1);
+                        player.maxVelocity.X = veloctiy;
+
                         player.SetIsLeft(false);
                         RIGHT = true;
 
@@ -167,7 +184,8 @@ namespace Game1 {
                         player.SetAnimationState(Animation.State.WALK_TOWARDS);
                     }
 
-                    player.VelZ(veloctiy);
+                    player.MoveZ(veloctiy, 1);
+                    player.maxVelocity.Z = veloctiy;
                     DOWN = true;
                 }
             }
@@ -184,7 +202,8 @@ namespace Game1 {
                                 player.SetAnimationState(Animation.State.WALK_TOWARDS);
 
                         //if (!player.HasCollidedX()) {
-                            player.VelX(-veloctiy);
+                            player.MoveX(veloctiy, -1);
+                            player.maxVelocity.X = veloctiy;
                         //}
 
                         walkPressTime = 0f;
@@ -203,7 +222,8 @@ namespace Game1 {
                                 player.SetAnimationState(Animation.State.WALK_TOWARDS);
 
                         //if (!player.HasCollidedX()) {
-                            player.VelX(veloctiy);
+                            player.MoveX(veloctiy, 1);
+                            player.maxVelocity.X = veloctiy;
                         //}
 
                         walkPressTime = 0f;
@@ -292,8 +312,11 @@ namespace Game1 {
             ReadReleasedInputBuffer(gameTime);
 
             if (IsInputDirection(InputDirection.NONE)) {
-                player.VelX(0f);
-                player.VelZ(0f);
+                player.MoveX(0, 0);
+                player.VelX(0);
+
+                player.MoveZ(0, 0);
+                player.VelZ(0);
 
                 player.ResetToIdle(gameTime);
             }
@@ -327,7 +350,7 @@ namespace Game1 {
         private void checkHeld(InputHelper.CommandMove command, InputHelper.KeyState currentKeyState)
         {
             int held = 0;
-            Debug.WriteLine("HELD KEY: " + currentKeyState.GetState());
+            //Debug.WriteLine("HELD KEY: " + currentKeyState.GetState());
             currentKeyState = command.GetCurrentMove();
 
             if (command.IsMaxNegativeReached() == true)
@@ -371,8 +394,8 @@ namespace Game1 {
                 }
             }
 
-            Debug.WriteLine("HELD COUNT: " + held);
-            Debug.WriteLine("HELD TIME: " + currentKeyState.GetKeyHeldTime());
+            //Debug.WriteLine("HELD COUNT: " + held);
+           // Debug.WriteLine("HELD TIME: " + currentKeyState.GetKeyHeldTime());
 
             if (held >= currentKeyState.GetKeyHeldTime())
             {
@@ -412,7 +435,7 @@ namespace Game1 {
                     }
 
                     currentBuffer = GetNextBuffer(currentKeyState);
-                    Debug.WriteLine("NEXT BUFFER: " + currentKeyState.GetState());
+                    //Debug.WriteLine("NEXT BUFFER: " + currentKeyState.GetState());
                 }
                 else
                 {
@@ -421,15 +444,15 @@ namespace Game1 {
             }
             else
             {
-                Debug.WriteLine("IN HELD");
+                //Debug.WriteLine("IN HELD");
                 checkHeld(command, currentKeyState);
             }
 
-            Debug.WriteLine("CURRENTMOVE STEP: " + command.GetCurrentMoveStep());
+            //Debug.WriteLine("CURRENTMOVE STEP: " + command.GetCurrentMoveStep());
 
             if (command.IsComplete())
             {
-                Debug.WriteLine("IS COMPLETE");
+                //Debug.WriteLine("IS COMPLETE");
                 command.Reset();
                 ResetBuffers();
                 return true;
