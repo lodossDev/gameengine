@@ -105,6 +105,13 @@ namespace Game1 {
 
             AddCommandMove(command);
 
+            command = new InputHelper.CommandMove("RUNNING", Animation.State.RUN, new List<InputHelper.KeyState> {
+                new InputHelper.KeyState(InputHelper.KeyPress.LEFT, InputHelper.ButtonState.Pressed),
+                new InputHelper.KeyState(InputHelper.KeyPress.LEFT, InputHelper.ButtonState.Pressed),
+            }, 200f);
+
+            AddCommandMove(command);
+
             //Attack command moves..
 
             /*InputHelper.CommandMove command = new InputHelper.CommandMove("TEST", Animation.State.ATTACK4, new List<InputHelper.KeyState> {

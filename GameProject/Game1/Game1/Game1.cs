@@ -29,6 +29,7 @@ namespace Game1
 
         InputManager inputManager;
         InputHelper.CommandMove command;
+        static int padCount = 0;
 
 
         public Game1()
@@ -320,6 +321,11 @@ namespace Game1
                 Exit();
 
             currentKeyboardState = Keyboard.GetState();
+            GamePadState padState = GamePad.GetState(PlayerIndex.One);
+
+            if (padState.ThumbSticks.Left.X == -1) {
+                padCount++;
+            }
           
             if (Keyboard.GetState().IsKeyDown(Keys.P) && oldKeyboardState.IsKeyUp(Keys.P))
             {
@@ -506,11 +512,14 @@ namespace Game1
 
             //entity.HorizontalCollisionLeft(target, 5)
 
-            spriteBatch.DrawString(font1, "IS AIR: " + (ryo.InAir()), new Vector2(20, 20), Color.Blue);
-            spriteBatch.DrawString(font1, "ONTOP: " + (ryo.GetCollisionInfo().onTop), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "ABOVE: " + (collisionManager.FindAbove(ryo).Count), new Vector2(20, 80), Color.Blue);
-            spriteBatch.DrawString(font1, "GROUND: " + (drum2.GetGround()), new Vector2(20, 110), Color.Blue);
-            spriteBatch.DrawString(font1, "VEL: " + (ryo.GetCollisionInfo().collide_x), new Vector2(20, 140), Color.Blue);
+            GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
+
+            /*spriteBatch.DrawString(font1, "IS AIR: " + (ryo.InAir()), new Vector2(20, 20), Color.Blue);
+            */spriteBatch.DrawString(font1, "ONTOP: " + (ryo.GetCollisionInfo().onTop), new Vector2(20, 50), Color.Blue);
+            spriteBatch.DrawString(font1, "VELX: " + (ryo.GetVelX()), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "X: " + (int)Math.Round(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X), new Vector2(20, 110), Color.Blue);
+
+            spriteBatch.DrawString(font1, "Y: " + (int)Math.Round(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y), new Vector2(20, 140), Color.Blue);
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

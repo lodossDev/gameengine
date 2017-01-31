@@ -7,6 +7,16 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using Game1;
+
+/**
+ * *
+ * 
+ *  GAME PAD BUTTON STATE AXIS
+ * X= -1 - left , 1 - right
+ * Y = -1 - down, 1 - up
+ * 
+ **/
 
 namespace Game1 {
 
@@ -19,12 +29,12 @@ namespace Game1 {
         private PlayerIndex playerIndex;
 
         private KeyboardState oldKeyboardState, currentKeyboardState;
-        private GamePadState oldPadState, currentPadState;
+        public GamePadState oldPadState, currentPadState;
 
         private InputBuffer pressedState;
         private InputBuffer releasedState;
         private InputBuffer heldState;
-        private float walkPressTime = 0f;
+        public float walkPressTime = 0f;
         private float walkSpeed = 5f;
         private float runSpeed = 15f;
         private float veloctiy = 5f;
@@ -55,39 +65,47 @@ namespace Game1 {
             JUMP_PRESS = false;
             ATTACK_PRESS = false;
 
-            if (UP && currentKeyboardState.IsKeyUp(Keys.Up)) {
-                player.MoveZ(0, 0);
-                player.VelZ(0);
+            if (UP && (currentKeyboardState.IsKeyUp(Keys.Up) 
+                            || currentPadState.IsButtonUp(Buttons.DPadUp) 
+                            || currentPadState.IsButtonUp(Buttons.LeftThumbstickUp))) {
+
+                player.ResetZ();
                 walkPressTime = 0f;
                 UP = false;
             }
 
-            if (DOWN && currentKeyboardState.IsKeyUp(Keys.Down)) {
-                player.MoveZ(0, 0);
-                player.VelZ(0);
+            if (DOWN && (currentKeyboardState.IsKeyUp(Keys.Down) 
+                                || currentPadState.IsButtonUp(Buttons.DPadDown) 
+                                || currentPadState.IsButtonUp(Buttons.LeftThumbstickDown))) {
+
+                player.ResetZ();
                 walkPressTime = 0f;
                 DOWN = false;
             }
 
-            if (RIGHT && currentKeyboardState.IsKeyUp(Keys.Right)) {
-                player.MoveX(0, 0);
-                player.VelX(0);
+            if (RIGHT && (currentKeyboardState.IsKeyUp(Keys.Right) 
+                                /*|| currentPadState.IsButtonUp(Buttons.DPadRight) 
+                                || currentPadState.IsButtonUp(Buttons.LeftThumbstickRight)*/)) {
+
+                player.ResetX();
                 walkPressTime = 0f;
                 RIGHT = false;
             }
 
-            if (LEFT && currentKeyboardState.IsKeyUp(Keys.Left)) {
-                player.MoveX(0, 0);
-                player.VelX(0);
+            if (LEFT && (currentKeyboardState.IsKeyUp(Keys.Left) 
+                            /*|| currentPadState.IsButtonUp(Buttons.DPadLeft) 
+                            || currentPadState.IsButtonUp(Buttons.LeftThumbstickLeft)*/)) {
+
+                player.ResetX();
                 walkPressTime = 0f;
                 LEFT = false;
             }
 
-            if (JUMP_PRESS && currentKeyboardState.IsKeyUp(Keys.Space)) {
+            if (JUMP_PRESS && (currentKeyboardState.IsKeyUp(Keys.Space) || currentPadState.IsButtonUp(Buttons.A))) {
                 JUMP_PRESS = false;
             }
 
-            if (ATTACK_PRESS && currentKeyboardState.IsKeyUp(Keys.A)) {
+            if (ATTACK_PRESS && (currentKeyboardState.IsKeyUp(Keys.A) || currentPadState.IsButtonUp(Buttons.X))) {
                 ATTACK_PRESS = false;
             }
         }
@@ -95,14 +113,20 @@ namespace Game1 {
         public void UpdateDefaultControls(GameTime gameTime) {
             Reset();
 
-            if ((currentKeyboardState.IsKeyDown(Keys.Space))
-                    && (!oldKeyboardState.IsKeyDown(Keys.Space))) {
+            if (((currentKeyboardState.IsKeyDown(Keys.Space))
+                    && (!oldKeyboardState.IsKeyDown(Keys.Space)))
+
+                        || (currentPadState.IsButtonDown(Buttons.A)
+                                && !oldPadState.IsButtonDown(Buttons.A))) {
 
                 JUMP_PRESS = true;
             }
 
-            if ((currentKeyboardState.IsKeyDown(Keys.A))
-                    && (!oldKeyboardState.IsKeyDown(Keys.A))) {
+            if (((currentKeyboardState.IsKeyDown(Keys.A))
+                    && (!oldKeyboardState.IsKeyDown(Keys.A)))
+                        
+                        || (currentPadState.IsButtonDown(Buttons.X)
+                                && !oldPadState.IsButtonDown(Buttons.X))) {
 
                 ATTACK_PRESS = true;
             }
@@ -124,23 +148,25 @@ namespace Game1 {
             
             if (player.IsNonActionState()) {
 
-                if (!DOWN && currentKeyboardState.IsKeyDown(Keys.Up)) {
+                if (!DOWN && (currentKeyboardState.IsKeyDown(Keys.Up) 
+                                || currentPadState.IsButtonDown(Buttons.DPadUp) 
+                                || currentPadState.IsButtonDown(Buttons.LeftThumbstickUp))) {
 
-                    if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
+                    if (!RIGHT && (currentKeyboardState.IsKeyDown(Keys.Left) 
+                                       || currentPadState.IsButtonDown(Buttons.DPadLeft) 
+                                       || currentPadState.IsButtonDown(Buttons.LeftThumbstickLeft))) {
+
                         inputDirection = InputDirection.UP_LEFT;
-
                         player.MoveX(veloctiy, -1);
-                        player.maxVelocity.X = veloctiy;
-
                         player.SetIsLeft(true);
                         LEFT = true;
 
-                    } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
+                    } else if (!LEFT && (currentKeyboardState.IsKeyDown(Keys.Right) 
+                                            || currentPadState.IsButtonDown(Buttons.DPadRight) 
+                                            || currentPadState.IsButtonDown(Buttons.LeftThumbstickRight))) {
+
                         inputDirection = InputDirection.UP_RIGHT;
-
                         player.MoveX(veloctiy, 1);
-                        player.maxVelocity.X = veloctiy;
-
                         player.SetIsLeft(false);
                         RIGHT = true;
 
@@ -153,26 +179,27 @@ namespace Game1 {
                     } 
 
                     player.MoveZ(veloctiy, -1);
-                    player.maxVelocity.Z = veloctiy;
                     UP = true;
 
-                } else if (!UP && currentKeyboardState.IsKeyDown(Keys.Down)) {
+                } else if (!UP && (currentKeyboardState.IsKeyDown(Keys.Down) 
+                                        || currentPadState.IsButtonDown(Buttons.DPadDown) 
+                                        || currentPadState.IsButtonDown(Buttons.LeftThumbstickDown))) {
 
-                    if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
+                    if (!RIGHT && (currentKeyboardState.IsKeyDown(Keys.Left) 
+                                        || currentPadState.IsButtonDown(Buttons.DPadLeft) 
+                                        || currentPadState.IsButtonDown(Buttons.LeftThumbstickLeft))) {  
+
                         inputDirection = InputDirection.DOWN_LEFT;
-
                         player.MoveX(veloctiy, -1);
-                        player.maxVelocity.X = veloctiy;
-
                         player.SetIsLeft(true);
                         LEFT = true;
 
-                    } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
+                    } else if (!LEFT && (currentKeyboardState.IsKeyDown(Keys.Right) 
+                                            || currentPadState.IsButtonDown(Buttons.DPadRight) 
+                                            || currentPadState.IsButtonDown(Buttons.LeftThumbstickRight))) {
+
                         inputDirection = InputDirection.DOWN_RIGHT;
-
                         player.MoveX(veloctiy, 1);
-                        player.maxVelocity.X = veloctiy;
-
                         player.SetIsLeft(false);
                         RIGHT = true;
 
@@ -185,47 +212,48 @@ namespace Game1 {
                     }
 
                     player.MoveZ(veloctiy, 1);
-                    player.maxVelocity.Z = veloctiy;
                     DOWN = true;
                 }
             }
 
             if (player.IsNonActionState() && !IsDirectionalPress()) {
 
-                if (!RIGHT && currentKeyboardState.IsKeyDown(Keys.Left)) {
+                if (!RIGHT && (currentKeyboardState.IsKeyDown(Keys.Left) 
+                                  || currentPadState.IsButtonDown(Buttons.DPadLeft) 
+                                  || currentPadState.IsButtonDown(Buttons.LeftThumbstickLeft))) {
+
                     inputDirection = InputDirection.LEFT;
                     walkPressTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    player.SetDirectionX(-1);
 
                     if (walkPressTime >= 120) {
 
-                        if (!player.IsInAnimationAction(Animation.Action.RUNNING))
-                                player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                        if (!player.IsInAnimationAction(Animation.Action.RUNNING)) {
+                            player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                        }
 
-                        //if (!player.HasCollidedX()) {
-                            player.MoveX(veloctiy, -1);
-                            player.maxVelocity.X = veloctiy;
-                        //}
-
+                        player.MoveX(veloctiy, -1);
                         walkPressTime = 0f;
                     }
 
                     player.SetIsLeft(true);
                     LEFT = true;
 
-                } else if (!LEFT && currentKeyboardState.IsKeyDown(Keys.Right)) {
+                } else if (!LEFT && (currentKeyboardState.IsKeyDown(Keys.Right) 
+                                         || currentPadState.IsButtonDown(Buttons.DPadRight) 
+                                         || currentPadState.IsButtonDown(Buttons.LeftThumbstickRight))) {
+
                     inputDirection = InputDirection.RIGHT; 
                     walkPressTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    player.SetDirectionX(1);
 
                     if (walkPressTime >= 120) {
 
-                        if (!player.IsInAnimationAction(Animation.Action.RUNNING))
-                                player.SetAnimationState(Animation.State.WALK_TOWARDS);
-
-                        //if (!player.HasCollidedX()) {
-                            player.MoveX(veloctiy, 1);
-                            player.maxVelocity.X = veloctiy;
-                        //}
-
+                        if (!player.IsInAnimationAction(Animation.Action.RUNNING)) {
+                            player.SetAnimationState(Animation.State.WALK_TOWARDS);
+                        }
+                       
+                        player.MoveX(veloctiy, 1);
                         walkPressTime = 0f;
                     }
 
@@ -312,12 +340,8 @@ namespace Game1 {
             ReadReleasedInputBuffer(gameTime);
 
             if (IsInputDirection(InputDirection.NONE)) {
-                player.MoveX(0, 0);
-                player.VelX(0);
-
-                player.MoveZ(0, 0);
-                player.VelZ(0);
-
+                player.ResetX();
+                player.ResetZ();
                 player.ResetToIdle(gameTime);
             }
 
@@ -347,47 +371,42 @@ namespace Game1 {
             return currentBuffer;
         }
 
-        private void checkHeld(InputHelper.CommandMove command, InputHelper.KeyState currentKeyState)
-        {
+        private void checkHeld(InputHelper.CommandMove command, InputHelper.KeyState currentKeyState) {
             int held = 0;
             //Debug.WriteLine("HELD KEY: " + currentKeyState.GetState());
             currentKeyState = command.GetCurrentMove();
 
-            if (command.IsMaxNegativeReached() == true)
-            {
+            if (command.IsMaxNegativeReached() == true) {
                 command.Reset();
                 held = 0;
             }
 
-            if (releasedState.GetCurrentInputState() != InputHelper.KeyPress.NONE)
-            {
+            if (releasedState.GetCurrentInputState() != InputHelper.KeyPress.NONE) {
+
                 if (releasedState.GetCurrentInputState() == currentKeyState.GetKey()
                         || (releasedState.GetCurrentInputState(releasedState.GetCurrentStateStep() - 2) == currentKeyState.GetKey()
-                                && releasedState.GetCurrentInputState() != currentKeyState.GetKey()))
-                {
+                                && releasedState.GetCurrentInputState() != currentKeyState.GetKey())) {
+
                     command.Reset();
                 }
             }
 
-            for (int i = 0; i < heldState.GetBuffer().Count - 1; i++)
-            {
+            for (int i = 0; i < heldState.GetBuffer().Count - 1; i++) {
+
                 bool reset = (releasedState.GetBuffer().Count >= i + 2
                                     && releasedState.GetBuffer()[i + 1] == currentKeyState.GetKey());
 
-                if (reset)
-                {
+                if (reset) {
                     held = 0;
                     command.IncrementNegativeCount();
                     break;
                 }
 
-                if (heldState.GetBuffer()[i + 1] == currentKeyState.GetKey())
-                {
+                if (heldState.GetBuffer()[i + 1] == currentKeyState.GetKey()) {
                     held++;
                     command.ResetNegativeEdge();
-                }
-                else
-                {
+
+                } else {
                     held = 0;
                     command.Reset();
                     break;
@@ -395,63 +414,50 @@ namespace Game1 {
             }
 
             //Debug.WriteLine("HELD COUNT: " + held);
-           // Debug.WriteLine("HELD TIME: " + currentKeyState.GetKeyHeldTime());
+            //Debug.WriteLine("HELD TIME: " + currentKeyState.GetKeyHeldTime());
 
-            if (held >= currentKeyState.GetKeyHeldTime())
-            {
+            if (held >= currentKeyState.GetKeyHeldTime()) {
                 command.Next();
-            }
-            else
-            {
+
+            } else {
                 command.IncrementNegativeCount();
             }
         }
 
-        public bool Matches(InputHelper.CommandMove command)
-        {
+        public bool Matches(InputHelper.CommandMove command) {
             InputHelper.KeyState previousKeyState = command.GetPreviousMove();
             InputHelper.KeyState currentKeyState = command.GetCurrentMove();
             InputBuffer currentBuffer = GetNextBuffer(currentKeyState);
 
-            if (currentKeyState.GetState() != InputHelper.ButtonState.Held)
-            {
-                if (command.IsMaxNegativeReached() == true)
-                {
+            if (currentKeyState.GetState() != InputHelper.ButtonState.Held) {
+                if (command.IsMaxNegativeReached() == true) {
                     command.Reset();
                     return false;
                 }
                 
-                if (currentBuffer.GetCurrentInputState() == currentKeyState.GetKey())
-                {
+                if (currentBuffer.GetCurrentInputState() == currentKeyState.GetKey()) {
                     command.Next();
 
-                    if (command.GetCurrentMoveStep() >= command.GetMoves().Count - 1)
-                    {
+                    if (command.GetCurrentMoveStep() >= command.GetMoves().Count - 1) {
                         currentKeyState = command.GetMoves()[command.GetMoves().Count - 1];
-                    }
-                    else
-                    {
+
+                    } else {
                         currentKeyState = command.GetCurrentMove();
                     }
 
                     currentBuffer = GetNextBuffer(currentKeyState);
                     //Debug.WriteLine("NEXT BUFFER: " + currentKeyState.GetState());
-                }
-                else
-                {
+                } else {
                     command.IncrementNegativeCount();
                 }
-            }
-            else
-            {
+            } else {
                 //Debug.WriteLine("IN HELD");
                 checkHeld(command, currentKeyState);
             }
 
             //Debug.WriteLine("CURRENTMOVE STEP: " + command.GetCurrentMoveStep());
 
-            if (command.IsComplete())
-            {
+            if (command.IsComplete()) {
                 //Debug.WriteLine("IS COMPLETE");
                 command.Reset();
                 ResetBuffers();
@@ -461,23 +467,19 @@ namespace Game1 {
             return false;
         }
 
-        public InputDirection GetInputDirection()
-        {
+        public InputDirection GetInputDirection() {
             return inputDirection;
         }
 
-        public PlayerIndex GetPlayerIndex()
-        {
+        public PlayerIndex GetPlayerIndex() {
             return playerIndex;
         }
 
-        public bool IsInputDirection(InputDirection input)
-        {
+        public bool IsInputDirection(InputDirection input) {
             return (inputDirection == input);
         }
 
-        public bool IsDirectionalPress()
-        {
+        public bool IsDirectionalPress() {
             return (IsInputDirection(InputDirection.UP)
                         || IsInputDirection(InputDirection.DOWN)
                         || IsInputDirection(InputDirection.LEFT)
@@ -488,18 +490,15 @@ namespace Game1 {
                         || IsInputDirection(InputDirection.UP_RIGHT));
         }
 
-        public InputBuffer GetPressedState()
-        {
+        public InputBuffer GetPressedState() {
             return pressedState;
         }
 
-        public InputBuffer GetReleasedState()
-        {
+        public InputBuffer GetReleasedState() {
             return releasedState;
         }
 
-        public InputBuffer GetHeldState()
-        {
+        public InputBuffer GetHeldState() {
             return heldState;
         }
     }

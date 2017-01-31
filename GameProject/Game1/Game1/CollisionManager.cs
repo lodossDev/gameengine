@@ -37,8 +37,8 @@ namespace Game1
             int eGround = (int)Math.Abs(Math.Round((double)entity.GetGround()));
             int eHeight = (int)(ePosY + (entityBox.GetHeight() - eDepth));
 
-            int vx = Math.Abs(entity.GetDirVelX());
-            int vz = Math.Abs(entity.GetDirVelZ());
+            float vx = Math.Abs(entity.GetAbsoluteVelX());
+            float vz = Math.Abs(entity.GetAbsoluteVelZ());
 
             foreach (Entity target in entities) {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
@@ -77,8 +77,8 @@ namespace Game1
             int eGround = (int)Math.Abs(Math.Round((double)entity.GetGround()));
             int eHeight = (int)(ePosY + (entityBox.GetHeight() - eDepth));
 
-            int vx = Math.Abs(entity.GetDirVelX());
-            int vz = Math.Abs(entity.GetDirVelZ());
+            float vx = Math.Abs(entity.GetAbsoluteVelX());
+            float vz = Math.Abs(entity.GetAbsoluteVelZ());
 
             foreach (Entity target in entities) {
                 if (entity != target && target.IsEntity(Entity.EntityType.OBSTACLE)) {
@@ -143,8 +143,8 @@ namespace Game1
             int eGround = (int)Math.Abs(Math.Round((double)entity.GetGround()));
             int eHeight = (int)(ePosY + (entityBox.GetHeight() - eDepth));
 
-            int vx = Math.Abs(entity.GetDirVelX());
-            int vz = Math.Abs(entity.GetDirVelZ());
+            float vx = Math.Abs(entity.GetAbsoluteVelX());
+            float vz = Math.Abs(entity.GetAbsoluteVelZ());
           
             foreach (Entity target in entities) {
 
@@ -169,8 +169,8 @@ namespace Game1
                                 && entity.GetCollisionInfo().onTop)  { 
                         
                             if (target.IsMovingY()) { 
-                                entity.MoveY(target.GetDirVelY());
-                                entity.SetGround(-(tHeight + 5) - target.GetDirVelY());
+                                entity.MoveY(target.GetDirY());
+                                entity.SetGround(-(tHeight + 5) - target.GetDirY());
                             } else {
                                 entity.SetGround(-(tHeight + 5));
                             }
@@ -180,8 +180,8 @@ namespace Game1
                                 && (double)entity.GetVelocity().Y > 0 && ePosY >= tHeight - 10) {
 
                             entity.GetCollisionInfo().onTop = true;
-                            entity.MoveY(target.GetDirVelY());
-                            entity.SetGround(-(tHeight + 5) - target.GetDirVelY());
+                            entity.MoveY(target.GetDirY());
+                            entity.SetGround(-(tHeight + 5) - target.GetDirY());
                         }
                     }
                 }
@@ -198,8 +198,8 @@ namespace Game1
             int eGround = (int)Math.Abs(Math.Round((double)entity.GetGround()));
             int eHeight = (int)(ePosY + (entityBox.GetHeight() - eDepth));
 
-            int vx = Math.Abs(entity.GetDirVelX());
-            int vz = Math.Abs(entity.GetDirVelZ());
+            float vx = Math.Abs(entity.GetAbsoluteVelX());
+            float vz = Math.Abs(entity.GetAbsoluteVelZ());
 
             List<Entity> aboveEntities = FindAbove(entity);
             List<Entity> belowEntities = FindBelow(entity);
@@ -233,25 +233,23 @@ namespace Game1
                         float depthZ = eDepthBox.GetRect().GetVerticalIntersectionDepth(tDepthBox.GetRect());
 
                         if (isWithInBoundsZ1 && !isWithInBoundsX1) { 
-                            if (entity.GetDirVelZ() < 0 && entity.VerticleCollisionTop(target, 5)) {
+                            if (entity.GetAbsoluteVelZ() < 0 && entity.VerticleCollisionTop(target, 5)) {
                                 entity.MoveZ(depthZ);
                                 entity.GetCollisionInfo().Bottom();
 
-                            } else if (entity.GetDirVelZ() > 0 && entity.VerticleCollisionBottom(target, 5)) {
+                            } else if (entity.GetAbsoluteVelZ() > 0 && entity.VerticleCollisionBottom(target, 5)) {
                                 entity.MoveZ(depthZ);
                                 entity.GetCollisionInfo().Top();
                             }
                         }
                         
                         if ((isWithInBoundsX1 || !isWithInBoundsX1 && !isWithInBoundsZ1) && isWithInBoundsZ2) {
-                            if (entity.GetDirVelX() < 0 && entity.HorizontalCollisionRight(target, 5)) {
+                            if (entity.GetAbsoluteVelX() < 0 && entity.HorizontalCollisionRight(target, 5)) {
                                 entity.MoveX(depthX);
-                                entity.MoveX(0, 0);
                                 entity.GetCollisionInfo().Left();
 
-                            } else if (entity.GetDirVelX() > 0 && entity.HorizontalCollisionLeft(target, 5)) {
+                            } else if (entity.GetAbsoluteVelX() > 0 && entity.HorizontalCollisionLeft(target, 5)) {
                                 entity.MoveX(depthX);
-                                entity.MoveX(0, 0);
                                 entity.GetCollisionInfo().Right();
                             }
                         }
@@ -260,8 +258,8 @@ namespace Game1
             }
 
             if (aboveEntities.Count > 0 && entity.InAir()) {
-                entity.VelY(0f);
-                entity.GetTossInfo().velocity.Y = entity.GetTossInfo().maxVelocity.Y;
+                //entity.VelY(0f);
+                //entity.GetTossInfo().velocity.Y = entity.GetTossInfo().maxVelocity.Y;
             }
         }
         
@@ -287,7 +285,7 @@ namespace Game1
         }
 
         private float TargetBodyY(Entity target, Entity entity, CLNS.AttackBox attack) {
-            return (int)-attack.GetRect().Height;
+            return (int)-attack.GetRect().Height + (int)Math.Round(attack.GetOffset().Y);
         }
 
         private void OnAttack(Entity entity, Entity target, CLNS.AttackBox attackBox) {

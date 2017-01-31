@@ -40,13 +40,11 @@ namespace Game1 {
         private Vector3 position;
         private Vector2 convertedPosition;
 
-        public Vector3 acceleration;
+        private Vector3 acceleration;
         private Vector3 direction;
         private Vector3 velocity;
-        public Vector3 maxVelocity;
-
+        private Vector3 maxVelocity;
         private Vector3 absoluteVel;
-        private Vector3 directionVel;
 
         private Vector2 origin;
         private Vector2 scale;
@@ -89,16 +87,14 @@ namespace Game1 {
             currentAnimationState = Animation.State.NONE;
             colorInfo = new Attributes.ColourInfo();
 
-            acceleration = Vector3.Zero;
-            direction = Vector3.Zero;
-            velocity = Vector3.Zero;
-            maxVelocity = new Vector3(15, 5, 5);
-
             position = Vector3.Zero;
             convertedPosition = Vector2.Zero;
 
-            directionVel = Vector3.Zero;
-            absoluteVel = directionVel;
+            acceleration = Vector3.Zero;
+            direction = Vector3.Zero;
+            velocity = Vector3.Zero;
+            absoluteVel = Vector3.Zero;
+            maxVelocity = new Vector3(15, 5, 5);
 
             origin = Vector2.Zero;
             ground = groundBase = 0;
@@ -318,9 +314,56 @@ namespace Game1 {
             currentTarget = target;
         }
 
+        public void SetDirectionX(float dir) {
+            direction.X = dir;
+        }
+
+        public void SetDirectionY(float dir) {
+            direction.Y = dir;
+        }
+
+        public void SetDirectionZ(float dir) {
+            direction.Z = dir;
+        }
+
+        public void SetMaxVelocityX(float x) {
+            maxVelocity.X = x;
+        }
+
+        public void SetMaxVelocityY(float y) {
+            maxVelocity.Y = y;
+        }
+
+        public void SetMaxVelocityZ(float z) {
+            maxVelocity.Z = z;
+        }
+
+        public void SetAbsoluteVelX(float x, float dir) {
+            absoluteVel.X = x * dir;
+            direction.X = dir;
+        }
+
+        public void SetAbsoluteVelY(float y, float dir) {
+            absoluteVel.Y = y * dir;
+            direction.Y = dir;
+        }
+
+        public void SetAbsoluteVelZ(float z, float dir) {
+            absoluteVel.Z = z * dir;
+            direction.Z = dir;
+        }
+
         public void MoveX(float acc, float dir) {
             this.acceleration.X = acc;
+            this.maxVelocity.X = acc;
             this.direction.X = dir;
+        }
+
+        public void ResetX() {
+            this.acceleration.X = 0;
+            this.direction.X = 0;
+            this.maxVelocity.X = 0;
+            this.velocity.X = 0;
         }
 
         public void MoveY(float acc, float dir) {
@@ -328,14 +371,22 @@ namespace Game1 {
             this.direction.Y = dir;
         }
 
-         public void MoveZ(float acc, float dir) {
+        public void MoveZ(float acc, float dir) {
             this.acceleration.Z = acc;
+            this.maxVelocity.Z = acc;
             this.direction.Z = dir;
         }
 
+        public void ResetZ() {
+            this.acceleration.Z = 0;
+            this.direction.X = 0;
+            this.maxVelocity.Z = 0;
+            this.velocity.Z = 0;
+        }
+
         public void MoveX(float velX) {
-            if (velX != 0.0) {
-                directionVel.X = velX;
+            if ((double)velX != 0.0) {
+                absoluteVel.X = velX;
             }
 
             if (IsInMoveFrame()) {
@@ -344,16 +395,16 @@ namespace Game1 {
         }
 
         public void MoveY(float velY) {
-            if (velY != 0.0) {
-                directionVel.Y = velY;
+            if ((double)velY != 0.0) {
+                absoluteVel.Y = velY;
             }
 
             position.Y += velY;
         }
 
         public void MoveZ(float velZ) {
-            if (velZ != 0.0) {
-                directionVel.Z = velZ;
+            if ((double)velZ != 0.0) {
+                absoluteVel.Z = velZ;
             }
 
             if (IsInMoveFrame()) {
@@ -362,17 +413,14 @@ namespace Game1 {
         }
 
         public void VelX(float velX) {
-            absoluteVel.X = velX;
             velocity.X = velX;
         }
 
         public void VelY(float velY) {
-            absoluteVel.Y = velY;
             velocity.Y = velY;
         }
 
         public void VelZ(float velZ) {
-            absoluteVel.Z = velZ;
             velocity.Z = velZ;
         }
 
@@ -409,7 +457,6 @@ namespace Game1 {
 
         public void SetGroundBase(float groundBase) {
             this.groundBase = groundBase;
-
             SetGround(groundBase);
         }
         
@@ -467,37 +514,39 @@ namespace Game1 {
         }
 
         public bool HasCollidedX() {
-             return (collisionInfo.collide_x == Attributes.CollisionState.LEFT_SIDE || collisionInfo.collide_x == Attributes.CollisionState.RIGHT_SIDE);
+             return (((double)absoluteVel.X < 0.0 && collisionInfo.collide_x == Attributes.CollisionState.LEFT_SIDE) 
+                        || ((double)absoluteVel.X > 0 && collisionInfo.collide_x == Attributes.CollisionState.RIGHT_SIDE));
         }
 
         public bool HasCollidedZ() {
-             return (collisionInfo.collide_z == Attributes.CollisionState.TOP || collisionInfo.collide_z == Attributes.CollisionState.BOTTOM);
+             return (((double)absoluteVel.Z > 0.0 && collisionInfo.collide_z == Attributes.CollisionState.TOP) 
+                        || ((double)absoluteVel.Z < 0.0 && collisionInfo.collide_z == Attributes.CollisionState.BOTTOM));
         }
 
-        public int GetDirVelX() {
-            return (int)Math.Round((double)directionVel.X);
+        public int GetDirX() {
+            return (int)Math.Round((double)direction.X);
         }
 
-        public int GetDirVelY() {
-            return (int)Math.Round((double)directionVel.Y);
+        public int GetDirY() {
+            return (int)Math.Round((double)direction.Y);
         }
 
-        public int GetDirVelZ() {
-            return (int)Math.Round((double)directionVel.Z);
+        public int GetDirZ() {
+            return (int)Math.Round((double)direction.Z);
         }
 
-        public int GetAbsoluteVelX() {
-            return (int)Math.Round((double)absoluteVel.X);
+        public float GetAbsoluteVelX() {
+            return absoluteVel.X;
         }
 
-        public int GetAbsoluteVelY() {
-            return (int)Math.Round((double)absoluteVel.Y);
+        public float GetAbsoluteVelY() {
+            return absoluteVel.Y;
         }
 
-        public int GetAbsoluteVelZ() {
-            return (int)Math.Round((double)absoluteVel.Z);
+        public float GetAbsoluteVelZ() {
+            return absoluteVel.Z;
         }
-        
+
         public float GetGround() {
             return ground;
         }
@@ -538,6 +587,14 @@ namespace Game1 {
 
         public Vector3 GetVelocity() {
             return velocity;
+        }
+
+        public Vector3 GetDirection() {
+            return direction;
+        }
+
+        public Vector3 GetMaxVelocity() {
+            return maxVelocity;
         }
 
         public int GetSpriteCount() {
@@ -789,7 +846,7 @@ namespace Game1 {
         }
 
         public bool IsMovingY() {
-            return ((double)velocity.Y != 0.0 || (int)Math.Abs(GetPosY()) > 0);
+            return ((double)velocity.Y != 0.0 || (double)Math.Abs(GetPosY()) > 0.0);
         }
 
         public bool IsMovingZ() {
@@ -950,7 +1007,7 @@ namespace Game1 {
                 }
 
                 if (tossInfo.inTossFrame) {
-                    VelX(tossInfo.velocity.X);
+                    MoveX(tossInfo.velocity.X);
                     VelY(tossInfo.velocity.Y);
 
                     tossInfo.velocity.Y += tossInfo.gravity;
@@ -1164,26 +1221,34 @@ namespace Game1 {
             }
 
             //Update movement.
-            //MoveX(velocity.X);
-            //MoveY(velocity.Y);
-            //MoveZ(velocity.Z);
-
-            //if (collisionInfo.collide_x == Attributes.CollisionState.NO_COLLISION) { 
-                velocity += acceleration * direction;
-            //}
+            velocity.X += acceleration.X * direction.X;
+            velocity.Y += acceleration.Y * direction.Y;
+            velocity.Z += acceleration.Z * direction.Z;
 
             velocity.X = MathHelper.Clamp(velocity.X, -maxVelocity.X, maxVelocity.X);
             velocity.Z = MathHelper.Clamp(velocity.Z, -maxVelocity.Z, maxVelocity.Z);
 
             if ((double)velocity.X != 0.0) { 
-                directionVel.X = velocity.X;
+                absoluteVel.X = velocity.X;
+            }
+
+            if ((double)velocity.Y != 0.0) { 
+                absoluteVel.Y = velocity.Y;
             }
 
             if ((double)velocity.Z != 0.0) { 
-                directionVel.Z = velocity.Z;
+                absoluteVel.Z = velocity.Z;
             }
 
-            position += velocity;
+            if (IsInMoveFrame()) { 
+                position.X += velocity.X;
+            }
+
+            position.Y += velocity.Y;
+
+            if (IsInMoveFrame()) { 
+                position.Z += velocity.Z;
+            }
         }
 
         public virtual void OnAttack(Entity target, CLNS.AttackBox attackBox) {

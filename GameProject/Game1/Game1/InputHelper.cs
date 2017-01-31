@@ -5,13 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Game1
-{
-    public static class InputHelper
-    {
+namespace Game1 {
+    public static class InputHelper { 
+
         [Flags]
-        public enum KeyPress
-        {
+        public enum KeyPress  {
             NONE = 0,
             UP = 1,
             DOWN = 2,
@@ -35,15 +33,13 @@ namespace Game1
         }
 
         [Flags]
-        public enum ButtonState
-        {
+        public enum ButtonState {
             Pressed = 1,
             Released = 2,
             Held = 4
         }
 
-        internal static readonly Dictionary<Buttons, Keys> NonDirectionButtons = new Dictionary<Buttons, Keys>
-        {
+        internal static readonly Dictionary<Buttons, Keys> NonDirectionButtons = new Dictionary<Buttons, Keys> {
             { Buttons.A, Keys.A },
             { Buttons.B, Keys.B },
             { Buttons.X, Keys.X },
@@ -53,16 +49,14 @@ namespace Game1
             // RightShoulder, RightTrigger, and RightStick.
         };
 
-        internal static readonly Dictionary<Buttons, InputHelper.KeyPress> NonDirectionButtonKeyMap = new Dictionary<Buttons, InputHelper.KeyPress>
-        {
+        internal static readonly Dictionary<Buttons, InputHelper.KeyPress> NonDirectionButtonKeyMap = new Dictionary<Buttons, InputHelper.KeyPress> {
             { Buttons.A, InputHelper.KeyPress.A },
             { Buttons.B, InputHelper.KeyPress.B },
             { Buttons.X, InputHelper.KeyPress.X },
             { Buttons.Y, InputHelper.KeyPress.Y },
         };
 
-        internal static readonly Dictionary<Keys, InputHelper.KeyPress> NonDirectionButtonKeysMap = new Dictionary<Keys, InputHelper.KeyPress>
-        {
+        internal static readonly Dictionary<Keys, InputHelper.KeyPress> NonDirectionKeyButtonMap = new Dictionary<Keys, InputHelper.KeyPress> {
             { Keys.A, InputHelper.KeyPress.A },
             { Keys.B, InputHelper.KeyPress.B },
             { Keys.X, InputHelper.KeyPress.X },
@@ -374,7 +368,7 @@ namespace Game1
                         || oldKeyboardState.IsKeyUp(key) && newKeyboardState.IsKeyDown(key))
                 {
                     // Use a bitwise-or to accumulate button presses.
-                    buttons |= NonDirectionButtonKeyMap[button] | NonDirectionButtonKeysMap[key];
+                    buttons |= NonDirectionButtonKeyMap[button] | NonDirectionKeyButtonMap[key];
                 }
             }
 
@@ -396,7 +390,7 @@ namespace Game1
                         || oldKeyboardState.IsKeyDown(key) && newKeyboardState.IsKeyUp(key))
                 {
                     // Use a bitwise-or to accumulate button presses.
-                    buttons |= NonDirectionButtonKeyMap[button] | NonDirectionButtonKeysMap[key];
+                    buttons |= NonDirectionButtonKeyMap[button] | NonDirectionKeyButtonMap[key];
                 }
             }
 
@@ -416,7 +410,7 @@ namespace Game1
                 if (newPadState.IsButtonDown(button) || newKeyboardState.IsKeyDown(key))
                 {
                     // Use a bitwise-or to accumulate button presses.
-                    buttons |= NonDirectionButtonKeyMap[button] | NonDirectionButtonKeysMap[key];
+                    buttons |= NonDirectionButtonKeyMap[button] | NonDirectionKeyButtonMap[key];
                 }
             }
 

@@ -39,5 +39,9 @@ namespace Game1 {
                 }
             }
         }
+
+        public InputControl GetInputControl(Entity entity) {
+            return controllMapEntity[entity];
+        }
     }
 }
