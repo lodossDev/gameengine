@@ -516,10 +516,13 @@ namespace Game1
 
             /*spriteBatch.DrawString(font1, "IS AIR: " + (ryo.InAir()), new Vector2(20, 20), Color.Blue);
             */spriteBatch.DrawString(font1, "ONTOP: " + (ryo.GetCollisionInfo().onTop), new Vector2(20, 50), Color.Blue);
-            spriteBatch.DrawString(font1, "VELX: " + (ryo.GetVelX()), new Vector2(20, 80), Color.Blue);
-            spriteBatch.DrawString(font1, "X: " + (int)Math.Round(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X), new Vector2(20, 110), Color.Blue);
+            spriteBatch.DrawString(font1, "VELX: " + (inputManager.GetInputControl(ryo).walkPressTime), new Vector2(20, 80), Color.Blue);
+            spriteBatch.DrawString(font1, "X - NEW: " + (inputManager.GetInputControl(ryo).JUMP_PRESS), new Vector2(20, 110), Color.Blue);
+            spriteBatch.DrawString(font1, "X - OLD: " + ((int)Math.Round(inputManager.GetInputControl(ryo).oldPadState.ThumbSticks.Left.X) == 0), new Vector2(20, 140), Color.Blue);
 
-            spriteBatch.DrawString(font1, "Y: " + (int)Math.Round(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y), new Vector2(20, 140), Color.Blue);
+            //spriteBatch.DrawString(font1, "X - NEW: " + (inputManager.GetInputControl(ryo).currentKeyboardState.IsKeyDown(Keys.X)), new Vector2(20, 110), Color.Blue);
+            //spriteBatch.DrawString(font1, "X - OLD: " + (inputManager.GetInputControl(ryo).oldKeyboardState.IsKeyUp(Keys.X)), new Vector2(20, 140), Color.Blue);
+
 
             /*int i = 1;
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())

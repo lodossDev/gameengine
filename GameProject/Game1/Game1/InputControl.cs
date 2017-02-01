@@ -22,13 +22,13 @@ namespace Game1 {
 
     public class InputControl {
         public enum InputDirection {NONE, UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT}
-        private bool UP, DOWN, LEFT, RIGHT, JUMP_PRESS, ATTACK_PRESS;
+        public bool UP, DOWN, LEFT, RIGHT, JUMP_PRESS, ATTACK_PRESS;
 
         private Entity player;
         private InputDirection inputDirection;
         private PlayerIndex playerIndex;
 
-        private KeyboardState oldKeyboardState, currentKeyboardState;
+        public KeyboardState oldKeyboardState, currentKeyboardState;
         public GamePadState oldPadState, currentPadState;
 
         private InputBuffer pressedState;
@@ -36,7 +36,7 @@ namespace Game1 {
         private InputBuffer heldState;
         public float walkPressTime = 0f;
         private float walkSpeed = 5f;
-        private float runSpeed = 15f;
+        private float runSpeed = 10f;
         private float veloctiy = 5f;
 
 
@@ -45,8 +45,8 @@ namespace Game1 {
             this.playerIndex = index;
             inputDirection = InputDirection.NONE;
 
-            currentKeyboardState = new KeyboardState();
-            currentPadState = new GamePadState();
+            oldKeyboardState = new KeyboardState();
+            oldPadState = new GamePadState();
 
             pressedState = new InputBuffer(InputHelper.ButtonState.Pressed);
             releasedState = new InputBuffer(InputHelper.ButtonState.Released);
@@ -65,36 +65,73 @@ namespace Game1 {
             JUMP_PRESS = false;
             ATTACK_PRESS = false;
 
-            if (UP && (currentKeyboardState.IsKeyUp(Keys.Up) 
-                            || currentPadState.IsButtonUp(Buttons.DPadUp) 
-                            || currentPadState.IsButtonUp(Buttons.LeftThumbstickUp))) {
+            if (UP && (!currentKeyboardState.IsKeyUp(Keys.Up) 
+                    && (currentPadState.IsButtonUp(Buttons.DPadUp) 
+                    && currentPadState.IsButtonUp(Buttons.LeftThumbstickUp)))) {
 
                 player.ResetZ();
                 walkPressTime = 0f;
                 UP = false;
             }
 
-            if (DOWN && (currentKeyboardState.IsKeyUp(Keys.Down) 
-                                || currentPadState.IsButtonUp(Buttons.DPadDown) 
-                                || currentPadState.IsButtonUp(Buttons.LeftThumbstickDown))) {
+            if (UP && (currentKeyboardState.IsKeyUp(Keys.Up) 
+                    && !currentPadState.IsButtonDown(Buttons.DPadUp) 
+                    && !currentPadState.IsButtonDown(Buttons.LeftThumbstickUp))) {
+
+                player.ResetZ();
+                walkPressTime = 0f;
+                UP = false;
+            }
+
+            if (DOWN && (!currentKeyboardState.IsKeyDown(Keys.Down) 
+                      && (currentPadState.IsButtonUp(Buttons.DPadDown) 
+                      && currentPadState.IsButtonUp(Buttons.LeftThumbstickDown)))) {
 
                 player.ResetZ();
                 walkPressTime = 0f;
                 DOWN = false;
             }
 
+            if (DOWN && (currentKeyboardState.IsKeyUp(Keys.Down) 
+                      && !currentPadState.IsButtonDown(Buttons.DPadDown) 
+                      && !currentPadState.IsButtonDown(Buttons.LeftThumbstickDown))) {
+
+                player.ResetZ();
+                walkPressTime = 0f;
+                DOWN = false;
+            }
+
+            if (RIGHT && (!currentKeyboardState.IsKeyDown(Keys.Right) 
+                        && (currentPadState.IsButtonUp(Buttons.DPadRight) 
+                        && currentPadState.IsButtonUp(Buttons.LeftThumbstickRight)))) {
+
+                player.ResetX();
+                walkPressTime = 0f;
+                RIGHT = false;
+            }
+                player.ResetX();
+
             if (RIGHT && (currentKeyboardState.IsKeyUp(Keys.Right) 
-                                /*|| currentPadState.IsButtonUp(Buttons.DPadRight) 
-                                || currentPadState.IsButtonUp(Buttons.LeftThumbstickRight)*/)) {
+                        && !currentPadState.IsButtonDown(Buttons.DPadRight) 
+                        && !currentPadState.IsButtonDown(Buttons.LeftThumbstickRight))) {
 
                 player.ResetX();
                 walkPressTime = 0f;
                 RIGHT = false;
             }
 
-            if (LEFT && (currentKeyboardState.IsKeyUp(Keys.Left) 
-                            /*|| currentPadState.IsButtonUp(Buttons.DPadLeft) 
-                            || currentPadState.IsButtonUp(Buttons.LeftThumbstickLeft)*/)) {
+            if (LEFT && (!currentKeyboardState.IsKeyDown(Keys.Left) 
+                        && (currentPadState.IsButtonUp(Buttons.LeftThumbstickLeft) 
+                        && currentPadState.IsButtonUp(Buttons.DPadLeft)))) {
+
+                player.ResetX();
+                walkPressTime = 0f;
+                LEFT = false;
+            }
+
+            if (LEFT && currentKeyboardState.IsKeyUp(Keys.Left) 
+                    && !currentPadState.IsButtonDown(Buttons.LeftThumbstickLeft) 
+                    && !currentPadState.IsButtonDown(Buttons.DPadLeft)) {
 
                 player.ResetX();
                 walkPressTime = 0f;
@@ -219,7 +256,7 @@ namespace Game1 {
             if (player.IsNonActionState() && !IsDirectionalPress()) {
 
                 if (!RIGHT && (currentKeyboardState.IsKeyDown(Keys.Left) 
-                                  || currentPadState.IsButtonDown(Buttons.DPadLeft) 
+                                  || currentPadState.IsButtonDown(Buttons.DPadLeft)
                                   || currentPadState.IsButtonDown(Buttons.LeftThumbstickLeft))) {
 
                     inputDirection = InputDirection.LEFT;
@@ -233,14 +270,13 @@ namespace Game1 {
                         }
 
                         player.MoveX(veloctiy, -1);
-                        walkPressTime = 0f;
                     }
 
                     player.SetIsLeft(true);
                     LEFT = true;
 
                 } else if (!LEFT && (currentKeyboardState.IsKeyDown(Keys.Right) 
-                                         || currentPadState.IsButtonDown(Buttons.DPadRight) 
+                                         || currentPadState.IsButtonDown(Buttons.DPadRight)
                                          || currentPadState.IsButtonDown(Buttons.LeftThumbstickRight))) {
 
                     inputDirection = InputDirection.RIGHT; 
@@ -254,7 +290,6 @@ namespace Game1 {
                         }
                        
                         player.MoveX(veloctiy, 1);
-                        walkPressTime = 0f;
                     }
 
                     player.SetIsLeft(false);
@@ -332,6 +367,7 @@ namespace Game1 {
         public void Update(GameTime gameTime) {
             currentKeyboardState = Keyboard.GetState();
             currentPadState = GamePad.GetState(playerIndex);
+            
 
             UpdateDefaultControls(gameTime);
             
